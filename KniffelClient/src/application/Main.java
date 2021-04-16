@@ -35,7 +35,7 @@ public class Main extends Application {
 				Client.logout();
 				tThread.setRunning(false);
 			});
-			BorderPane root = (BorderPane) FXMLLoader.load(getClass().getResource("Scene_Login.fxml"));
+			BorderPane root = (BorderPane) FXMLLoader.load(Main.class.getResource("Scene_Login.fxml"));
 			Scene scene = new Scene(root, 600, 400);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
@@ -50,8 +50,16 @@ public class Main extends Application {
 	 * @param fxml
 	 * @throws IOException
 	 */
-	public void changeScene(String fxml) throws IOException {
-		Parent root = FXMLLoader.load(getClass().getResource(fxml));
+	public static void changeScene(String fxml, int width, int height) throws IOException {
+		Parent root = FXMLLoader.load(Main.class.getResource(fxml));
+		stg.getScene().setRoot(root);
+		stg.setWidth(width);
+		stg.setHeight(height);
+		stg.centerOnScreen();
+	}
+	
+	public static void changeScene(String fxml) throws IOException {
+		Parent root = FXMLLoader.load(Main.class.getResource(fxml));
 		stg.getScene().setRoot(root);
 	}
 

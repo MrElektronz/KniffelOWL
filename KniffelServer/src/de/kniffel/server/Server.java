@@ -70,6 +70,7 @@ public class Server {
 	public static boolean isRunning() {
 		return !listenerThread.getServerSocket().isClosed() && listenerThread.getServerSocket().isBound();
 	}
+
 	
 	
 }

@@ -39,6 +39,16 @@ public class LogInController {
 		this.password.setText(Main.readProperty("client.password"));
 	}
 
+	
+	public void onRegisterHere(ActionEvent event) throws IOException {
+		Main.changeScene("Scene_Register.fxml");
+	}
+	
+	public void onForgotPassword(ActionEvent event) throws IOException {
+		Main.changeScene("Scene_ResetPW.fxml");
+	}
+	
+	
 	/**
 	 * handles the process after the 'Login'-Button has been clicked
 	 * @param event
@@ -64,6 +74,7 @@ public class LogInController {
 				errorLabel.setText("Dieser Nutzer ist bereits eingeloggt");
 			}else {
 				errorLabel.setText("Du wurdest erfolgreich eingeloggt");
+				Main.changeScene("Scene_MainMenu.fxml",1280,720);
 			}
 			
 			}

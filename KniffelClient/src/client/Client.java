@@ -61,9 +61,55 @@ public class Client {
 		client.close();
 		//Could receive answer from server after logout
 		}catch(IOException ex) {
-			
+			ex.printStackTrace();
 		}
 		}
+	}
+	/**
+	 * 
+	 * @param username
+	 * @return 1 if reset code was send, 0 if username not found, 2 other error
+	 */
+	public static byte requestResetPassword(String username) {
+		try {
+		Socket client = new Socket(IP,PORT);
+		DataOutputStream out = new DataOutputStream(client.getOutputStream());
+		out.writeUTF(buildServerCommand("RequestResetPW", username));
+		DataInputStream in = new DataInputStream(client.getInputStream());
+		byte value = in.readByte();
+		in.close();
+		out.close();
+		client.close();
+		return value;
+		}catch(IOException ex) {
+			ex.printStackTrace();
+			return 2;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param username
+	 * @param password decrypted
+	 * @param pin
+	 * @return 1 if password was reset, 0 if username not found, 2 if other error, 3 if pin wrong
+	 */
+	public static byte resetPassword(String username, String password, String pin) {
+		password = encrypt(password);
+		try {
+			Socket client = new Socket(IP,PORT);
+			DataOutputStream out = new DataOutputStream(client.getOutputStream());
+			out.writeUTF(buildServerCommand("ResetPW", username,password,pin));
+			DataInputStream in = new DataInputStream(client.getInputStream());
+			byte value = in.readByte();
+			in.close();
+			out.close();
+			client.close();
+			return value;
+			}catch(IOException ex) {
+				ex.printStackTrace();
+				return 2;
+			}
 	}
 	
 	/**
@@ -100,7 +146,7 @@ public class Client {
 	 * @param username
 	 * @param password
 	 * @param email
-	 * @return 1 if successful, 0 if already exists, 2 format, 3 other error
+	 * @return 1 if successful, 0 if already exists, 2 format, 3 other error, 4 email already in use, 5 email format
 	 */
 	public static int register(String username, String password, String email) {
 		if(email.contains("@") && email.contains(".")) {
@@ -117,7 +163,7 @@ public class Client {
 			return 3;
 		}
 		}
-		return 2;
+		return 5;
 	}
 	
 	/**
@@ -138,9 +184,12 @@ public class Client {
 	/**
 	 * 
 	 * @param in 
-	 * @return the String 'in' but encrypted with the MD5-Algorithm
+	 * @return the String 'in' but encrypted with the MD5-Algorithm or "" if the password contains a space
 	 */
 	public static String encrypt(String in) {
+		if(in.contains(" ") || in.equals("") || in.length()<4) {
+			return "";
+		}
 		try {
 		MessageDigest m = MessageDigest.getInstance("MD5");
 		m.reset();
@@ -154,7 +203,7 @@ public class Client {
 		}
 		return hashtext;
 		}catch(Exception e) {
-			return null;
+			return "";
 		}
 	}
 	
