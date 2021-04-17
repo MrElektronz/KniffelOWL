@@ -48,7 +48,7 @@ public class OfflineGameBoardController {
 		root = new Group();
 		t1.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
 		tv1.setItems(getThemes());
-		dices = new Dice[6];
+		dices = new Dice[5];
 		for(int i = 0; i< dices.length;i++) {
 			dices[i] = new Dice();
 		root.getChildren().add(dices[i]);
@@ -90,7 +90,7 @@ public class OfflineGameBoardController {
 	public void onMouseClicked(MouseEvent event) throws IOException {
 		System.out.println("click");
 		for(Dice dice : dices) {
-			dice.randomTransforms();
+			dice.randomTransforms(dices);
 			dice.roll();
 		}
 		
