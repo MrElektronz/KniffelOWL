@@ -1,5 +1,6 @@
 package gameplay;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.animation.RotateTransition;
@@ -32,6 +33,16 @@ public class Dice extends MeshView{
 		setMesh(createMesh(1,1,1));
 
 		setScale(70);
+	}
+	
+	public Dice(int number) {
+		this.number = number;
+		randomTransforms(null);
+		
+		setMesh(createMesh(1,1,1));
+
+		setScale(70);
+		setSide(number);
 	}
 	
 	
@@ -103,7 +114,7 @@ public class Dice extends MeshView{
 	    }
 	
 	
-	public void randomTransforms(Dice[] arr) {
+	public void randomTransforms(ArrayList<Dice> arr) {
 		getTransforms().clear();
 		setSide(new Random().nextInt(6)+1);
 
@@ -113,7 +124,7 @@ public class Dice extends MeshView{
 		translate(r.nextInt(450)+100, r.nextInt(450)+100, 0);
 		rotate(r.nextInt(359),Rotate.Z_AXIS);
 		}else {
-			for(int i = 0; i<arr.length;i++) {
+			for(int i = 0; i<arr.size();i++) {
 				int x = 0;
 				int y = 0;
 				do {
@@ -150,15 +161,15 @@ public class Dice extends MeshView{
 	 * @param arr
 	 * @return
 	 */
-	private boolean canSpawn(int x, int y, Dice[] arr) {
+	private boolean canSpawn(int x, int y, ArrayList<Dice> arr) {
 		x = Math.abs(x);
 		y = Math.abs(y);
-		for(int i = 0; i<arr.length;i++) {
-			double posX = Math.abs(arr[i].getTranslateX());
-			double posY = Math.abs(arr[i].getTranslateY());
+		for(int i = 0; i<arr.size();i++) {
+			double posX = Math.abs(arr.get(i).getTranslateX());
+			double posY = Math.abs(arr.get(i).getTranslateY());
 			double distanceX = Math.abs(posX-x);
 			double distanceY = Math.abs(posY-y);
-			if(distanceX+distanceY <100  && arr[i] != this) {
+			if(distanceX+distanceY <100  && arr.get(i) != this) {
 				return false;
 			}
 		}

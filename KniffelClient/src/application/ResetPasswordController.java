@@ -71,7 +71,7 @@ public class ResetPasswordController {
 				}else if(answer == 3) {
 					errorLabel.setText("Your pin is wrong");
 				}else {
-					errorLabel.setText("An error has occurred");
+					errorLabel.setText("An error has occurred["+answer+"]");
 				}
 			}else {
 				errorLabel.setText("Both passwords do not match");

@@ -28,6 +28,6 @@ public class MainMenuController {
 	 * @throws IOException
 	 */
 	public void onPlayOffline(ActionEvent event) throws IOException {
-		Main.changeScene("Scene_GameBoard.fxml",1280,720);
+		Main.changeScene("Scene_GameBoard.fxml",1280,745);
 	}
 }
