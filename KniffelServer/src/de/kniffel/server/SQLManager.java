@@ -46,7 +46,7 @@ public class SQLManager{
 					"achievements BIT(32), "+
 					"PRIMARY KEY (username))");
 			statement.executeUpdate("CREATE TABLE IF NOT EXISTS pins "+
-					"(email CHAR(20) not NULL, "+
+					"(email CHAR(50) not NULL, "+
 					"pin CHAR(6) not NULL, "+
 					"PRIMARY KEY (email))");
 			statement.close();

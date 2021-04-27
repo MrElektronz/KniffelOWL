@@ -4,5 +4,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="lib" path="D:/_Universität/Programme/workspace/mysql-connector-java-8.0.23.jar"/>
+	<classpathentry kind="lib" path="D:/_Universität/Programme/workspace/javax.mail.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
