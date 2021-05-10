@@ -31,7 +31,7 @@ public class Main extends Application {
 		try {
 			stg = primaryStage;
 			primaryStage.setResizable(false);
-			primaryStage.setTitle("Kevins & Kevins kooles Kniffelspiel");
+			primaryStage.setTitle("Kniffel OWL");
 			primaryStage.setOnCloseRequest(event -> {
 				Client.logout();
 				tThread.setRunning(false);
@@ -45,7 +45,6 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-
 	/**
 	 * Changes the scene
 	 * @param fxml
@@ -62,6 +61,17 @@ public class Main extends Application {
 	public static void changeScene(String fxml) throws IOException {
 		Parent root = FXMLLoader.load(Main.class.getResource(fxml));
 		stg.getScene().setRoot(root);
+	}
+	
+	public static void changeToEndScreen(String text, String color) throws IOException {
+		FXMLLoader loader = new FXMLLoader(Main.class.getResource("Scene_End.fxml"));
+		Parent root = (Parent)loader.load();
+		EndScreenController ctrl = (EndScreenController)loader.getController();
+		stg.getScene().setRoot(root);
+		stg.setWidth(600);
+		stg.setHeight(400);
+		stg.centerOnScreen();
+		ctrl.setText(text,color);
 	}
 
 	/**

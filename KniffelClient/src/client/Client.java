@@ -17,7 +17,6 @@ public class Client {
 	private static final String IP = Main.readProperty("server.ip");
 	private static final int PORT = Integer.valueOf(Main.readProperty("server.port"));
 	private static String sessionID = "0";
-	
 	/**
 	 * 
 	 * @param username 
@@ -39,6 +38,7 @@ public class Client {
 			return null;
 		}
 		if(!value.equals("-1")) {
+		//successful login
 		sessionID = value;
 		}
 		return value;
@@ -65,6 +65,26 @@ public class Client {
 		}
 		}
 	}
+	
+	public static String requestUsername() {
+		String user = "?";
+		if(!sessionID.equals("0")) {
+			try {
+			Socket client = new Socket(IP,PORT);
+			DataOutputStream out = new DataOutputStream(client.getOutputStream());
+			out.writeUTF(buildServerCommand("ReqestUsername", sessionID));
+			DataInputStream in = new DataInputStream(client.getInputStream());
+			user = in.readUTF();
+			out.close();
+			in.close();
+			client.close();
+			//Could receive answer from server after logout
+			}catch(IOException ex) {
+				ex.printStackTrace();
+			}
+			}
+		return user;
+	}
 	/**
 	 * 
 	 * @param username
@@ -86,6 +106,7 @@ public class Client {
 			return 2;
 		}
 	}
+	
 	
 	/**
 	 * 
@@ -140,7 +161,6 @@ public class Client {
 	public static String getSessionID() {
 		return sessionID;
 	}
-	
 	/**
 	 * 
 	 * @param username
