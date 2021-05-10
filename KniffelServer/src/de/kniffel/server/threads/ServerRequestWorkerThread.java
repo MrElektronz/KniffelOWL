@@ -57,6 +57,10 @@ public class ServerRequestWorkerThread extends Thread{
 			//.log("AUSLOGGEN");
 			byte result = Server.getSQLManager().setNewPasswordWithPin(args[1], args[2], args[3]);
 			out.writeByte(result);
+		}else if(command.equals("$ReqUsername")) {
+			String name = SessionManager.getSession(args[1]).getUsername();
+			out.writeUTF(name);
+			
 		}
 		//System.out.println("Server: "+input.readUTF()+" by "+client.getRemoteSocketAddress());
 		input.close();

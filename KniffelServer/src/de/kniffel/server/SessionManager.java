@@ -43,6 +43,10 @@ public class SessionManager {
 			}
 		}
 		
+		public static Session getSession(String sessionID) {
+			return sessions.get(sessionID);
+		}
+		
 		public static void delSession(String id) {
 			sessions.remove(id);
 		}
@@ -115,7 +119,7 @@ public class SessionManager {
 			}
 		}
 		
-		private static class Session{
+		public static class Session{
 			private String username;
 			private Instant lastTimeSeen;
 			
