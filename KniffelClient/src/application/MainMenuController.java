@@ -10,17 +10,32 @@ import java.util.Properties;
 import client.Client;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
+import profile.ProfileManager;
 
 public class MainMenuController {
 	
 
+	@FXML
+	private Label username;
 	
-
+	@FXML
+	private ImageView imageProfile;
+	
+	public void initialize() {
+		username.setText(Client.getUsername());
+		updateProfileImage();
+	}
 	
 	/**
 	 * handles the process after the 'Play vs Bots'-Button has been clicked
@@ -29,5 +44,24 @@ public class MainMenuController {
 	 */
 	public void onPlayOffline(ActionEvent event) throws IOException {
 		Main.changeScene("Scene_GameBoard.fxml",1280,745);
+	}
+	
+	public void onPlayOnline(ActionEvent event) throws IOException {
+		Main.changeScene("Scene_Lobby.fxml",640,440);
+	}
+	
+	public void onImageChanged(ActionEvent event) throws IOException{
+		Parent root = FXMLLoader.load(Main.class.getResource("Scene_ChangeProfileImage.fxml"));
+		Main.mainMenu = this;
+		Scene scene = new Scene(root,312,85);
+		Stage stage = new Stage();
+		stage.setScene(scene);
+		stage.setResizable(false);
+		stage.show();
+	}
+	
+	public void updateProfileImage() {
+		Image img = ProfileManager.getProfileImage();
+		imageProfile.setImage(img);
 	}
 }

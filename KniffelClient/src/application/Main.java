@@ -8,7 +8,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
+import javax.swing.ImageIcon;
+
 import client.Client;
+import client.LobbyThread;
 import client.TimeoutThread;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -22,7 +25,8 @@ public class Main extends Application {
 
 	private static Stage stg;
 	private static TimeoutThread tThread;
-
+	public static LobbyThread lThread;
+	public static MainMenuController mainMenu;
 	@Override
 	public void start(Stage primaryStage) {
 		// Client.register("Emre2", "passwort2", "xaxaxa@gmail.com");
@@ -33,8 +37,10 @@ public class Main extends Application {
 			primaryStage.setResizable(false);
 			primaryStage.setTitle("Kniffel OWL");
 			primaryStage.setOnCloseRequest(event -> {
+				LobbyController.shutdown();
 				Client.logout();
 				tThread.setRunning(false);
+				//if(lThread != null)
 			});
 			BorderPane root = (BorderPane) FXMLLoader.load(Main.class.getResource("Scene_Login.fxml"));
 			Scene scene = new Scene(root, 600, 400);

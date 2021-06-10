@@ -1,14 +1,26 @@
 package client;
 
+import java.awt.image.BufferedImage;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
 import java.net.Socket;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.util.Properties;
+import java.util.Random;
+
+import javax.imageio.ImageIO;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 import application.Main;
 
@@ -17,8 +29,10 @@ public class Client {
 	private static final String IP = Main.readProperty("server.ip");
 	private static final int PORT = Integer.valueOf(Main.readProperty("server.port"));
 	private static String sessionID = "0";
+	private static String username = "";
+	private static int profilePicID = 0;
 	/**
-	 * 
+	 * This method also updates the profilePicID
 	 * @param username 
 	 * @param password not-encrypted password
 	 * @return if login was successful return is the session-ID, if not return is null, if wrong username/password its '0'
@@ -40,10 +54,63 @@ public class Client {
 		if(!value.equals("-1")) {
 		//successful login
 		sessionID = value;
+		//update profilePic
 		}
 		return value;
 		}catch(IOException ex) {
+			ex.printStackTrace();
 			return null;
+		}
+	}
+	
+	public static void setUsername(String username) {
+		Client.username = username;
+	}
+	/**
+	 * is client-side only
+	 * @param profilePicID
+	 */
+	public static void setProfilePicID(int profilePicID) {
+		Client.profilePicID = profilePicID;
+	}
+	public static String getUsername() {
+		return username;
+	}
+	
+	public static int getProfilePicID() {
+		return profilePicID;
+	}
+	
+	/**
+	 *  is server-side only
+	 * @param id
+	 */
+	public static void sendNewProfilePicID(int id) {
+		try {
+		Socket client = new Socket(IP,PORT);
+		DataOutputStream out = new DataOutputStream(client.getOutputStream());
+		out.writeUTF(buildServerCommand("SetProf", sessionID,id+""));
+		out.close();
+		client.close();
+		}catch(IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public static void updateProfilePic() {
+		try {
+		Socket client = new Socket(IP,PORT);
+		DataOutputStream out = new DataOutputStream(client.getOutputStream());
+		//out.writeUTF("$Login;"+username+";"+password);
+		out.writeUTF(buildServerCommand("GetProf",username));
+		DataInputStream in = new DataInputStream(client.getInputStream());
+		int value = in.readInt();
+		in.close();
+		out.close();
+		client.close();
+		setProfilePicID(value);
+		}catch(IOException ex) {
+			ex.printStackTrace();
 		}
 	}
 	/**
@@ -53,6 +120,7 @@ public class Client {
 	public static void logout() {
 		if(!sessionID.equals("0")) {
 		try {
+			System.out.println("mach logout jetzt");
 		Socket client = new Socket(IP,PORT);
 		DataOutputStream out = new DataOutputStream(client.getOutputStream());
 		out.writeUTF(buildServerCommand("Logout", sessionID));
@@ -226,5 +294,75 @@ public class Client {
 			return "";
 		}
 	}
+	
+	/**
+	 * @return has a size of 5, with index 0-3 being the player profile id's and if index 4 = 1 the game begins
+	 * (the lobby is full or everyone is ready)
+	 */
+	public static int[] requestLobbyUpdate() {
+		try {
+			Socket client = new Socket(IP,PORT);
+			DataOutputStream out = new DataOutputStream(client.getOutputStream());
+			out.writeUTF(buildServerCommand("LobbyUpdate", sessionID));
+			int[] lobbyData = readInts(client.getInputStream());
+			out.close();
+			client.close();
+			return lobbyData;
+			}catch(IOException ex) {
+				ex.printStackTrace();
+				return new int[1];
+			}
+	}
+	
+	/**
+	 * tells the server that the player is ready to start the game (if he is in a lobby)
+	 */
+	public static void sendLobbyReadyStatus() {
+		try {
+			Socket client = new Socket(IP,PORT);
+			DataOutputStream out = new DataOutputStream(client.getOutputStream());
+			out.writeUTF(buildServerCommand("LobbyReady", sessionID));
+			out.close();
+			client.close();
+			}catch(IOException ex) {
+				ex.printStackTrace();
+			}
+	}
+	
+	
+	/**
+	 * Helper method to read ints from an InputStream
+	 * (taken from https://stackoverflow.com/questions/35527516/java-sending-receiving-int-array-via-socket-to-from-a-program-coded-in-c)
+	 */
+	private static int[] readInts(InputStream in) throws IOException {
+        DataInputStream dataIn = new DataInputStream(in);
+        try {
+        int[] ints = new int[dataIn.readInt()];
+        for (int i = 0; i < ints.length; ++i) ints[i] = dataIn.readInt();
+        dataIn.close();
+        return ints;
+        }catch(EOFException ex) {
+            dataIn.close();
+        	return new int[1];
+        }
+        
+        
+    }
+	
+	/**
+	 * tells the server that the player is ready to start the game (if he is in a lobby)
+	 */
+	public static void sendLeaveLobby() {
+		try {
+			Socket client = new Socket(IP,PORT);
+			DataOutputStream out = new DataOutputStream(client.getOutputStream());
+			out.writeUTF(buildServerCommand("LobbyLeave", sessionID));
+			out.close();
+			client.close();
+			}catch(IOException ex) {
+				ex.printStackTrace();
+			}
+	}
+	
 	
 }

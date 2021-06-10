@@ -74,9 +74,10 @@ public class LogInController {
 				errorLabel.setText("Dieser Nutzer ist bereits eingeloggt");
 			}else {
 				errorLabel.setText("Du wurdest erfolgreich eingeloggt");
+				Client.setUsername(username.getText());
+				Client.updateProfilePic();
 				Main.changeScene("Scene_MainMenu.fxml",1280,720);
 			}
-			
 			}
 		
 	}
