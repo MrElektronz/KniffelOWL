@@ -29,7 +29,7 @@ public class SQLManager{
 			statement.executeUpdate("CREATE DATABASE IF NOT EXISTS KNIFFEL");
 			statement.close();
 			con.close();
-			con = DriverManager.getConnection("jdbc:mysql://localhost/KNIFFEL","root","");
+			con = DriverManager.getConnection("jdbc:mysql://"+this.url+"/KNIFFEL",this.user,this.password);
 			statement = con.createStatement();
 			statement.executeUpdate("CREATE TABLE IF NOT EXISTS accounts "+
 									"(username CHAR(20) not NULL, "+
@@ -57,6 +57,38 @@ public class SQLManager{
 			ex.printStackTrace();
 		}
 	}
+	
+	public int getProfilePic(String username) {
+		System.out.println("Start "+username);
+		try {
+		Connection con = DriverManager.getConnection("jdbc:mysql://"+this.url+"/KNIFFEL",this.user,this.password);
+		String query= "SELECT profilepicture as prof FROM accounts WHERE username='"+username+"'";
+		PreparedStatement pst = con.prepareStatement(query);
+		ResultSet rs = pst.executeQuery();
+		if(!rs.next()) {
+			con.close();
+			return 0;
+		}
+		int i = rs.getInt("prof");
+		con.close();
+		System.out.println("return "+i);
+		return i;
+		
+		}catch(SQLException ex) {
+			ex.printStackTrace();
+			return 0;
+		}
+	}
+	
+	public void setProfilePic(String username,int id) {
+		try {
+			executeSQLStatement("UPDATE accounts SET profilepicture="+id+" WHERE username='"+username+"'");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	
 	/**
 	 * @return 0 if username already exists, 1 if account was successfully created, 2 if the format doesnt match, 3 other error, 4 email already in use
@@ -117,6 +149,7 @@ public class SQLManager{
 		}
 	}
 	
+
 	public void executeSQLStatement(String statement) throws SQLException {
 		Connection con = DriverManager.getConnection("jdbc:mysql://"+this.url+"/KNIFFEL",this.user,this.password);
 		Statement st = con.createStatement();

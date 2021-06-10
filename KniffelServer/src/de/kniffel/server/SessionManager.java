@@ -48,7 +48,14 @@ public class SessionManager {
 		}
 		
 		public static void delSession(String id) {
+			Session s = sessions.get(id);
 			sessions.remove(id);
+			
+			//if in gameinstance
+			if(s.getCurrentGame() != null) {
+				GameInstance game = s.getCurrentGame();
+				
+			}
 		}
 		
 		public static boolean doesSessionExist(String id) {
@@ -122,10 +129,11 @@ public class SessionManager {
 		public static class Session{
 			private String username;
 			private Instant lastTimeSeen;
-			
+			private GameInstance currentGame;
 			public Session(String username) {
 				this.username = username;
 				lastTimeSeen = Instant.now();
+				currentGame = null;
 			}
 			
 			public String getUsername() {
@@ -140,6 +148,12 @@ public class SessionManager {
 				lastTimeSeen = Instant.now();
 			}
 			
+			public void setCurrentGame(GameInstance currentGame) {
+				this.currentGame = currentGame;
+			}
+			public GameInstance getCurrentGame() {
+				return currentGame;
+			}
 			
 			/**
 			 * Override equals in Order to use containsValue of class Hashmap
