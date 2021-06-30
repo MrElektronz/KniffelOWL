@@ -1,42 +1,27 @@
 package application;
 
 import java.awt.geom.Point2D;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Properties;
 
-import client.Client;
-import gameplay.Bot;
 import gameplay.Dice;
 import gameplay.OfflinePlayer;
 import gameplay.OfflineSession;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
-import javafx.scene.Scene;
 import javafx.scene.SubScene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import sound.SoundGenerator;
 
 public class OfflineGameBoardController {
 	
@@ -63,6 +48,9 @@ public class OfflineGameBoardController {
 	
 	//So that the player needs to roll at least once to click the dice
 	private boolean canClickDice;
+	
+	//Helps with playing sound effects
+	private SoundGenerator sounds;
 	
 	private Group root;
 	private PerspectiveCamera pc;
@@ -105,6 +93,7 @@ public class OfflineGameBoardController {
 		//add player/bots
 		//gameSession.setPlayer(new OfflinePlayer(Client.requestUsername()));
 		gameSession.setPlayer(new OfflinePlayer("p1"));
+		sounds = new SoundGenerator();
 	}
 	
 	/**
@@ -234,6 +223,7 @@ public class OfflineGameBoardController {
 		if(gameSession.getCurrentRoll() == 3) {
 			btnRoll.setVisible(false);
 		}
+		sounds.playRoll();
 		gameSession.nextRoll();
 		btnRoll.setText(getButtonLabel());
 		for(Dice dice : dices) {

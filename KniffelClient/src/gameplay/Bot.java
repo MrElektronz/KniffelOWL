@@ -64,15 +64,18 @@ public class Bot extends OfflinePlayer{
 			this.delay = 1500;
 			this.delayRatio = 200; //newDelay() can sleep for a value between 1300 and 1700
 		}
+		
 		//logic is specified in here
 		@Override
 		public void run() {
+			//Sample code, roll 2 times, then add to the field with highest score
 			rollDice();
 			rollDice();
 			ArrayList<Integer> scores = getScores(); //gets the scores
 			//getting max index of scores
 			int index = -1;
 			int maxValue = 0;
+			//set field of highest score
 			for(int i = 0; i< scores.size();i++) {
 				if(scores.get(i) >maxValue && !ogbc.isScoreAlreadySet(i) && !alreadySet.contains(i) && ogbc.isChoosableScoreID(i)) {
 					maxValue = scores.get(i);
@@ -80,6 +83,7 @@ public class Bot extends OfflinePlayer{
 					System.out.println("here1");
 				}
 			}
+			//if no highest score field found, set next field
 			if(index ==-1) {
 				for(int i = 0; i< scores.size();i++) {
 					if(ogbc.isChoosableScoreID(i)&&!alreadySet.contains(i)) {

@@ -8,18 +8,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
 
-import javax.swing.ImageIcon;
-
 import client.Client;
 import client.LobbyThread;
 import client.TimeoutThread;
 import javafx.application.Application;
-import javafx.stage.Stage;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.fxml.FXMLLoader;
+import javafx.stage.Stage;
 
 public class Main extends Application {
 
@@ -94,7 +91,7 @@ public class Main extends Application {
 	 * @return returns the value of the key 'key' stored in client.properties (next to the .jar file) or returns "" if key was not found
 	 */
 	public static String readProperty(String key) {
-		createFileIfNotExists();
+		createFileIfNotExist();
 		try (InputStream in = new FileInputStream(new File("client.properties"))) {
 			Properties prop = new Properties();
 
@@ -137,7 +134,7 @@ public class Main extends Application {
 	/**
 	 * creates a new client.properties file if not found
 	 */
-	public static void createFileIfNotExists() {
+	public static void createFileIfNotExist() {
 		File f = new File("client.properties");
 		if(!f.exists()) {
 			try {
