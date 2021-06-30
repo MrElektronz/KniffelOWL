@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="313.0" style="-fx-background-color: #171717;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ChangeProfileImageController">
+  <content>
+    <AnchorPane style="-fx-background-color: #171717;">
+         <children>
+            <HBox fx:id="box" prefHeight="72.0" prefWidth="313.0" />
+         </children></AnchorPane>
+  </content>
+</ScrollPane>
