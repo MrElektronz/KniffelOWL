@@ -24,6 +24,8 @@ public class ResetPasswordController {
 	private PasswordField password;
 	@FXML
 	private PasswordField password2;
+	@FXML
+	private Label lCheckMail;
 
 	
 	
@@ -36,13 +38,14 @@ public class ResetPasswordController {
 		if(username.getText().length()<3) {
 			errorLabel.setText("username not found");
 		}
-		byte result = Client.requestResetPassword(username.getText());
+		byte result = Client.getInstance().requestResetPassword(username.getText());
 		if(result == 0) {
 			errorLabel.setText("username not found");
 		}else if(result == 2) {
 			errorLabel.setText("An error has occurred");
 		}else if(result == 1){
-			errorLabel.setText("An email with the reset code has been send");
+			lCheckMail.setText("An email with the reset code has been send to your e-mail address");
+			lCheckMail.setVisible(true);
 		}
 		
 	}
@@ -56,9 +59,10 @@ public class ResetPasswordController {
 	public void onSetNewPassword(ActionEvent event) throws IOException {
 		if(username.getText().length()>1&& password2.getText().length()>1&&password.getText().length()>1&&pin.getText().length()>1) {
 			if(password.getText().equals(password2.getText())) {
-				int answer = Client.resetPassword(username.getText(), password.getText(), pin.getText());
+				int answer = Client.getInstance().resetPassword(username.getText(), password.getText(), pin.getText());
 				if(answer == 1) {
-					errorLabel.setText("Password was changed successfully");
+					lCheckMail.setText("Password was changed successfully");
+					lCheckMail.setVisible(true);
 				}else if(answer == 0) {
 					errorLabel.setText("User does not exist");
 				}else if(answer == 3) {

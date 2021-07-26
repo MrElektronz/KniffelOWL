@@ -35,7 +35,7 @@ public class Main extends Application {
 			primaryStage.setTitle("Kniffel OWL");
 			primaryStage.setOnCloseRequest(event -> {
 				LobbyController.shutdown();
-				Client.logout();
+				Client.getInstance().logout();
 				tThread.setRunning(false);
 				//if(lThread != null)
 			});

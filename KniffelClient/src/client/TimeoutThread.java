@@ -23,7 +23,7 @@ public class TimeoutThread extends Thread{
 	public void run() {
 
 		while(running) {
-		Client.pingServer();
+		Client.getInstance().pingServer();
 		try {
 			sleep(9000);
 		} catch (InterruptedException e) {

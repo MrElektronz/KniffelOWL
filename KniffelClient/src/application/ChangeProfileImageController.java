@@ -16,13 +16,13 @@ public class ChangeProfileImageController {
 	public void initialize() {
 		Button[] btns = new Button[5];
 		for(int i = 0; i<btns.length;i++) {
-			Button b = new Button(i+"",new ImageView(ProfileManager.getImage(i)));
+			Button b = new Button(i+"",new ImageView(ProfileManager.getInstance().getImage(i)));
 			b.setStyle("-fx-background-color: transparent; -fx-text-fill: transparent");
 			b.setOnMouseClicked(event ->{
 				int id = Integer.parseInt(b.getText());
-				Client.setProfilePicID(id);
+				Client.getInstance().setProfilePicID(id);
 				Main.mainMenu.updateProfileImage();
-				Client.sendNewProfilePicID(id);
+				Client.getInstance().sendNewProfilePicID(id);
 			});
 			btns[i] = b;
 		}

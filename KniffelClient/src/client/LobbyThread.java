@@ -26,7 +26,7 @@ public class LobbyThread extends Thread{
 		while(running) {
 			//update the lobby client-side
 			System.out.println("run lobby");
-		lobby.updateLobby(Client.requestLobbyUpdate());
+		lobby.updateLobby(Client.getInstance().requestLobbyUpdate());
 		try {
 			//request a new lobby update every 2 seconds
 			sleep(2000);

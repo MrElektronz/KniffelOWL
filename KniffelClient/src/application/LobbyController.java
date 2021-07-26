@@ -24,8 +24,10 @@ public class LobbyController {
 	HBox horbox;
 	private boolean isReady;
 	
+	private Client client;
 	public void initialize() {
 		isReady = false;
+		client = Client.getInstance();
 		Main.lThread = new LobbyThread(this);
 		Main.lThread.start();
 	}
@@ -41,7 +43,7 @@ public class LobbyController {
 		bReady.setText("Ready");
 		bReady.setStyle("-fx-background-color: #CCCC");
 		bReturn.setVisible(false);
-		Client.sendLobbyReadyStatus();
+		client.sendLobbyReadyStatus();
 		}
 	}
 	
@@ -49,7 +51,7 @@ public class LobbyController {
 		if(Main.lThread != null) {
 		Main.lThread.setRunning(false);
 		}
-		Client.sendLeaveLobby();
+		Client.getInstance().sendLeaveLobby();
 	}
 	/**
 	 * @param event
@@ -62,7 +64,7 @@ public class LobbyController {
 	
 	public void updateLobby(int[] lobbyData) {
 		//start the game if lobby is ready
-		System.out.println(Client.getSessionID()+" Lobby Data: "+lobbyData[0]+" "+lobbyData[1]);
+		System.out.println(client.getSessionID()+" Lobby Data: "+lobbyData[0]+" "+lobbyData[1]);
 		if(lobbyData.length>2) {
 		boolean startGame = lobbyData[4] == 1 ? true:false;
 		if(startGame) {
@@ -71,7 +73,7 @@ public class LobbyController {
 			//update the lobby scene
 			ArrayList<ImageView> profiles = new ArrayList<ImageView>();
 			for(int i = 0; i< lobbyData.length-1;i++) {
-				profiles.add(new ImageView(ProfileManager.getImage(lobbyData[i])));
+				profiles.add(new ImageView(ProfileManager.getInstance().getImage(lobbyData[i])));
 			}
 			Platform.runLater(new Runnable() {
 

@@ -24,12 +24,13 @@ public class LogInController {
 	@FXML
 	private CheckBox keepSignedIn;
 	
+	private Client client;
 	
 	/**
 	 * gets called on startup, automatically enters username and password if possible
 	 */
 	public void initialize() {
-
+		client = Client.getInstance();
 		this.username.setText(Main.readProperty("client.user"));
 		this.password.setText(Main.readProperty("client.password"));
 	}
@@ -59,7 +60,7 @@ public class LogInController {
 		            System.out.println("saved");
 			}
 
-			String sessionID = Client.login(username.getText(), password.getText());
+			String sessionID = client.login(username.getText(), password.getText());
 			
 			if(sessionID == null) {
 				errorLabel.setText("Ein Fehler ist aufgetreten");
@@ -69,8 +70,8 @@ public class LogInController {
 				errorLabel.setText("Dieser Nutzer ist bereits eingeloggt");
 			}else {
 				errorLabel.setText("Du wurdest erfolgreich eingeloggt");
-				Client.setUsername(username.getText());
-				Client.updateProfilePic();
+				client.setUsername(username.getText());
+				client.updateProfilePic();
 				Main.changeScene("Scene_MainMenu.fxml",1280,720);
 			}
 			}

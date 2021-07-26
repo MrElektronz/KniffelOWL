@@ -24,7 +24,7 @@ public class MainMenuController {
 	private ImageView imageProfile;
 	
 	public void initialize() {
-		username.setText(Client.getUsername());
+		username.setText(Client.getInstance().getUsername());
 		updateProfileImage();
 	}
 	
@@ -52,7 +52,7 @@ public class MainMenuController {
 	}
 	
 	public void updateProfileImage() {
-		Image img = ProfileManager.getProfileImage();
+		Image img = ProfileManager.getInstance().getProfileImage();
 		imageProfile.setImage(img);
 	}
 }

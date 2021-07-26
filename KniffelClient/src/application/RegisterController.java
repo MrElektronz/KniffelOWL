@@ -26,6 +26,8 @@ public class RegisterController {
 	private PasswordField password;
 	@FXML
 	private PasswordField password2;
+	@FXML
+	private Label successLabel;
 
 	
 	
@@ -45,11 +47,13 @@ public class RegisterController {
 	 * @throws IOException
 	 */
 	public void onRegister(ActionEvent event) throws IOException {
+		successLabel.setVisible(false);
 		if(username.getText().length()>1&& password.getText().length()>1&& password2.getText().length()>1&&email.getText().length()>1  ) {
 			if(password.getText().equals(password2.getText())) {
-				int answer = Client.register(username.getText(), password.getText(), email.getText());
+				int answer = Client.getInstance().register(username.getText(), password.getText(), email.getText());
 				if(answer == 1) {
-					errorLabel.setText("Successfully registered");
+					successLabel.setVisible(true);
+					successLabel.setText("Successfully registered");
 				}else if(answer == 0) {
 					errorLabel.setText("User already exists");
 				}else if(answer == 5) {
