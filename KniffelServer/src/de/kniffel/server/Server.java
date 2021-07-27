@@ -26,7 +26,7 @@ public class Server {
 	public static void main(String[] args) {
 		loadConfig();
 		sql.createDatatablesIfNotExisting();
-		SessionManager.setup();
+		SessionManager.getInstance().setup();
 
 		try {
 			listenerThread = new ServerListenerThread(port);

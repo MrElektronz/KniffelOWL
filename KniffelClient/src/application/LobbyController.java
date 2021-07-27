@@ -30,6 +30,7 @@ public class LobbyController {
 		client = Client.getInstance();
 		Main.lThread = new LobbyThread(this);
 		Main.lThread.start();
+	
 	}
 	
 	/**
@@ -52,6 +53,7 @@ public class LobbyController {
 		Main.lThread.setRunning(false);
 		}
 		Client.getInstance().sendLeaveLobby();
+		System.out.println("leave lobby1");
 	}
 	/**
 	 * @param event
@@ -62,7 +64,7 @@ public class LobbyController {
 		Main.changeScene("Scene_MainMenu.fxml",1280,720);
 	}
 	
-	public void updateLobby(int[] lobbyData) {
+	public void updateLobby(byte[] lobbyData) {
 		//start the game if lobby is ready
 		System.out.println(client.getSessionID()+" Lobby Data: "+lobbyData[0]+" "+lobbyData[1]);
 		if(lobbyData.length>2) {

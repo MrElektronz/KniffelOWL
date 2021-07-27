@@ -11,6 +11,7 @@ import java.util.Properties;
 import client.Client;
 import client.LobbyThread;
 import client.TimeoutThread;
+import de.client.serialize.Serializer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,11 +23,30 @@ public class Main extends Application {
 
 	private static Stage stg;
 	private static TimeoutThread tThread;
+	//move later to onlinegameboardcontroller
 	public static LobbyThread lThread;
 	public static MainMenuController mainMenu;
 	@Override
 	public void start(Stage primaryStage) {
 		// Client.register("Emre2", "passwort2", "xaxaxa@gmail.com");
+	/*	byte[] data = new byte[] {0,3,6,1};
+		fromByteArr(data);
+		try {
+			String se = Serializer.toString(data);
+			System.out.println("serialized: "+ se);
+			System.out.println("deserialized");
+			try {
+				fromByteArr(Serializer.fromStringToByteArr(se));
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		
+		
 		tThread = new TimeoutThread();
 		tThread.start();
 		try {
@@ -48,6 +68,9 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
+	
+	
+
 	/**
 	 * Changes the scene
 	 * @param fxml

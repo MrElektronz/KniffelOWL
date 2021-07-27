@@ -27,7 +27,7 @@ public class ServerTimeoutListenerThread extends Thread{
 	public void run() {
 		while(Server.isRunning()) {
 		
-			SessionManager.checkForTimeouts(120);
+			SessionManager.getInstance().checkForTimeouts(120);
 			
 			
 			try {

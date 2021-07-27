@@ -18,9 +18,29 @@ public class GameFinder {
 	 * wird sich diese Herangehensweise (über alle games loopen) nicht als wesentlich langsamer darstellen. 
 	 */
 
-	public static ArrayList<GameInstance> games = new ArrayList<GameInstance>();
+	private static GameFinder instance;
 	
-	private static int[] addPlayerToLobby(String sessionID) {
+	/**
+	 * private constructor, so no other class can instanciate GameFinder
+	 */
+	private GameFinder() {
+		
+	}
+	
+	/**
+	 * using the singleton design pattern
+	 * @return one and only instance of this class
+	 */
+	public static GameFinder getInstance() {
+		if(instance == null) {
+			instance = new GameFinder();
+		}
+		return instance;
+	}
+	
+	public ArrayList<GameInstance> games = new ArrayList<GameInstance>();
+	
+	public byte[] addPlayerToLobby(String sessionID) {
 		GameInstance lobby = null;
 		for(GameInstance game : games) {
 			if(game.getState() == GameState.Lobby) {
@@ -33,18 +53,19 @@ public class GameFinder {
 		}
 		//add Player to lobby
 		lobby.addPlayer(sessionID);
+		
 		return lobby.getLobbyData();
 	}
 	
 	
 	/**
-	 * 
+	 * @deprecated
 	 * @param sessionID
 	 * @return own version of 'null' is an empty array
 	 */
-	public static int[] updateLobby(String sessionID) {
+	public byte[] updateLobby(String sessionID) {
 		System.out.println("Lobby Amount: "+games.size());
-		Session s = SessionManager.getSession(sessionID);
+		Session s = SessionManager.getInstance().getSession(sessionID);
 		if(s != null) {
 		System.out.println("update lobby with "+sessionID);
 		//add to lobby if not already inside of one
@@ -54,11 +75,11 @@ public class GameFinder {
 		return s.getCurrentGame().getLobbyData();
 		}
 		
-		return new int[1];
+		return new byte[1];
 	}
 	
 	
-	public static void removePlayerFromLobby(String sessionID) {
+	public void removePlayerFromLobby(String sessionID) {
 		GameInstance toDelete = null;
 		for(GameInstance game : games) {
 			if(game.containsPlayer(sessionID)) {
@@ -67,7 +88,24 @@ public class GameFinder {
 			}
 		}
 		if(toDelete != null && toDelete.getPlayerCount()==0) {
-			GameFinder.games.remove(toDelete);
+			games.remove(toDelete);
+		}
+	}
+	
+	public GameInstance getGameInstanceOfPlayer(String sessionID) {
+		GameInstance g = null;
+		for(GameInstance game : games) {
+			if(game.containsPlayer(sessionID)) {
+				g = game;
+			}
+		}
+		return g;
+	}
+	
+	public void setLobbyReadyStatus(String sessionID) {
+		GameInstance g = getGameInstanceOfPlayer(sessionID);
+		if(g != null) {
+			g.updateReady(sessionID, true);
 		}
 	}
 }

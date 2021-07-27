@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 import java.security.MessageDigest;
 
 import application.Main;
+import de.client.serialize.Serializer;
 
 public class Client {
 
@@ -313,21 +314,22 @@ public class Client {
 		}
 	}
 
-	/**
-	 * @return has a size of 5, with index 0-3 being the player profile id's and if index 4 = 1 the game begins
-	 * (the lobby is full or everyone is ready)
-	 */
-	public int[] requestLobbyUpdate() {
+
+	
+	public void addToLobby() {
 		try {
 			initClient();
-			out.writeUTF(buildServerCommand("LobbyUpdate", sessionID));
+			out.writeUTF(buildServerCommand("LobbyAdd", sessionID));
+			/* This answer doesnt come anymore, now the server will always send data
+			try {
+				lobbyData = Serializer.fromStringToByteArr(in.readUTF().split(";")[1]);
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}*/
 			out.flush();
-			int[] lobbyData = readInts();
-			//client.close();
-			return lobbyData;
 		}catch(IOException ex) {
 			ex.printStackTrace();
-			return new int[1];
 		}
 	}
 
@@ -373,6 +375,7 @@ public class Client {
 		}catch(IOException ex) {
 			ex.printStackTrace();
 		}
+		System.out.println("leave lobby 2");
 	}
 
 	/**
@@ -383,5 +386,8 @@ public class Client {
 		return in;
 	}
 
+	public Socket getSocket() {
+		return client;
+	}
 
 }

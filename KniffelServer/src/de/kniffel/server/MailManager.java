@@ -14,7 +14,32 @@ import javax.mail.internet.MimeMessage;
 
 public class MailManager {
 
-	public static byte sendResetPasswordPIN(String username)
+	private static MailManager instance;
+	
+	/*
+	 * private constructor, so no other class can instanciate from MailManager
+	 */
+	private MailManager() {}
+	
+	/**
+	 * using singleton design pattern
+	 * @return one and only instance of MailManager
+	 */
+	public static MailManager getInstance() {
+		if(instance == null) {
+			instance = new MailManager();
+		}
+		return instance;
+	}
+	
+	
+	
+	/**
+	 * sends a email to the usernames mail adress to reset its password
+	 * @param username
+	 * @return 1 if successful
+	 */
+	public byte sendResetPasswordPIN(String username)
 	{
 		String pin = new RandomString(6).nextString();
 		String email = Server.getSQLManager().getMailAdresse(username);
@@ -46,8 +71,13 @@ public class MailManager {
 	}
 	
 	
-	
-	private static void sendMail(String recepient, String pin, String username) {
+	/**
+	 * send message to recepient to reset his/her password
+	 * @param recepient
+	 * @param pin
+	 * @param username
+	 */
+	private void sendMail(String recepient, String pin, String username) {
 		Properties prop = new Properties();
 		prop.put("mail.smtp.auth", "true");
 		prop.put("mail.smtp.starttls.enable","true");
@@ -71,8 +101,16 @@ public class MailManager {
 		}
 	}
 	
-	
-	private static Message prepareMessage(Session session, String acc, String recepient, String pin,String username) {
+	/**
+	 * 
+	 * @param session
+	 * @param acc
+	 * @param recepient
+	 * @param pin
+	 * @param username
+	 * @return Message object, with all the new account's data to send to the users email
+	 */
+	private Message prepareMessage(Session session, String acc, String recepient, String pin,String username) {
 		try {
 		Message m = new MimeMessage(session);
 		m.setFrom(new InternetAddress(acc));

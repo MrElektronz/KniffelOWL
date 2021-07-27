@@ -1,11 +1,14 @@
 package de.kniffel.server;
 
 import java.math.BigInteger;
+import java.net.Socket;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.sql.*;
 import java.util.Locale;
 import java.util.Random;
+
+import de.kniffel.server.threads.ServerRequestWorkerThread;
 
 public class SQLManager{
 
@@ -58,7 +61,7 @@ public class SQLManager{
 		}
 	}
 	
-	public int getProfilePic(String username) {
+	public byte getProfilePic(String username) {
 		System.out.println("Start "+username);
 		try {
 		Connection con = DriverManager.getConnection("jdbc:mysql://"+this.url+"/KNIFFEL",this.user,this.password);
@@ -72,7 +75,7 @@ public class SQLManager{
 		int i = rs.getInt("prof");
 		con.close();
 		System.out.println("return "+i);
-		return i;
+		return (byte)i;
 		
 		}catch(SQLException ex) {
 			ex.printStackTrace();
@@ -129,7 +132,7 @@ public class SQLManager{
 	 * @param password
 	 * @return session-ID login successful, '0' username/password wrong, '' other error, '-1' already logged in
 	 */
-	public String login(String username, String password) {
+	public String login(String username, String password, ServerRequestWorkerThread wt) {
 		try {
 		Connection con = DriverManager.getConnection("jdbc:mysql://"+this.url+"/KNIFFEL",this.user,this.password);
 		String query= "SELECT username,password FROM accounts WHERE username='"+username+"' AND password='"+password+"'";
@@ -142,7 +145,7 @@ public class SQLManager{
 		}
 		System.out.println("User "+username+ " has logged in with password "+password);
 		con.close();
-		return SessionManager.addNewSession(username);
+		return SessionManager.getInstance().addNewSession(username,wt);
 		}catch(SQLException ex) {
 			return "";
 			
