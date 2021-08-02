@@ -11,8 +11,11 @@ import java.util.Properties;
 import client.Client;
 import client.LobbyThread;
 import client.TimeoutThread;
+import de.client.serialize.OnlinePlayerWrapper;
+import de.client.serialize.OnlineSessionWrapper;
 import de.client.serialize.Serializer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -26,6 +29,7 @@ public class Main extends Application {
 	//move later to onlinegameboardcontroller
 	public static LobbyThread lThread;
 	public static MainMenuController mainMenu;
+	public static OnlineGameBoardController onlineGame;
 	@Override
 	public void start(Stage primaryStage) {
 		// Client.register("Emre2", "passwort2", "xaxaxa@gmail.com");
@@ -67,6 +71,22 @@ public class Main extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		/*
+		OnlineSessionWrapper os = new OnlineSessionWrapper(new OnlinePlayerWrapper("KEK", (byte) 3), null, null, null);
+		System.out.println(os.serialize());
+		int a = os.getDice().get(0);
+		System.out.println(a);
+		int b = os.getDice().get(1);
+		System.out.println(b);
+		os.addToBank(a);
+		os.addToBank(b);
+		System.out.println(os.serialize());
+		os.removeFromBank(a);
+		System.out.println(os.serialize());
+		os.removeFromBank(b);
+		System.out.println(os.serialize());
+		*/
+		
 	}
 	
 	
@@ -184,5 +204,32 @@ public class Main extends Application {
 	        }
 
 		}
+	}
+
+
+
+	public static void updateSession(OnlineSessionWrapper deserialize) {
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+				if(onlineGame == null) {
+					FXMLLoader loader = new FXMLLoader(Main.class.getResource("Scene_OnlineGameBoardController.fxml"));
+					Parent root = (Parent)loader.load();
+					OnlineGameBoardController ctrl = (OnlineGameBoardController)loader.getController();
+					stg.getScene().setRoot(root);
+					stg.setWidth(1280);
+					stg.setHeight(745);
+					stg.centerOnScreen();
+					onlineGame = ctrl;
+					}
+					onlineGame.updateSession(deserialize);				
+				}catch(IOException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+		
 	}
 }

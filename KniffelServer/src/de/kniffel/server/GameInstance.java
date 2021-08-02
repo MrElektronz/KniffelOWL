@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import de.kniffel.serialize.OnlinePlayerWrapper;
+import de.kniffel.serialize.OnlineSessionWrapper;
 import de.kniffel.serialize.Serializer;
 import de.kniffel.server.SessionManager.Session;
 import de.kniffel.server.threads.ServerRequestWorkerThread;
@@ -18,19 +20,20 @@ import de.kniffel.server.threads.ServerRequestWorkerThread;
 public class GameInstance {
 	
 	private GameState state;
-	private Player currentPlayer;
 	private Player[] players;
 	//a set of all players who clicked ready
 	private HashSet<String> ready;
 	private SessionManager sm;
+	private OnlineSessionWrapper game;
+	private int count =1;
 	
 	public GameInstance() {
 		sm = SessionManager.getInstance();
 		players = new Player[4];
-		currentPlayer = null;
 		state = GameState.Lobby;
 		GameFinder.getInstance().games.add(this);
 		ready = new HashSet<String>();
+		game = new OnlineSessionWrapper(null, null, null, null);
 	}
 	
 	
@@ -38,13 +41,26 @@ public class GameInstance {
 		return state;
 	}
 	
-	public Player getCurrentPlayer() {
-		return currentPlayer;
-	}
+
 	public Player[] getPlayers() {
 		return players;
 	}
 	
+	public Player getCurrentPlayer() {
+		for(int i = 0; i< players.length;i++) {
+			if(players[i] != null) {
+				if(players[i].getUsername().equals(game.getCurrentPlayer().getName())) {
+					return players[i];
+				}
+			}
+		}
+		return null;
+	}
+	
+	
+	public OnlineSessionWrapper getGame() {
+		return game;
+	}
 	/**
 	 * 
 	 * @return true if successful
@@ -56,6 +72,7 @@ public class GameInstance {
 		for(int i = 0; i<players.length;i++) {
 			if(players[i] == null) {
 				players[i] = new Player(sessionID);
+				game.addPlayer(new OnlinePlayerWrapper(players[i].getUsername(), players[i].getProfilePic()));
 				sm.getSession(sessionID).setCurrentGame(this);
 				
 				//Sending new lobby status to all clients, because Base64 doesn't include ';', we can use it as a separator
@@ -80,21 +97,95 @@ public class GameInstance {
 			if(players[i] != null) {
 				if(players[i].getSessionID().equals(sessionID)) {
 					updateReady(sessionID,false);
+					game.removePlayer(players[i].getUsername());
 					players[i] = null;
+
 				}
 			}
 			}
 		Session s = sm.getSession(sessionID);
+		if(s != null) {
 		s.setCurrentGame(null);
-		
+		}
 		try {
+			if(state == GameState.Lobby) {
 			notifyAllClients("!LobbyUpdate;"+Serializer.toString(getLobbyData()));
+			}else {
+				sendGameUpdate();
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
+	/**
+	 * gets called by the current player (client) and sends a game update afterwards
+	 */
+	public void rollDice(String sessionID) {
+		Session s = sm.getSession(sessionID);
+		if(game.getCurrentPlayer().getName().equals(s.getUsername())&&game.getCurrentRoll()<4) {
+			game.rollDice();
+			sendGameUpdate();
+		}
+	}
+	
+	/**
+	 * gets called by the current player (client) and sends a game update afterwards
+	 */
+	public void addDiceToBank(String sessionID, int number) {
+		Session s = sm.getSession(sessionID);
+		if(game.getCurrentPlayer().getName().equals(s.getUsername())&&game.getCurrentRoll()<4) {
+			game.getBank().add(number);
+			game.getDice().remove((Integer)number);
+			sendGameUpdate();
+		}
+	}
+	
+	/**
+	 * gets called by the current player (client) and sends a game update afterwards
+	 */
+	public void removeDiceFromBank(String sessionID, int number) {
+		Session s = sm.getSession(sessionID);
+		if(game.getCurrentPlayer().getName().equals(s.getUsername())&&game.getCurrentRoll()<4) {
+			if(game.getBank().contains(number)) {
+			game.getBank().remove((Integer)number);
+			game.getDice().add(number);
+			sendGameUpdate();
+			}
+		}
+	}
+	
+	
+	/**
+	 * 
+	 * @param fieldID gets selected after dice roll
+	 */
+	public void selectScore(String sessionID,int fieldID) {
+		Session s = sm.getSession(sessionID);
+		Player current = getCurrentPlayer();
+		if(game.getCurrentPlayer().getName().equals(s.getUsername())&&game.getCurrentRoll()>1 && current!=null) {
+			//If not already set, set score
+			if(!current.getAlreadySetScores().contains(fieldID)) {
+			int score = 1;
+			game.selectScore(fieldID,score);
+			current.alreadySetScores.add(fieldID);
+			sendGameUpdate();
+			}
+		}
+	}
+	
+	
+	/**
+	 * sends an updated version of the current game to all connected clients
+	 */
+	private void sendGameUpdate() {
+		notifyAllClients("!GameUpdate;"+game.serialize());
+	}
+	
+	private void sendGameEnd(String winner) {
+		notifyAllClients("!GameEnd;"+winner);
+	}
 	
 	/**
 	 * 
@@ -112,15 +203,25 @@ public class GameInstance {
 	
 	
 	public void updateReady(String sessionID, boolean bReady) {
+		if(state == GameState.Lobby) {
 		if(bReady) {
 			this.ready.add(sessionID);
 		}else {
 			this.ready.remove(sessionID);
 		}
-		//TODO: remove
-		notifyAllClients("!test");
+		//check if ready? if so, then start
+		getLobbyData();
+		
+		}
 	}
 	
+	
+	private void startGame() {
+		if(state == GameState.Lobby) {
+			state = GameState.Ingame;
+			sendGameUpdate();
+		}
+	}
 	
 	/**
 	 * Lobby is ready if every player clicks ready (min 2 players) or 4 players are in the lobby
@@ -142,6 +243,9 @@ public class GameInstance {
 				//add profilepicID to array
 				data[i] = players[i].getProfilePic();
 			}
+		}
+		if(data[4]==1) {
+			startGame();
 		}
 		return data;
 	}
@@ -172,6 +276,16 @@ public class GameInstance {
 		return x;
 	}
 	
+	
+	
+	public void nextTurn() {
+		game.setTurn(game.getTurn()+1);
+		game.setCurrentRoll(1);
+		//ogbc.switchCurrentPlayer(getCurrentPlayer() == getPlayer());
+		if(game.getTurn() >= 13*game.getPlayerCount()) {
+			//ogbc.endGame();
+		}
+	}
 
 	/**
 	 * sends data to every client in the game instance
@@ -198,30 +312,32 @@ public class GameInstance {
 	
 	class Player{
 		private String sessionID;
-		private HashMap<Integer, Integer> score;
+		private String username;
+		private ArrayList<Integer> alreadySetScores;
 		public Player(String sessionID) {
 			this.sessionID = sessionID;
-			score = new HashMap<Integer, Integer>();
+			username = "";
+			alreadySetScores = new ArrayList<>();
 		}
 		
 		public Session getSession() {
 			return sm.getSession(sessionID);
 		}
 		
-		public String getUsername() {
-			Session s = sm.getSession(sessionID);
-			if(s != null) {
-			return s.getUsername();
-			}else {
-				return "";
-			}
+		public ArrayList<Integer> getAlreadySetScores() {
+			return alreadySetScores;
 		}
 		
-		public HashMap<Integer, Integer> getScore() {
-			return score;
-		}
-		public void setScore(HashMap<Integer, Integer> score) {
-			this.score = score;
+		public String getUsername() {
+			if(username.equals("")) {
+			Session s = sm.getSession(sessionID);
+			if(s != null) {
+			this.username = s.getUsername();
+			}else {
+				this.username = "";
+			}
+			}
+			return username;
 		}
 		
 		public byte getProfilePic() {

@@ -3,6 +3,9 @@ package client;
 import java.io.IOException;
 
 import application.LobbyController;
+import application.Main;
+import application.OnlineGameBoardController;
+import de.client.serialize.OnlineSessionWrapper;
 import de.client.serialize.Serializer;
 
 /**
@@ -34,7 +37,7 @@ public class LobbyThread extends Thread{
 		while(running&&!client.getSocket().isClosed()) {
 			//update the lobby client-side
 			System.out.println("run lobby");
-		//lobby.updateLobby(Client.getInstance().requestLobbyUpdate());
+		    //lobby.updateLobby(Client.getInstance().requestLobbyUpdate());
 			String received = "";
 			try {
 				received = client.getIn().readUTF();
@@ -42,7 +45,6 @@ public class LobbyThread extends Thread{
 				
 			}
 			String[] args = received.split(";");
-			System.out.println(received);
 			String command = args[0];
 			
 			if(!received.equals("")) {
@@ -61,9 +63,11 @@ public class LobbyThread extends Thread{
 				}
 				//!GameStart;SerializedObjectWhichContains:All Players,All Stats,current player,active dice numbers, bank dice numbers
 			}else if(command.equals("!GameUpdate")) {
-				
-				//!Roll;byte[] of 5 random dice numbers, this is used so rolling the dice is done through the server :)
-			}else if(command.equals("!Roll")) {
+					OnlineSessionWrapper os = OnlineSessionWrapper.deserialize(received.replace("!GameUpdate;", ""));
+					Main.updateSession(os);
+					System.out.println("SERVER: "+os.serialize());
+				//!GameEnd;winner
+			}else if(command.equals("!GameEnd")) {
 				
 			}
 		try {

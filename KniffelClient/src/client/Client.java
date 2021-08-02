@@ -104,6 +104,9 @@ public class Client {
 		this.profilePicID = profilePicID;
 	}
 	public String getUsername() {
+		if(username.equals("")) {
+			username = requestUsername();
+		}
 		return username;
 	}
 
@@ -347,21 +350,46 @@ public class Client {
 	}
 
 
+	
 	/**
-	 * Helper method to read ints from an InputStream
-	 * (taken from https://stackoverflow.com/questions/35527516/java-sending-receiving-int-array-via-socket-to-from-a-program-coded-in-c)
+	 * If successful, send new game update to all clients
 	 */
-	private int[] readInts() throws IOException {
+	public void requestRollDice() {
 		try {
-			int[] ints = new int[in.readInt()];
-			for (int i = 0; i < ints.length; ++i) ints[i] = in.readInt();
-			return ints;
-		}catch(EOFException ex) {
-			return new int[1];
+			initClient();
+			out.writeUTF(buildServerCommand("RequestRoll", sessionID));
+			out.flush();
+		}catch(IOException ex) {
+			ex.printStackTrace();
 		}
-
-
 	}
+	
+	/**
+	 * If successful, send new game update to all clients
+	 */
+	public void requestAddBankDice(int number) {
+		try {
+			initClient();
+			out.writeUTF(buildServerCommand("RequestAddBank", sessionID,""+number));
+			out.flush();
+		}catch(IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	/**
+	 * If successful, send new game update to all clients
+	 */
+	public void requestRemoveBankDice(int number) {
+		try {
+			initClient();
+			out.writeUTF(buildServerCommand("RequestRemoveBank", sessionID,""+number));
+			out.flush();
+		}catch(IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
 
 	/**
 	 * tells the server that the player is ready to start the game (if he is in a lobby)

@@ -105,7 +105,17 @@ public class ServerRequestWorkerThread extends Thread{
 			//out.writeUTF("!LobbyUpdate;"+Serializer.toString();
 			//out.flush();
 			GameFinder.getInstance().addPlayerToLobby(sessionID);
-			
+		}else if(command.equals("$RequestRoll")) {
+			String sessionID = args[1];
+			GameFinder.getInstance().rollDice(sessionID);
+		}else if(command.equals("$RequestAddBank")) {
+			String sessionID = args[1];
+			Integer number = Integer.parseInt(args[2]);
+			GameFinder.getInstance().addDiceToBank(sessionID, number);
+		}else if(command.equals("$RequestRemoveBank")) {
+			String sessionID = args[1];
+			Integer number = Integer.parseInt(args[2]);
+			GameFinder.getInstance().removeDiceFromBank(sessionID, number);
 		}
 		//System.out.println("Server: "+input.readUTF()+" by "+client.getRemoteSocketAddress());
 		

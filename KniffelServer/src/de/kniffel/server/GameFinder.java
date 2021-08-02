@@ -1,8 +1,10 @@
 package de.kniffel.server;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import de.kniffel.server.GameInstance.GameState;
+import de.kniffel.server.GameInstance.Player;
 import de.kniffel.server.SessionManager.Session;
 
 
@@ -102,10 +104,31 @@ public class GameFinder {
 		return g;
 	}
 	
+	/**
+	 * 
+	 * @param sessionID
+	 * @return byte[] length of 0 if it's not sessionID's turn 
+	 */
+	public void rollDice(String sessionID) {
+		GameInstance g = getGameInstanceOfPlayer(sessionID);
+		g.rollDice(sessionID);
+	}
+	
+	public void addDiceToBank(String sessionID, int number) {
+		GameInstance g = getGameInstanceOfPlayer(sessionID);
+		g.addDiceToBank(sessionID, number);
+	}
+	
+	public void removeDiceFromBank(String sessionID, int number) {
+		GameInstance g = getGameInstanceOfPlayer(sessionID);
+		g.removeDiceFromBank(sessionID, number);
+	}
+	
 	public void setLobbyReadyStatus(String sessionID) {
 		GameInstance g = getGameInstanceOfPlayer(sessionID);
 		if(g != null) {
 			g.updateReady(sessionID, true);
 		}
+		System.out.println("Ready set go?");
 	}
 }

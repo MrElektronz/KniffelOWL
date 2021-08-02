@@ -257,7 +257,6 @@ public class OfflineGameBoardController {
 				break;
 			}
 		}
-		
 	}
 	
 	/**

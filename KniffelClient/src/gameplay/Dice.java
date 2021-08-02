@@ -140,7 +140,7 @@ public class Dice extends MeshView{
 	
 	
 	
-	private void setSide(int number) {
+	public void setSide(int number) {
 		this.number = number;
 		PhongMaterial mat = new PhongMaterial(Color.WHITE);
 		mat.setSpecularColor(Color.BLACK);
