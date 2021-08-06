@@ -51,8 +51,12 @@ public class RegisterController {
 		if(username.getText().length()>1&& password.getText().length()>1&& password2.getText().length()>1&&email.getText().length()>1  ) {
 			if(password.getText().equals(password2.getText())) {
 				int answer = Client.getInstance().register(username.getText(), password.getText(), email.getText());
+				errorLabel.setVisible(true);
+				successLabel.setVisible(false);
+				successLabel.setText("");
 				if(answer == 1) {
 					successLabel.setVisible(true);
+					errorLabel.setVisible(false);
 					successLabel.setText("Successfully registered");
 				}else if(answer == 0) {
 					errorLabel.setText("User already exists");

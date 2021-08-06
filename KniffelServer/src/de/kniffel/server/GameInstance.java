@@ -297,8 +297,20 @@ public class GameInstance {
 		}
 		for(Player all : players) {
 			//Use this method so the game instance gets deleted afterwards
-			if(all != null)
+			if(all != null) {
 			GameFinder.getInstance().removePlayerFromLobby(all.getSessionID());
+		
+			Server.getSQLManager().addPlayedGame(all.getUsername());
+			
+			if(all.getUsername().equals(winner.getName())) {
+				Server.getSQLManager().addWin(all.getUsername());
+				Server.getSQLManager().addPoints(all.getUsername(), 20);
+			}else {
+				Server.getSQLManager().addLoss(all.getUsername());
+				Server.getSQLManager().addPoints(all.getUsername(), 5);
+			}
+			
+			}
 		}
 	}
 	

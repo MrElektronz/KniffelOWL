@@ -36,7 +36,7 @@ public class SQLManager{
 			statement = con.createStatement();
 			statement.executeUpdate("CREATE TABLE IF NOT EXISTS accounts "+
 									"(username CHAR(20) not NULL, "+
-									"password CHAR(32) not NULL, "+
+									"password CHAR(50) not NULL, "+
 									"email CHAR(32) not NULL, "+
 									"profilepicture TINYINT not NULL, "+
 									"PRIMARY KEY (username))");
@@ -58,6 +58,82 @@ public class SQLManager{
 			
 		}catch(Exception ex) {
 			ex.printStackTrace();
+		}
+	}
+	
+	public int getWins(String username) {
+		try {
+		Connection con = DriverManager.getConnection("jdbc:mysql://"+this.url+"/KNIFFEL",this.user,this.password);
+		String query= "SELECT wins as data FROM players WHERE username='"+username+"'";
+		PreparedStatement pst = con.prepareStatement(query);
+		ResultSet rs = pst.executeQuery();
+		if(!rs.next()) {
+			con.close();
+			return 0;
+		}
+		int i = rs.getInt("data");
+		con.close();
+		return i;
+		}catch(SQLException ex) {
+			ex.printStackTrace();
+			return 0;
+		}
+	}
+	
+	public int getLosses(String username) {
+		try {
+		Connection con = DriverManager.getConnection("jdbc:mysql://"+this.url+"/KNIFFEL",this.user,this.password);
+		String query= "SELECT losses as data FROM players WHERE username='"+username+"'";
+		PreparedStatement pst = con.prepareStatement(query);
+		ResultSet rs = pst.executeQuery();
+		if(!rs.next()) {
+			con.close();
+			return 0;
+		}
+		int i = rs.getInt("data");
+		con.close();
+		return i;
+		}catch(SQLException ex) {
+			ex.printStackTrace();
+			return 0;
+		}
+	}
+	
+	public int getPlayedGames(String username) {
+		try {
+		Connection con = DriverManager.getConnection("jdbc:mysql://"+this.url+"/KNIFFEL",this.user,this.password);
+		String query= "SELECT played as data FROM players WHERE username='"+username+"'";
+		PreparedStatement pst = con.prepareStatement(query);
+		ResultSet rs = pst.executeQuery();
+		if(!rs.next()) {
+			con.close();
+			return 0;
+		}
+		int i = rs.getInt("data");
+		con.close();
+		return i;
+		}catch(SQLException ex) {
+			ex.printStackTrace();
+			return 0;
+		}
+	}
+	
+	public int getPoints(String username) {
+		try {
+		Connection con = DriverManager.getConnection("jdbc:mysql://"+this.url+"/KNIFFEL",this.user,this.password);
+		String query= "SELECT points as data FROM players WHERE username='"+username+"'";
+		PreparedStatement pst = con.prepareStatement(query);
+		ResultSet rs = pst.executeQuery();
+		if(!rs.next()) {
+			con.close();
+			return 0;
+		}
+		int i = rs.getInt("data");
+		con.close();
+		return i;
+		}catch(SQLException ex) {
+			ex.printStackTrace();
+			return 0;
 		}
 	}
 	
@@ -83,6 +159,7 @@ public class SQLManager{
 		}
 	}
 	
+	
 	public void setProfilePic(String username,int id) {
 		try {
 			executeSQLStatement("UPDATE accounts SET profilepicture="+id+" WHERE username='"+username+"'");
@@ -92,6 +169,42 @@ public class SQLManager{
 		}
 	}
 	
+	
+	public void addWin(String username) {
+		try {
+			executeSQLStatement("UPDATE players SET wins="+(getWins(username)+1)+" WHERE username='"+username+"'");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void addLoss(String username) {
+		try {
+			executeSQLStatement("UPDATE players SET losses="+(getLosses(username)+1)+" WHERE username='"+username+"'");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void addPlayedGame(String username) {
+		try {
+			executeSQLStatement("UPDATE players SET played="+(getPlayedGames(username)+1)+" WHERE username='"+username+"'");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void addPoints(String username, int points) {
+		try {
+			executeSQLStatement("UPDATE players SET points="+(getPoints(username)+points)+" WHERE username='"+username+"'");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	/**
 	 * @return 0 if username already exists, 1 if account was successfully created, 2 if the format doesnt match, 3 other error, 4 email already in use
@@ -112,7 +225,8 @@ public class SQLManager{
 				return 4;
 			}
 			
-			executeSQLStatement("INSERT INTO accounts VALUES ('"+username+"','"+password+"','"+email+"','"+0+"')");
+			executeSQLStatement("INSERT INTO accounts VALUES ('"+username+"',PASSWORD('"+password+"'),'"+email+"','"+0+"')");
+			executeSQLStatement("INSERT INTO players VALUES ('"+username+"','"+0+"','"+0+"','"+0+"','"+0+"',b'0')");
 			System.out.println("User "+username+ " was added to the database with password "+password);
 			return 1;
 		} catch (SQLException e) {
@@ -135,7 +249,7 @@ public class SQLManager{
 	public String login(String username, String password, ServerRequestWorkerThread wt) {
 		try {
 		Connection con = DriverManager.getConnection("jdbc:mysql://"+this.url+"/KNIFFEL",this.user,this.password);
-		String query= "SELECT username,password FROM accounts WHERE username='"+username+"' AND password='"+password+"'";
+		String query= "SELECT username,password FROM accounts WHERE username='"+username+"' AND password=PASSWORD('"+password+"')";
 		PreparedStatement pst = con.prepareStatement(query);
 		ResultSet rs = pst.executeQuery();
 		//No result
@@ -237,7 +351,7 @@ public class SQLManager{
 			String code = rs.getString("code");
 			if(pin.equals(code)) {
 				//Set new password if entered pin is correct
-				executeSQLStatement("UPDATE accounts SET password='"+password+"' WHERE email='"+mail+"'");
+				executeSQLStatement("UPDATE accounts SET password=PASSWORD('"+password+"') WHERE email='"+mail+"'");
 				//Remove row from pins table
 				executeSQLStatement("DELETE FROM pins WHERE email='"+mail+"'");
 				

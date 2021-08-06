@@ -4,9 +4,11 @@ import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import gameplay.Bot;
 import gameplay.Dice;
 import gameplay.OfflinePlayer;
 import gameplay.OfflineSession;
+import gameplay.Bot.BotDifficulty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -62,7 +64,7 @@ public class OfflineGameBoardController {
 	public void initialize() {
 		yh = YahtzeeHelper.getInstance();
 		canClickDice = false;
-		gameSession = new OfflineSession(1,this);
+		gameSession = new OfflineSession(Bot.BotDifficulty.EASY,this);
 		pc = new PerspectiveCamera();
 		root = new Group();
 		t1.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
@@ -97,6 +99,11 @@ public class OfflineGameBoardController {
 		//gameSession.setPlayer(new OfflinePlayer(Client.requestUsername()));
 		gameSession.setPlayer(new OfflinePlayer("p1"));
 		sounds = new SoundGenerator();
+	}
+	
+	
+	public void setDifficulty(BotDifficulty difficulty) {
+		gameSession.getBot().setDifficulty(difficulty);
 	}
 	
 	/**

@@ -40,6 +40,14 @@ public class SessionManager {
 		return instance;
 	}
 	
+	/**
+	 * 
+	 * @return HashMap of a clone of all sessions (which means read-only)
+	 */
+	public HashMap<String, Session> getSessions() {
+		return (HashMap<String, Session>) sessions.clone();
+	}
+	
 	
 	//Has format SessionID,Session(Username, lastTimeSeen)
 		private HashMap<String, Session> sessions;
@@ -181,7 +189,7 @@ public class SessionManager {
 				if(dur.compareTo(Duration.ofSeconds(difference)) >0) {
 					//remove session
 					delSession((String)keys[i]);
-					Server.log(s.toString() +" timed out");
+					//Server.log(s.toString() +" timed out");
 					printSessions();
 				}
 				

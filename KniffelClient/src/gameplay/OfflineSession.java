@@ -3,6 +3,7 @@ package gameplay;
 import java.util.ArrayList;
 
 import application.OfflineGameBoardController;
+import gameplay.Bot.BotDifficulty;
 
 /**
  * 
@@ -16,17 +17,17 @@ public class OfflineSession {
 	private Bot bot;
 	private int turn,currentRoll;
 	private OfflineGameBoardController ogbc;
-	public OfflineSession(int botDifficulty, OfflineGameBoardController ogbc) {
+	public OfflineSession(BotDifficulty botDifficulty, OfflineGameBoardController ogbc) {
 		turn = 0;
 		currentRoll = 1;
-		bot = new Bot(1,ogbc);
+		bot = new Bot(botDifficulty,ogbc);
 		this.ogbc = ogbc;
 	}
 	
-	public OfflineSession(int botDifficulty, OfflineGameBoardController ogbc, String color) {
+	public OfflineSession(BotDifficulty botDifficulty, OfflineGameBoardController ogbc, String color) {
 		turn = 0;
 		currentRoll = 1;
-		bot = new Bot(1,ogbc,color);
+		bot = new Bot(botDifficulty,ogbc,color);
 		this.ogbc = ogbc;
 	}
 	

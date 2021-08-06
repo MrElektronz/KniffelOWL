@@ -26,6 +26,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import sound.SoundGenerator;
 
 public class OnlineGameBoardController{
 	
@@ -62,8 +63,9 @@ public class OnlineGameBoardController{
 	//So that the player needs to roll at least once to click the dice
 	private boolean canClickDice;
 	
+	
 	//Helps with playing sound effects
-	//private SoundGenerator sounds;
+	private SoundGenerator sounds;
 	
 	private Group root;
 	private PerspectiveCamera pc;
@@ -110,9 +112,7 @@ public class OnlineGameBoardController{
 		subScene.setRoot(root);
 		subScene.setCamera(pc);
 		
-		//add player/bots
-		//gameSession.setPlayer(new OfflinePlayer(Client.requestUsername()));
-		//sounds = new SoundGenerator();
+		sounds = new SoundGenerator();
 	}
 	
 	
@@ -192,7 +192,6 @@ public class OnlineGameBoardController{
 								for(Button b : diceButtons) {
 									if(!b.getText().equals("-")) {
 										Integer number = Integer.parseInt(b.getText());
-										System.out.println(digit +" compared "+number);
 										if(digit == number) {
 										Dice newDice = new Dice(number);
 										dices.add(newDice);
@@ -223,6 +222,7 @@ public class OnlineGameBoardController{
 										dices.get(i).setSide(newNumbers.get(i));
 										dices.get(i).roll();
 									}
+									sounds.playRoll();
 									
 									//Update score buttons after roll
 									if(session.getCurrentPlayer().getName().equals(Client.getInstance().getUsername())) {

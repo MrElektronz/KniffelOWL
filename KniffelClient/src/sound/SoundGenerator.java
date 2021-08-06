@@ -11,10 +11,8 @@ public class SoundGenerator {
 	private Media roll2;
 	private Random random;
 	public SoundGenerator() {
-		//roll1 = new Media(new File("res/Wuerfeln_1.m4a").toURI().toString());
-		//roll2 = new Media(new File("res/Wuerfeln_2.m4a").toURI().toString());
-		roll1 = new Media(new File("src/sound/Wuerfeln_1.m4a").toURI().toString());
-		roll2 = new Media(new File("src/sound/Wuerfeln_2.m4a").toURI().toString());
+		roll1 = new Media(SoundGenerator.class.getResource("Wuerfeln_1.m4a").toString());
+		roll2 = new Media(SoundGenerator.class.getResource("Wuerfeln_2.m4a").toString());
 		random = new Random();
 	}
 	

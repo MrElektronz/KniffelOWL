@@ -127,17 +127,7 @@ public class ServerRequestWorkerThread extends Thread{
 			e.printStackTrace();
 		}
 	}
-		try {
-		in.close();
-		out.close();
-		client.close();
-		//logout if error
-		sm.logout(sm.getSession(this));
-		System.out.println("Close connection TO CLIENT");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		shutdown();
 	}
 
 	public DataOutputStream getOut() {
@@ -149,5 +139,21 @@ public class ServerRequestWorkerThread extends Thread{
 	}
 	
 
+	/**
+	 * closes all sockets and logs the player out
+	 */
+	public void shutdown() {
+		try {
+			in.close();
+			out.close();
+			client.close();
+			//logout if error
+			sm.logout(sm.getSession(this));
+			System.out.println("Close connection TO CLIENT");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
     
 }

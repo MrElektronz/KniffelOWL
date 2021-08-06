@@ -49,4 +49,12 @@ public class ServerListenerThread extends Thread{
 	}
 	}
 
+	public void shutdown() {
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

@@ -39,7 +39,6 @@ public class LobbyThread extends Thread{
 	public void run() {
 		while(running&&!client.getSocket().isClosed()) {
 			//update the lobby client-side
-			System.out.println("run lobs");
 		    //lobby.updateLobby(Client.getInstance().requestLobbyUpdate());
 			String received = "";
 			try {
@@ -48,8 +47,6 @@ public class LobbyThread extends Thread{
 				
 			}
 			
-			System.out.println("2222");
-			
 			String[] args = received.split(";");
 			String command = args[0];
 			
@@ -57,7 +54,6 @@ public class LobbyThread extends Thread{
 			System.out.println("received: "+received);
 			}
 			if(command.equals("!LobbyUpdate")) {
-				System.out.println("YWWWWWWWWWWWWWWW");
 				try {
 					lobby.updateLobby(Serializer.fromStringToByteArr(args[1]));
 				} catch (ClassNotFoundException e) {

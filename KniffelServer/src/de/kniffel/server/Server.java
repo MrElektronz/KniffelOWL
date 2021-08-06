@@ -17,6 +17,8 @@ import java.util.Properties;
 
 import de.kniffel.serialize.OnlinePlayerWrapper;
 import de.kniffel.serialize.OnlineSessionWrapper;
+import de.kniffel.server.SessionManager.Session;
+import de.kniffel.server.commands.AdminConsoleThread;
 import de.kniffel.server.threads.ServerListenerThread;
 import de.kniffel.server.threads.ServerTimeoutListenerThread;
 
@@ -25,6 +27,7 @@ public class Server {
 	private static int port;
 	private static SQLManager sql;
 	private static ServerListenerThread listenerThread;
+	private static ServerTimeoutListenerThread timeoutThread;
 	
 	
 	public static void main(String[] args) {
@@ -53,8 +56,10 @@ public class Server {
 		try {
 			listenerThread = new ServerListenerThread(port);
 			listenerThread.start();
-			ServerTimeoutListenerThread timeoutThread = new ServerTimeoutListenerThread();
+			timeoutThread = new ServerTimeoutListenerThread();
 			timeoutThread.start();
+			AdminConsoleThread adminThread = new AdminConsoleThread();
+			adminThread.start();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -62,10 +67,6 @@ public class Server {
 	
 
 	
-	
-	public static void log(String param) {
-		System.out.println("SERVER: "+param);
-	}
 	
 	/**
 	 * loads values from the config file and create instance of SQLManager
@@ -92,6 +93,20 @@ public class Server {
 	
 	public static boolean isRunning() {
 		return !listenerThread.getServerSocket().isClosed() && listenerThread.getServerSocket().isBound();
+	}
+	
+	/**
+	 *	shuts down the server
+	 */ 
+	public static void shutdown() {
+		
+		for(Session s : SessionManager.getInstance().getSessions().values()) {
+			s.getWorkerThread().shutdown();
+		}
+		listenerThread.shutdown();
+		timeoutThread.interrupt();
+		System.out.println("SERVER CLOSED");
+		System.exit(0);
 	}
 
 	

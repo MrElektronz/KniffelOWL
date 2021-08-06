@@ -42,7 +42,7 @@
                   <TableColumn fx:id="t2" prefWidth="164.0" style="-fx-background-color: #2e6e26; -fx-text-fill: #FFFFFF; -fx-text-base-color: #FFFFFF;" />
                </columns>
             </TableView>
-            <Label fx:id="title1" layoutY="5.0" prefHeight="16.0" prefWidth="96.0" text="/" textFill="WHITE">
+            <Label fx:id="title1" layoutY="5.0" prefHeight="16.0" prefWidth="96.0" text="/" textFill="WHITE" translateX="5.0">
                <font>
                   <Font name="Arial Bold" size="13.0" />
                </font>
@@ -56,7 +56,7 @@
                   <TableColumn fx:id="t3" prefWidth="164.0" style="-fx-background-color: #6e2826; -fx-text-fill: #FFFFFF;" />
                </columns>
             </TableView>
-            <Label fx:id="title2" layoutY="4.0" prefHeight="16.0" prefWidth="96.0" text="/" textFill="WHITE">
+            <Label fx:id="title2" layoutY="4.0" prefHeight="16.0" prefWidth="96.0" text="/" textFill="WHITE" translateX="5.0">
                <font>
                   <Font name="Arial Bold" size="13.0" />
                </font>
@@ -70,7 +70,7 @@
                   <TableColumn fx:id="t4" prefWidth="164.0" style="-fx-background-color: #6c6e26; -fx-text-fill: #FFFFFF;" />
                </columns>
             </TableView>
-            <Label fx:id="title3" layoutY="4.0" prefHeight="16.0" prefWidth="96.0" text="/" textFill="WHITE">
+            <Label fx:id="title3" layoutY="4.0" prefHeight="16.0" prefWidth="96.0" text="/" textFill="WHITE" translateX="5.0">
                <font>
                   <Font name="Arial Bold" size="13.0" />
                </font>
@@ -84,7 +84,7 @@
                   <TableColumn fx:id="t5" prefWidth="164.0" style="-fx-background-color: #212a5e; -fx-text-fill: #FFFFFF;" />
                </columns>
             </TableView>
-            <Label fx:id="title4" layoutY="5.0" prefHeight="16.0" prefWidth="96.0" text="/" textFill="WHITE">
+            <Label fx:id="title4" layoutY="5.0" prefHeight="16.0" prefWidth="96.0" text="/" textFill="WHITE" translateX="5.0">
                <font>
                   <Font name="Arial Bold" size="13.0" />
                </font>

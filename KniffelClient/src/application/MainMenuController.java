@@ -3,6 +3,7 @@ package application;
 import java.io.IOException;
 
 import client.Client;
+import gameplay.Bot.BotDifficulty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,15 +35,15 @@ public class MainMenuController {
 	 * @throws IOException
 	 */
 	public void onPlayBotEasy(ActionEvent event) throws IOException {
-		Main.changeScene("Scene_GameBoard.fxml",1280,745);
+		Main.changeToOfflineScene(BotDifficulty.EASY);
 	}
 	
 	public void onPlayBotMedium(ActionEvent event) throws IOException {
-		Main.changeScene("Scene_GameBoard.fxml",1280,745);
+		Main.changeToOfflineScene(BotDifficulty.MEDIUM);
 	}
 	
 	public void onPlayBotHard(ActionEvent event) throws IOException {
-		Main.changeScene("Scene_GameBoard.fxml",1280,745);
+		Main.changeToOfflineScene(BotDifficulty.HARD);
 	}
 	
 	public void onPlayOnline(ActionEvent event) throws IOException {

@@ -14,6 +14,7 @@ import client.TimeoutThread;
 import de.client.serialize.OnlinePlayerWrapper;
 import de.client.serialize.OnlineSessionWrapper;
 import de.client.serialize.Serializer;
+import gameplay.Bot.BotDifficulty;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -43,7 +44,10 @@ public class Main extends Application {
 			primaryStage.setOnCloseRequest(event -> {
 				LobbyController.shutdown();
 				Client.getInstance().logout();
+				if(lThread != null) {
 				lThread.setRunning(false);
+				}
+				
 				tThread.setRunning(false);
 				//if(lThread != null)
 			});
@@ -88,6 +92,22 @@ public class Main extends Application {
 		stg.setWidth(width);
 		stg.setHeight(height);
 		stg.centerOnScreen();
+	}
+	
+	/**
+	 * Changes the scene
+	 * @param fxml
+	 * @throws IOException
+	 */
+	public static void changeToOfflineScene(BotDifficulty difficulty) throws IOException {
+		FXMLLoader loader = new FXMLLoader(Main.class.getResource("Scene_GameBoard.fxml"));
+		Parent root = (Parent)loader.load();
+		OfflineGameBoardController ctrl = (OfflineGameBoardController)loader.getController();
+		stg.getScene().setRoot(root);
+		stg.setWidth(1280);
+		stg.setHeight(745);
+		stg.centerOnScreen();
+		ctrl.setDifficulty(difficulty);
 	}
 	
 	public static void changeScene(String fxml) throws IOException {

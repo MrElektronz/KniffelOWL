@@ -13,30 +13,36 @@ import javafx.application.Platform;
  */
 public class Bot extends OfflinePlayer{
 
-	private int difficulty;
+	private BotDifficulty difficulty;
 	private OfflineGameBoardController ogbc;
 	private String color;
 	private ArrayList<Integer> alreadySet;
-	public Bot(int difficulty,OfflineGameBoardController ogbc) {
-		super("Bot["+difficulty+"]");
+	public Bot(BotDifficulty difficulty,OfflineGameBoardController ogbc) {
+		super("Bot["+difficulty.name()+"]");
 		this.ogbc = ogbc;
 		color = "#987267";
 		alreadySet = new ArrayList<Integer>();
+		this.difficulty = difficulty;
 	}
 	
-	public Bot(int difficulty,OfflineGameBoardController ogbc, String color) {
-		super("Bot["+difficulty+"]");
+	public Bot(BotDifficulty difficulty,OfflineGameBoardController ogbc, String color) {
+		super("Bot["+difficulty.name()+"]");
 		this.ogbc = ogbc;
 		this.color = color;
 		alreadySet = new ArrayList<Integer>();
+		this.difficulty = difficulty;
 	}
 	
-	public int getDifficulty() {
+	public BotDifficulty getDifficulty() {
 		return difficulty;
 	}
 	
 	public String getColor() {
 		return color;
+	}
+	
+	public void setDifficulty(BotDifficulty difficulty) {
+		this.difficulty = difficulty;
 	}
 	
 	//call to start the bot
@@ -144,5 +150,9 @@ public class Bot extends OfflinePlayer{
 			}
 		}
 		
+	}
+	
+	public enum BotDifficulty{
+		EASY,MEDIUM,HARD;
 	}
 }
