@@ -39,15 +39,7 @@ public class OnlineSessionWrapper {
 	}
 	
 	public OnlinePlayerWrapper getCurrentPlayer() {
-		if(turn%4==0 && players[3]!=null) {
-			return players[3];
-		}else if(turn%3==0 && players[2]!=null) {
-			return players[2];
-		}else if(turn%2==0 && players[1]!=null) {
-			return players[1];
-		}else {
-			return players[0];
-		}
+		return players[turn % getPlayerCount()];
 	}
 	
 	public void removePlayer(String name) {
@@ -276,6 +268,7 @@ public class OnlineSessionWrapper {
 	private static String[] splitIntoArgs(String data) {
 		ArrayList<String> args = new ArrayList<String>();
 		data = data.substring(1,data.length()-1);
+		System.out.println("new data: "+data);
 		boolean out = true;
 		String between = "";
 		String list = "";
@@ -288,7 +281,14 @@ public class OnlineSessionWrapper {
 					list = "";
 				}
 				else if(data.charAt(i-1) != '}') {
-				args.add(data.charAt(i-1)+"");
+					
+					String next = "";
+					int j = i-1;
+					while(j>-1 && data.charAt(j) != '}' && data.charAt(j) != ';') {
+						next+=data.charAt(j);
+						j--;
+					}
+					args.add(new StringBuilder(next).reverse().toString());
 				}
 			}else if(data.charAt(i)==',') {
 				list+=data.charAt(i-1)+",";

@@ -291,7 +291,7 @@ public class OnlineGameBoardController{
 							btnRoll.setText(getButtonLabel());		
 							
 							//Update button color for current player
-							if(!prevSession.getCurrentPlayer().getName().equals(session.getCurrentPlayer().getName())) {
+							if(session.getPlayerCount() > 1 && !prevSession.getCurrentPlayer().getName().equals(session.getCurrentPlayer().getName())) {
 								updateCurrentPlayerButtons();
 							}
 					}

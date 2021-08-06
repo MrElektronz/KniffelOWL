@@ -33,23 +33,6 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		// Client.register("Emre2", "passwort2", "xaxaxa@gmail.com");
-	/*	byte[] data = new byte[] {0,3,6,1};
-		fromByteArr(data);
-		try {
-			String se = Serializer.toString(data);
-			System.out.println("serialized: "+ se);
-			System.out.println("deserialized");
-			try {
-				fromByteArr(Serializer.fromStringToByteArr(se));
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		
 		
 		tThread = new TimeoutThread();
 		tThread.start();
@@ -60,6 +43,7 @@ public class Main extends Application {
 			primaryStage.setOnCloseRequest(event -> {
 				LobbyController.shutdown();
 				Client.getInstance().logout();
+				lThread.setRunning(false);
 				tThread.setRunning(false);
 				//if(lThread != null)
 			});
@@ -71,6 +55,7 @@ public class Main extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		/*
 		OnlineSessionWrapper os = new OnlineSessionWrapper(new OnlinePlayerWrapper("KEK", (byte) 3), null, null, null);
 		System.out.println(os.serialize());
@@ -86,6 +71,7 @@ public class Main extends Application {
 		os.removeFromBank(b);
 		System.out.println(os.serialize());
 		*/
+		
 		
 	}
 	
