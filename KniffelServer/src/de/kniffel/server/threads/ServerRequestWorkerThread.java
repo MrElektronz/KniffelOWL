@@ -101,9 +101,6 @@ public class ServerRequestWorkerThread extends Thread{
 			GameFinder.getInstance().setLobbyReadyStatus(sessionID);
 		}else if(command.equals("$LobbyAdd")) {
 			String sessionID = args[1];
-			//Sending the client serialized lobby information
-			//out.writeUTF("!LobbyUpdate;"+Serializer.toString();
-			//out.flush();
 			GameFinder.getInstance().addPlayerToLobby(sessionID);
 		}else if(command.equals("$RequestRoll")) {
 			String sessionID = args[1];
@@ -116,6 +113,10 @@ public class ServerRequestWorkerThread extends Thread{
 			String sessionID = args[1];
 			Integer number = Integer.parseInt(args[2]);
 			GameFinder.getInstance().removeDiceFromBank(sessionID, number);
+		}else if(command.equals("$SelectScore")) {
+			String sessionID = args[1];
+			int scoreID = Integer.parseInt(args[2]);
+			GameFinder.getInstance().setScore(sessionID, scoreID);
 		}
 		//System.out.println("Server: "+input.readUTF()+" by "+client.getRemoteSocketAddress());
 		

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import application.OfflineGameBoardController.InteractableCell;
 import client.Client;
 import de.client.serialize.OnlinePlayerWrapper;
 import de.client.serialize.OnlineSessionWrapper;
@@ -43,9 +44,9 @@ public class OnlineGameBoardController{
 	@FXML
 	private TableView<String> tv2;
 	@FXML
-	private TableColumn<String,String> t1,t3,t4,t5;
+	private TableColumn<String,Void> t2,t3,t4,t5;
 	@FXML
-	private TableColumn<String, Void>t2;
+	private TableColumn<String,String> t1;
 	@FXML
 	private SubScene subScene;
 	@FXML
@@ -55,8 +56,8 @@ public class OnlineGameBoardController{
 	@FXML
 	private GridPane gridPane;
 	
-	//Collection of all interactable cells
-	private ArrayList<InteractableCell> iCells = new ArrayList<InteractableCell>();
+	//Collections of all interactable cells of all players
+	private ArrayList<InteractableCell> iCells1,iCells2,iCells3,iCells4;
 	
 	//So that the player needs to roll at least once to click the dice
 	private boolean canClickDice;
@@ -68,16 +69,25 @@ public class OnlineGameBoardController{
 	private PerspectiveCamera pc;
 	private ArrayList<Dice> dices;
 	private ArrayList<Button> diceButtons;
+	private YahtzeeHelper yh;
 	public void initialize() {
+		yh = YahtzeeHelper.getInstance();
 		canClickDice = false;
 		pc = new PerspectiveCamera();
 		root = new Group();
-		t1.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
-		t2.setCellFactory(col -> new InteractableCell());
-		t3.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
-		t4.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
-		t5.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+		
+		iCells1 = new ArrayList<InteractableCell>();
+		iCells2 = new ArrayList<InteractableCell>();
+		iCells3 = new ArrayList<InteractableCell>();
+		iCells4 = new ArrayList<InteractableCell>();
 
+		
+		t1.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue()));
+		t2.setCellFactory(col -> new InteractableCell(iCells1));
+		t3.setCellFactory(col -> new InteractableCell(iCells2));
+		t4.setCellFactory(col -> new InteractableCell(iCells3));
+		t5.setCellFactory(col -> new InteractableCell(iCells4));
+		
 		
 		tv1.setItems(getThemes());
 		tv2.setItems(fillZeroes());
@@ -111,6 +121,18 @@ public class OnlineGameBoardController{
 	}
 	
 	public void updateSession(OnlineSessionWrapper session) {
+		
+		if(prevSession == null) {
+			Platform.runLater(new Runnable() {
+
+				@Override
+				public void run() {
+					updateCurrentPlayerButtons();					
+				}
+				
+			});
+		}
+		
 		//Update previous and current session
 		this.prevSession = this.session;
 		this.session = session;
@@ -202,15 +224,81 @@ public class OnlineGameBoardController{
 										dices.get(i).roll();
 									}
 									
+									//Update score buttons after roll
+									if(session.getCurrentPlayer().getName().equals(Client.getInstance().getUsername())) {
+										setInteractableButtons(false,false);
+								    	setInteractableButtons(true,false);
+									}
+									
+									
 								}
 						}
 						}
+							
+							//set player scores
+							if(session.getPlayer(0) != null) {
+							int[] scores = session.getPlayer(0).getScores();
+							for(int i = 0; i< scores.length;i++) {
+								int id = i;
+								if(id >5) {
+									id+=4;
+								}
+								iCells1.get(id).setCellScore(scores[i]);
+							}
+							}
+							
+							if(session.getPlayer(1) != null) {
+							int[] scores = session.getPlayer(1).getScores();
+							for(int i = 0; i< scores.length;i++) {
+								int id = i;
+								if(id >5) {
+									id+=4;
+								}
+								iCells2.get(id).setCellScore(scores[i]);
+							}
+							}
+							
+							if(session.getPlayer(2) != null) {
+							int[] scores = session.getPlayer(2).getScores();
+							for(int i = 0; i< scores.length;i++) {
+								int id = i;
+								if(id >5) {
+									id+=4;
+								}
+								iCells3.get(id).setCellScore(scores[i]);
+							}
+							}
+							
+							if(session.getPlayer(3) != null) {
+							int[] scores = session.getPlayer(3).getScores();
+							for(int i = 0; i< scores.length;i++) {
+								int id = i;
+								if(id >5) {
+									id+=4;
+								}
+								iCells4.get(id).setCellScore(scores[i]);
+							}
+							}
+							
+							//Update total score
+							for(OnlinePlayerWrapper p : players) {
+								if(p != null) {
+								updateTotalLabelsPlayer(p);
+								}
+							}
+							
+							//Update roll button
+							btnRoll.setText(getButtonLabel());		
+							
+							//Update button color for current player
+							if(!prevSession.getCurrentPlayer().getName().equals(session.getCurrentPlayer().getName())) {
+								updateCurrentPlayerButtons();
+							}
 					}
 					
 				}
 			});
 	}
-	
 	
 	
 	/**
@@ -378,7 +466,7 @@ public class OnlineGameBoardController{
 																						//&& canClickDice
 		if(session.getCurrentPlayer().getName().equals(Client.getInstance().getUsername())) {
 		Dice d = getNearestDice(e.getX(), e.getY(), 200);
-		if(d != null) {
+		if(d != null && session.getCurrentRoll()>1 && session.getCurrentRoll() <4) {
 			addDiceToButtons(d);
 			Client.getInstance().requestAddBankDice(d.getNumber());
 		}
@@ -408,8 +496,30 @@ public class OnlineGameBoardController{
 	 * @param interact if true all buttons which are possible to be interacted with will get interactable
 	 */
 	public void setInteractableButtons(boolean interact, boolean clicked) {
-		for(InteractableCell ic : iCells) {
+		
+		int id = 0;
+		for(int i = 1; i< session.getPlayers().length;i++) {
+			if(session.getPlayer(i) != null && session.getPlayer(i).getName().equals(Client.getInstance().getUsername())) {
+				id = i;
+			}
+		}
+		
+		if(id == 0) {
+		for(InteractableCell ic : iCells1) {
 			ic.setInteractable(interact,clicked);
+		}
+		}else if(id == 1) {
+			for(InteractableCell ic : iCells2) {
+				ic.setInteractable(interact,clicked);
+			}
+		}else if(id == 2) {
+			for(InteractableCell ic : iCells3) {
+				ic.setInteractable(interact,clicked);
+			}
+		}else {
+			for(InteractableCell ic : iCells4) {
+				ic.setInteractable(interact,clicked);
+			}
 		}
 	}
 	
@@ -431,6 +541,130 @@ public class OnlineGameBoardController{
 		return numbers;
 	}
 	
+	private String getButtonLabel() {
+		
+		switch(session.getCurrentRoll()) {
+		case 1: return "1st Roll";
+		case 2: return "2th Roll";
+		case 3: return "3rd Roll";
+		}
+		return "? Roll";
+	}
+	
+	
+	public void updateCurrentPlayerButtons() {
+		
+		OnlinePlayerWrapper p = session.getCurrentPlayer();
+	
+		int id = 0;
+		for(int i = 1; i< session.getPlayerCount();i++) {
+			if(session.getPlayer(i).getName().equals(p.getName())) {
+				id=i;
+			}
+		}
+		
+		if(p.getName().equals(Client.getInstance().getUsername())) {
+			btnRoll.setStyle("");
+			btnDice1.setStyle("");
+			btnDice2.setStyle("");
+			btnDice3.setStyle("");
+			btnDice4.setStyle("");
+			btnDice5.setStyle("");
+		}else {
+			String style;
+			
+			switch(id) {
+			
+			case 1:
+				style = "#6e2826";
+				break;
+			
+			case 2: 
+				style = "#babe41";
+				break;
+			
+			case 3: 
+				style = "#6877ca";
+				break;
+			
+			default:
+				style = "#50be41";
+				break;
+			}
+			
+			style = "-fx-background-color: "+style;
+			btnRoll.setStyle(style);
+			btnDice1.setStyle(style);
+			btnDice2.setStyle(style);
+			btnDice3.setStyle(style);
+			btnDice4.setStyle(style);
+			btnDice5.setStyle(style);
+		}
+	}
+	/**
+	 * Updates total score values of current player after updating default scores
+	 * TODO: Gets called after updated to next player, so it updates the total labels of the following player
+	 */
+	private void updateTotalLabelsPlayer(OnlinePlayerWrapper p) {
+		
+		int id = 0;
+		for(int i = 1; i< session.getPlayerCount();i++) {
+			if(session.getPlayer(i).getName().equals(p.getName())) {
+				id=i;
+			}
+		}
+		//now id has the value of the current player's id
+		
+		ArrayList<InteractableCell> cells;
+		
+		switch(id) {
+		
+		case 1:
+			cells = iCells2;
+			break;
+		
+		case 2: 
+			cells = iCells3;
+			break;
+		
+		case 3: 
+			cells = iCells4;
+			break;
+		
+		default:
+			cells = iCells1;
+			break;
+		}
+		
+		InteractableCell totalUpper = cells.get(6);
+		InteractableCell bonus = cells.get(7);
+		InteractableCell totalBonus = cells.get(8);
+		InteractableCell totalLower = cells.get(17);
+		InteractableCell grandTotal = cells.get(18);
+		int[] scores = p.getScores();
+		int totalUpperSum = 0;
+		for(int i = 0;i<6;i++) {
+			totalUpperSum+=scores[i];
+		}
+		totalUpper.button.setText(totalUpperSum+"");
+		if(totalUpperSum>62) {
+			bonus.button.setText("35");
+			totalBonus.button.setText((totalUpperSum+35)+"");
+		}else {
+			totalBonus.button.setText((totalUpperSum)+"");
+		}
+		
+		int totalLowerSum = 0;
+		for(int i = 6;i<13;i++) {
+			totalLowerSum+=scores[i];
+		}
+		totalLower.button.setText(totalLowerSum+"");
+		if(totalUpperSum > 62) {
+		grandTotal.button.setText(totalUpperSum+totalLowerSum+35+"");
+		}else {
+			grandTotal.button.setText(totalUpperSum+totalLowerSum+"");
+		}
+	}
 	
 	class InteractableCell extends TableCell<String, Void>{
 		 private final Button button;
@@ -438,31 +672,45 @@ public class OnlineGameBoardController{
 		 //needed to store the previous number of the button, if not selected
 		 private int prevNum = 0;
 		 boolean wasPressed = false;
-		 public InteractableCell() {
-			 iCells.add(this);
+		 private ArrayList<InteractableCell> cells;
+		 public InteractableCell(ArrayList<InteractableCell> cells) {
+			 cells.add(this);
+			 this.cells = cells;
 		}
 		 
 	        {
 	            button = new Button("0");
+	            button.setStyle("-fx-text-fill: #000000; -fx-background-color: #FFF;");
 	            button.setMinWidth(86);
 	            button.setOnAction(ev -> {
 	            	if(interactable) {
 	            		wasPressed = true;
 	            		releaseAllStoredDice();
-	            		for(InteractableCell ic : iCells) {
+	            		for(InteractableCell ic : cells) {
 	            			if(ic != this && ic.interactable) {
 	            				ic.button.setText("0");
 	            			}
 	            		}
 	            		setInteractableButtons(false,true);
+	            		//Sends the server the message that score with id has been chosen
+	            		//0-5 are aces,twos, etc. Then 10-16 are three of a kind - chance
+	            		int scoreID = cells.indexOf(this);
+	            		//if scoreID 10-16, then substract 4 to get 6-12, thats the format the server uses
+	            		if(scoreID >9) {
+	            			scoreID-=4;
+	            		}
+	            		Client.getInstance().selectScore(scoreID);
 	            		//gameSession.nextTurn();
 	            	}
 	            });
 	        }
 	        
+	        public boolean isWasPressed() {
+				return wasPressed;
+			}
 	        
 	        public void setInteractable(boolean interact, boolean clicked) {
-	        	int id = iCells.indexOf(this);
+	        	int id = cells.indexOf(this);
 	        	//lock in clicked number
 	        	if(wasPressed) {
 	        		interact = false;
@@ -475,14 +723,14 @@ public class OnlineGameBoardController{
 	        	interactable = interact;
 	        	prevNum = Integer.parseInt(button.getText());
 	        	if(interactable) {
-		            button.setStyle("-fx-background-color: #FAEF25");
+		            button.setStyle("-fx-text-fill: #000000; -fx-background-color: #FAEF25;");
 		            button.setMinHeight(30);
-		            setCellNumber(getAllDices());
+		            setCellScore(getAllDices());
 	        	}else {
-		            button.setStyle("-fx-background-color: #FFF");
+		            button.setStyle("-fx-text-fill: #000000; -fx-background-color: #FFF;");
 		            button.setMinHeight(-1);
 		            if(!clicked) {
-	            		for(InteractableCell ic : iCells) {
+	            		for(InteractableCell ic : cells) {
 	            			if(!ic.isSpecialCell())
 	            				ic.button.setText(ic.prevNum+"");
 	            		}
@@ -499,8 +747,15 @@ public class OnlineGameBoardController{
 	            //button.setStyle("-fx-background-color: #AAA");
 	        }
 	        
-	        public void setCellNumber(ArrayList<Integer> allDice) {
-	    		int id = iCells.indexOf(this);
+	        
+	        public void setCellScore(int score) {
+	        	if(!interactable)
+	        	button.setText(score+"");
+	    	}
+	        
+	        
+	        public void setCellScore(ArrayList<Integer> allDice) {
+	    		int id = cells.indexOf(this);
 	    		
 	    		//check if already set
 	    		if(!wasPressed) {
@@ -515,26 +770,26 @@ public class OnlineGameBoardController{
 	    			button.setText(sum+"");
 	    			System.out.println("id "+id+" set to "+sum);
 	    		}
-	    	/*	//three of a kind
+	    		//three of a kind
 	    		else if(id == 10) {
-	    			button.setText(isThreeOfAKind(allDice)+"");
+	    			button.setText(yh.isThreeOfAKind(allDice)+"");
 	    		}
 	    		//four of a kind
 	    		else if(id == 11) {
-	    			button.setText(isFourOfAKind(allDice)+"");
+	    			button.setText(yh.isFourOfAKind(allDice)+"");
 	    		}
 	    		else if(id == 12) {
-	    			button.setText(isFullHouse(allDice)+"");
+	    			button.setText(yh.isFullHouse(allDice)+"");
 	    		}
 	    		else if(id == 13) {
-	    			button.setText(isLowStraight(allDice)+"");
+	    			button.setText(yh.isLowStraight(allDice)+"");
 	    		}
 	    		else if(id == 14) {
-	    			button.setText(isHighStraight(allDice)+"");
+	    			button.setText(yh.isHighStraight(allDice)+"");
 	    		}
 	    		else if(id == 15) {
-	    			button.setText(isYahtzee(allDice)+"");
-	    		}*/
+	    			button.setText(yh.isYahtzee(allDice)+"");
+	    		}
 	    		//chance
 	    		else if(id == 16) {
 	    			int sum = 0;
@@ -550,7 +805,7 @@ public class OnlineGameBoardController{
 	         * @return true if cell is non-interactable cell
 	         */
 	        private boolean isSpecialCell() {
-	    		int id = iCells.indexOf(this);
+	    		int id = cells.indexOf(this);
 	    		return ((id>5 && id <10) || id > 16);		
 	        }
 	}

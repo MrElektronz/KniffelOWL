@@ -56,29 +56,12 @@ public class GameFinder {
 		//add Player to lobby
 		lobby.addPlayer(sessionID);
 		
+		System.out.println("Added session "+sessionID+" to lobby");
+		
 		return lobby.getLobbyData();
 	}
 	
 	
-	/**
-	 * @deprecated
-	 * @param sessionID
-	 * @return own version of 'null' is an empty array
-	 */
-	public byte[] updateLobby(String sessionID) {
-		System.out.println("Lobby Amount: "+games.size());
-		Session s = SessionManager.getInstance().getSession(sessionID);
-		if(s != null) {
-		System.out.println("update lobby with "+sessionID);
-		//add to lobby if not already inside of one
-		if(s.getCurrentGame() == null) {
-			return addPlayerToLobby(sessionID);
-		}
-		return s.getCurrentGame().getLobbyData();
-		}
-		
-		return new byte[1];
-	}
 	
 	
 	public void removePlayerFromLobby(String sessionID) {
@@ -122,6 +105,11 @@ public class GameFinder {
 	public void removeDiceFromBank(String sessionID, int number) {
 		GameInstance g = getGameInstanceOfPlayer(sessionID);
 		g.removeDiceFromBank(sessionID, number);
+	}
+	
+	public void setScore(String sessionID, int scoreID) {
+		GameInstance g = getGameInstanceOfPlayer(sessionID);
+		g.selectScore(sessionID, scoreID);
 	}
 	
 	public void setLobbyReadyStatus(String sessionID) {

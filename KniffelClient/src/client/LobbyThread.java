@@ -25,18 +25,21 @@ public class LobbyThread extends Thread{
 		running = true;
 		System.out.println("GO");
 		//lobby.updateLobby(client.addToLobby());
-		client.addToLobby();
 	}
 	
 	public void setRunning(boolean running) {
 		this.running = running;
 	}
 	
+	public void setLobby(LobbyController lobby) {
+		this.lobby = lobby;
+	}
+	
 	@Override
 	public void run() {
 		while(running&&!client.getSocket().isClosed()) {
 			//update the lobby client-side
-			System.out.println("run lobby");
+			System.out.println("run lobs");
 		    //lobby.updateLobby(Client.getInstance().requestLobbyUpdate());
 			String received = "";
 			try {
@@ -44,11 +47,14 @@ public class LobbyThread extends Thread{
 			}catch(Exception ex) {
 				
 			}
+			
+			System.out.println("2222");
+			
 			String[] args = received.split(";");
 			String command = args[0];
 			
 			if(!received.equals("")) {
-			System.out.println(received);
+			System.out.println("received: "+received);
 			}
 			if(command.equals("!LobbyUpdate")) {
 				System.out.println("YWWWWWWWWWWWWWWW");
@@ -68,7 +74,22 @@ public class LobbyThread extends Thread{
 					System.out.println("SERVER: "+os.serialize());
 				//!GameEnd;winner
 			}else if(command.equals("!GameEnd")) {
-				
+				String winner = args[1];
+				if(winner.equals(client.getUsername())) {
+					try {
+						Main.changeToEndScreen("You have won", "#CC8000");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else {
+					try {
+						Main.changeToEndScreen("You have lost", "#CC1F00");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
 		try {
 			sleep(20);
@@ -77,43 +98,5 @@ public class LobbyThread extends Thread{
 			e.printStackTrace();
 		}
 		}
-		/*while(running&&!client.getSocket().isClosed()) {
-			
-			String received = "";
-				try {
-					received = client.getIn().readUTF();
-				}catch(Exception ex) {
-					
-				}
-				String[] args = received.split(";");
-				System.out.println(received);
-				String command = args[0];
-				
-				if(!received.equals("")) {
-				System.out.println(received);
-				}
-				
-				if(command.equals("!test")) {
-					System.out.println("YEEEEEEEEEEEEESS GOOOO");
-				}else if(command.equals("!LobbyUpdate")) {
-					try {
-						//update the lobby every 10ms
-						lobby.updateLobby((int[])Serializer.fromString(args[1]));
-					} catch (ClassNotFoundException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			
-			try {
-				sleep(10);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}*/
 	}
 }

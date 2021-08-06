@@ -117,7 +117,13 @@ public class Main extends Application {
 		stg.setWidth(600);
 		stg.setHeight(400);
 		stg.centerOnScreen();
-		ctrl.setText(text,color);
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				ctrl.setText(text,color);				
+			}
+		});
 	}
 
 	/**

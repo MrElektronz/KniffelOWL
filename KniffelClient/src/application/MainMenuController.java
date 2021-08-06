@@ -33,7 +33,15 @@ public class MainMenuController {
 	 * @param event
 	 * @throws IOException
 	 */
-	public void onPlayOffline(ActionEvent event) throws IOException {
+	public void onPlayBotEasy(ActionEvent event) throws IOException {
+		Main.changeScene("Scene_GameBoard.fxml",1280,745);
+	}
+	
+	public void onPlayBotMedium(ActionEvent event) throws IOException {
+		Main.changeScene("Scene_GameBoard.fxml",1280,745);
+	}
+	
+	public void onPlayBotHard(ActionEvent event) throws IOException {
 		Main.changeScene("Scene_GameBoard.fxml",1280,745);
 	}
 	

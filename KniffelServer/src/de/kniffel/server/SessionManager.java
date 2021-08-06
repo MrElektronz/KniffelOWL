@@ -90,8 +90,7 @@ public class SessionManager {
 			
 			//if in gameinstance
 			if(s.getCurrentGame() != null) {
-				GameInstance game = s.getCurrentGame();
-				game.removePlayer(id);
+				GameFinder.getInstance().removePlayerFromLobby(id);
 			}
 		}
 		
@@ -107,8 +106,7 @@ public class SessionManager {
 			
 			//if in gameinstance
 			if(session.getCurrentGame() != null) {
-				GameInstance game = session.getCurrentGame();
-				game.removePlayer(id);
+				GameFinder.getInstance().removePlayerFromLobby(id);
 			}
 		}
 		

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 
+
 /**
  * This class has all important information about an online game and gets send to the client (serialized)
  * One thought was using Gson for serialization, but we try to create our own
@@ -38,11 +39,11 @@ public class OnlineSessionWrapper {
 	}
 	
 	public OnlinePlayerWrapper getCurrentPlayer() {
-		if(turn%3==0 && players[3]!=null) {
+		if(turn%4==0 && players[3]!=null) {
 			return players[3];
-		}else if(turn%2==0 && players[2]!=null) {
+		}else if(turn%3==0 && players[2]!=null) {
 			return players[2];
-		}else if(turn%1==0 && players[1]!=null) {
+		}else if(turn%2==0 && players[1]!=null) {
 			return players[1];
 		}else {
 			return players[0];
@@ -58,14 +59,31 @@ public class OnlineSessionWrapper {
 		}
 	}
 	
+	/**
+	 * 
+	 * @return ArrayList of visible 3d dice on the field
+	 */
 	public ArrayList<Integer> getDice() {
 		return dice;
 	}
 	
+	/**
+	 * 
+	 * @return ArrayList of dice on the bank
+	 */
 	public ArrayList<Integer> getBank() {
 		return bank;
 	}
 	
+	/**
+	 * 
+	 * @return ArrayList of all dice -> combining bank and 3d dice
+	 */
+	public ArrayList<Integer> getCombinedDice(){
+		ArrayList<Integer> clone = (ArrayList<Integer>) dice.clone();
+		clone.addAll(bank);
+		return clone;
+	}
 	
 	public int getPlayerCount() {
 		int j = 0;
@@ -118,9 +136,13 @@ public class OnlineSessionWrapper {
 		return numbers;
 	}
 	
+	/*
+	 * sets the score for the current player and adds one turn
+	 */
 	public void selectScore(int fieldID, int score) {
 		OnlinePlayerWrapper current = getCurrentPlayer();
 		current.setScore(fieldID, score);
+		turn++;
 	}
 	
 	/**
@@ -216,7 +238,7 @@ public class OnlineSessionWrapper {
 	public static OnlineSessionWrapper deserialize(String data) {
 		//String[] args = data.replace("{", "").replace("}", "").split(";");
 		String[] args = splitIntoArgs(data);
-		System.out.println(args[6]);
+		System.out.println("Turns: "+args[0]);
 		try {
 		System.out.println(args[7]);
 		}catch(ArrayIndexOutOfBoundsException ex) {
@@ -251,7 +273,7 @@ public class OnlineSessionWrapper {
 		return session;
 	}
 	
-	public static String[] splitIntoArgs(String data) {
+	private static String[] splitIntoArgs(String data) {
 		ArrayList<String> args = new ArrayList<String>();
 		data = data.substring(1,data.length()-1);
 		boolean out = true;

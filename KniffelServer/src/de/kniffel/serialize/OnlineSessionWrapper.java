@@ -37,11 +37,11 @@ public class OnlineSessionWrapper {
 	}
 	
 	public OnlinePlayerWrapper getCurrentPlayer() {
-		if(turn%3==0 && players[3]!=null) {
+		if(turn%4==0 && players[3]!=null) {
 			return players[3];
-		}else if(turn%2==0 && players[2]!=null) {
+		}else if(turn%3==0 && players[2]!=null) {
 			return players[2];
-		}else if(turn%1==0 && players[1]!=null) {
+		}else if(turn%2==0 && players[1]!=null) {
 			return players[1];
 		}else {
 			return players[0];
@@ -85,12 +85,30 @@ public class OnlineSessionWrapper {
 		return turn;
 	}
 	
+	/**
+	 * 
+	 * @return ArrayList of visible 3d dice on the field
+	 */
 	public ArrayList<Integer> getDice() {
 		return dice;
 	}
 	
+	/**
+	 * 
+	 * @return ArrayList of dice on the bank
+	 */
 	public ArrayList<Integer> getBank() {
 		return bank;
+	}
+	
+	/**
+	 * 
+	 * @return ArrayList of all dice -> combining bank and 3d dice
+	 */
+	public ArrayList<Integer> getCombinedDice(){
+		ArrayList<Integer> clone = (ArrayList<Integer>) dice.clone();
+		clone.addAll(bank);
+		return clone;
 	}
 	
 	public OnlinePlayerWrapper getPlayer(int index) {
@@ -111,16 +129,18 @@ public class OnlineSessionWrapper {
 		dice.add(number);
 		}
 		currentRoll++;
-		if(currentRoll >3) {
-			currentRoll = 1;
-		}
 		return numbers;
 	}
 	
+	/*
+	 * sets the score for the current player and adds one turn
+	 */
 	public void selectScore(int fieldID, int score) {
 		OnlinePlayerWrapper current = getCurrentPlayer();
 		current.setScore(fieldID, score);
-	}
+		turn++;
+		currentRoll = 1;
+		}
 	
 	/**
 	 * add specific dice with number to bank

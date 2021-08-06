@@ -57,7 +57,10 @@ public class OfflineGameBoardController {
 	private ArrayList<Dice> dices;
 	private ArrayList<Button> diceButtons;
 	private OfflineSession gameSession;
+	private YahtzeeHelper yh;
+	
 	public void initialize() {
+		yh = YahtzeeHelper.getInstance();
 		canClickDice = false;
 		gameSession = new OfflineSession(1,this);
 		pc = new PerspectiveCamera();
@@ -366,12 +369,12 @@ public class OfflineGameBoardController {
 		scores.add(Integer.parseInt(entries.get(8)));
 		//empty line
 		scores.add(-1);
-		scores.add(isThreeOfAKind(allDice));
-		scores.add(isFourOfAKind(allDice));
-		scores.add(isFullHouse(allDice));
-		scores.add(isLowStraight(allDice));
-		scores.add(isHighStraight(allDice));
-		scores.add(isYahtzee(allDice));
+		scores.add(yh.isThreeOfAKind(allDice));
+		scores.add(yh.isFourOfAKind(allDice));
+		scores.add(yh.isFullHouse(allDice));
+		scores.add(yh.isLowStraight(allDice));
+		scores.add(yh.isHighStraight(allDice));
+		scores.add(yh.isYahtzee(allDice));
 		
 		int chance = 0;
 		for(int i : allDice) {
@@ -445,161 +448,8 @@ public class OfflineGameBoardController {
 		}else {
 			grandTotal.button.setText(totalUpperSum+totalLowerSum+"");
 		}
-		
 	}
 	
-	/**
-	 * 
-	 * @param allDices
-	 * @return if 0, then no three of a kind
-	 */
-	public int isThreeOfAKind(ArrayList<Integer> allDices) {
-		int i1=0,i2=0,i3=0,i4=0,i5=0,i6=0;
-		int sum=0;
-		for(int num : allDices) {
-			sum+=num;
-			switch(num) {
-			case 1:
-				i1++;break;
-			case 2:
-				i2++;break;
-			case 3:
-				i3++;break;
-			case 4:
-				i4++;break;
-			case 5:
-				i5++;break;
-			case 6:
-				i6++;break;
-			default: 
-				break;
-			}
-		}
-		if(i1>2||i2>2||i3>2||i4>2||i5>2||i6>2) {
-			return sum;			
-		}
-		return 0;
-	}
-	
-	public int isFourOfAKind(ArrayList<Integer> allDices) {
-		int i1=0,i2=0,i3=0,i4=0,i5=0,i6=0;
-		int sum=0;
-		for(int num : allDices) {
-			sum+=num;
-			switch(num) {
-			case 1:
-				i1++;break;
-			case 2:
-				i2++;break;
-			case 3:
-				i3++;break;
-			case 4:
-				i4++;break;
-			case 5:
-				i5++;break;
-			case 6:
-				i6++;break;
-			default: 
-				break;
-			}
-		}
-		if(i1>3||i2>3||i3>3||i4>3||i5>3||i6>3) {
-			return sum;			
-		}
-		return 0;
-	}
-	
-	/**
-	 * 
-	 * @param allDices
-	 * @return if 0, then no three of a kind
-	 */
-	public int isFullHouse(ArrayList<Integer> allDices) {
-		int[] arr = new int[6];
-		for(int num : allDices) {
-			arr[num-1]=arr[num-1]+1;
-		}
-		boolean b1=false,b2=false;
-		for(int i : arr) {
-			if(i>2) {
-				b2=true;
-			}else if(i>1) {
-				b1=true;
-			}
-		}
-		//If both conditions are true
-		if(b1&&b2) {
-			return 25;
-		}
-		return 0;
-	}
-	
-	/**
-	 * 
-	 * @param allDices
-	 * @return 30 if allDices is LowStraight or 0 if not
-	 */
-	public int isLowStraight(ArrayList<Integer> allDices) {
-		ArrayList<Integer> a1 = new ArrayList<Integer>();
-		a1.add(1);
-		a1.add(2);
-		a1.add(3);
-		a1.add(4);
-		a1.add(5);
-		a1.add(6);
-		//contains either 1,2,3,4/2,3,4,5 or 3,4,5,6
-		if(allDices.containsAll(a1.subList(0, 4))||allDices.containsAll(a1.subList(1, 5))||allDices.containsAll(a1.subList(2, 6))){
-			return 30;
-		}
-		return 0;
-	}
-	
-	/**
-	 * 
-	 * @param allDices
-	 * @return 40 if allDices is HighStraight or 0 if not
-	 */
-	public int isHighStraight(ArrayList<Integer> allDices) {
-		ArrayList<Integer> a1 = new ArrayList<Integer>();
-		a1.add(1);
-		a1.add(2);
-		a1.add(3);
-		a1.add(4);
-		a1.add(5);
-		a1.add(6);
-		//contains either 1,2,3,4,5/2,3,4,5,6 or 3,4,5,6
-		if(allDices.containsAll(a1.subList(0, 5))||allDices.containsAll(a1.subList(1, 6))){
-			return 40;
-		}
-		return 0;
-	}
-	public int isYahtzee(ArrayList<Integer> allDices) {
-		int i1=0,i2=0,i3=0,i4=0,i5=0,i6=0;
-		int sum=0;
-		for(int num : allDices) {
-			sum+=num;
-			switch(num) {
-			case 1:
-				i1++;break;
-			case 2:
-				i2++;break;
-			case 3:
-				i3++;break;
-			case 4:
-				i4++;break;
-			case 5:
-				i5++;break;
-			case 6:
-				i6++;break;
-			default: 
-				break;
-			}
-		}
-		if(i1>4||i2>4||i3>4||i4>4||i5>4||i6>4) {
-			return 50;			
-		}
-		return 0;
-	}
 	
 	
 	/**
@@ -681,7 +531,6 @@ public class OfflineGameBoardController {
 	            				ic.button.setText(ic.prevNum+"");
 	            		}
 		            }
-		            
 	        	}
 	        }
 
@@ -710,23 +559,23 @@ public class OfflineGameBoardController {
 	    		}
 	    		//three of a kind
 	    		else if(id == 10) {
-	    			button.setText(isThreeOfAKind(allDice)+"");
+	    			button.setText(yh.isThreeOfAKind(allDice)+"");
 	    		}
 	    		//four of a kind
 	    		else if(id == 11) {
-	    			button.setText(isFourOfAKind(allDice)+"");
+	    			button.setText(yh.isFourOfAKind(allDice)+"");
 	    		}
 	    		else if(id == 12) {
-	    			button.setText(isFullHouse(allDice)+"");
+	    			button.setText(yh.isFullHouse(allDice)+"");
 	    		}
 	    		else if(id == 13) {
-	    			button.setText(isLowStraight(allDice)+"");
+	    			button.setText(yh.isLowStraight(allDice)+"");
 	    		}
 	    		else if(id == 14) {
-	    			button.setText(isHighStraight(allDice)+"");
+	    			button.setText(yh.isHighStraight(allDice)+"");
 	    		}
 	    		else if(id == 15) {
-	    			button.setText(isYahtzee(allDice)+"");
+	    			button.setText(yh.isYahtzee(allDice)+"");
 	    		}
 	    		//chance
 	    		else if(id == 16) {

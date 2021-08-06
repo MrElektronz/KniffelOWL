@@ -1,5 +1,7 @@
 package de.kniffel.serialize;
 
+import java.util.Arrays;
+
 public class OnlinePlayerWrapper {
 	
 	private String name;
@@ -30,6 +32,7 @@ public class OnlinePlayerWrapper {
 	public void setScore(int index, int value)
 	{
 		scores[index] = value;
+		System.out.println("Index: "+index+" was set to: "+value);
 	}
 	
 	

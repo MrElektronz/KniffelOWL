@@ -1,5 +1,7 @@
 package de.client.serialize;
 
+import java.util.Arrays;
+
 import de.client.serialize.OnlinePlayerWrapper;
 
 public class OnlinePlayerWrapper {

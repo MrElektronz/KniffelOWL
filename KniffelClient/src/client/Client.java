@@ -390,6 +390,19 @@ public class Client {
 		}
 	}
 	
+	/**
+	 * If successful, send new game update to all clients
+	 */
+	public void selectScore(int scoreID) {
+		try {
+			initClient();
+			out.writeUTF(buildServerCommand("SelectScore", sessionID,""+scoreID));
+			out.flush();
+		}catch(IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
 
 	/**
 	 * tells the server that the player is ready to start the game (if he is in a lobby)
