@@ -19,10 +19,6 @@ import de.kniffel.server.SessionManager;
 public class ServerTimeoutListenerThread extends Thread{
 	
 	
-	
-
-	
-	
 	@Override
 	public void run() {
 		while(Server.isRunning()) {

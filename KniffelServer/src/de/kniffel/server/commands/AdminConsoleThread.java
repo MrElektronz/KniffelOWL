@@ -20,6 +20,9 @@ public class AdminConsoleThread extends Thread{
 	
 	
 	
+	/**
+	 * This is the run method of the AdminConsoleThread, which checks if an admin uses 'exit' to shut the server down
+	 */
 	@Override
 	public void run() {
 		

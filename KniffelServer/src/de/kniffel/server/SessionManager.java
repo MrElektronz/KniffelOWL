@@ -132,7 +132,6 @@ public class SessionManager {
 		public void acceptPing(String sessionID) {
 			if(sessions.containsKey(sessionID)) {
 				sessions.get(sessionID).updateLastTimeSeen();
-				System.out.println("PING: "+sessions.get(sessionID));
 			}
 			
 		}
@@ -187,9 +186,9 @@ public class SessionManager {
 				Session s = sessions.get(keys[i]);
 				Duration dur = Duration.between(s.getLastTimeSeen(), end);
 				if(dur.compareTo(Duration.ofSeconds(difference)) >0) {
+					
 					//remove session
 					delSession((String)keys[i]);
-					//Server.log(s.toString() +" timed out");
 					printSessions();
 				}
 				

@@ -230,9 +230,7 @@ public class OnlineSessionWrapper {
 	public static OnlineSessionWrapper deserialize(String data) {
 		//String[] args = data.replace("{", "").replace("}", "").split(";");
 		String[] args = splitIntoArgs(data);
-		System.out.println("Turns: "+args[0]);
 		try {
-		System.out.println(args[7]);
 		}catch(ArrayIndexOutOfBoundsException ex) {
 			
 		}
@@ -259,8 +257,6 @@ public class OnlineSessionWrapper {
 			newBank.add(Integer.parseInt(sBank[i]));
 		}
 		session.setBank(newBank);
-		}else {
-			System.out.println("nee");
 		}
 		return session;
 	}
@@ -268,7 +264,6 @@ public class OnlineSessionWrapper {
 	private static String[] splitIntoArgs(String data) {
 		ArrayList<String> args = new ArrayList<String>();
 		data = data.substring(1,data.length()-1);
-		System.out.println("new data: "+data);
 		boolean out = true;
 		String between = "";
 		String list = "";
@@ -307,16 +302,7 @@ public class OnlineSessionWrapper {
 				between = "";
 			}
 			
-			/*
-			System.out.println("list: "+list);
-			System.out.println("out: "+out);
-			for(int j = 0;j<args.size();j++) {
-			System.out.print(args.get(j)+"");
-			}
-			
-			System.out.print("\n");*/
 		}
-		//System.out.println("liste: "+data);
 		if(!list.equals("")) {
 			list+=data.substring(data.length()-1);
 			args.add(list);

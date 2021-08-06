@@ -33,7 +33,6 @@ public class LobbyController {
 		if(Main.lThread == null) {
 		Main.lThread = new LobbyThread(this);
 		Main.lThread.start();
-		System.out.println("New thread");
 		}else {
 			Main.lThread.setLobby(this);
 		}
@@ -56,13 +55,7 @@ public class LobbyController {
 	}
 	
 	public static void shutdown() {
-		
-		/*if(Main.lThread != null) {
-			Main.lThread.setRunning(false);
-			Main.lThread = null;
-		}*/
 		Client.getInstance().sendLeaveLobby();
-		System.out.println("leave lobby1");
 	}
 	/**
 	 * @param event
@@ -75,11 +68,9 @@ public class LobbyController {
 	
 	public void updateLobby(byte[] lobbyData) {
 		//start the game if lobby is ready
-		System.out.println(client.getSessionID()+" Lobby Data: "+lobbyData[0]+" "+lobbyData[1]);
 		if(lobbyData.length>2) {
 			//update the lobby scene
 			ArrayList<ImageView> profiles = new ArrayList<ImageView>();
-			System.out.println("adding profiles");
 			for(int i = 0; i< lobbyData.length-1;i++) {
 				ImageView iv = new ImageView(ProfileManager.getInstance().getImage(lobbyData[i])); 
 				profiles.add(iv);
@@ -90,7 +81,6 @@ public class LobbyController {
 				public void run() {
 					horbox.getChildren().clear();
 					horbox.getChildren().addAll(profiles);
-					System.out.println("show em");
 				}
 				
 			});

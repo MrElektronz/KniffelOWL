@@ -74,7 +74,6 @@ public class GameInstance {
 			if(players[i] == null) {
 				players[i] = new Player(sessionID);
 				game.addPlayer(new OnlinePlayerWrapper(players[i].getUsername(), players[i].getProfilePic()));
-				System.out.println("added "+players[i].getUsername()+" to the lobby");
 				sm.getSession(sessionID).setCurrentGame(this);
 				
 				//Sending new lobby status to all clients, because Base64 doesn't include ';', we can use it as a separator
@@ -170,17 +169,13 @@ public class GameInstance {
 	public void selectScore(String sessionID,int id) {
 		Session s = sm.getSession(sessionID);
 		Player current = getCurrentPlayer();
-		System.out.println("Setting id: "+id);
-		if(game.getCurrentPlayer().getName().equals(s.getUsername()) && current!=null) { //&&game.getCurrentRoll()>1
-			System.out.println("yes1");
+		if(game.getCurrentPlayer().getName().equals(s.getUsername()) && current!=null) {
+			
 			//If not already set, set score
 			if(!current.getAlreadySetScores().contains(id)) {
-				System.out.println("yes2");
 			int score = 1;
 			
-			for(int num : game.getCombinedDice()) {
-				System.out.println("num: "+num);
-			}
+
 			
     		if(id < 6) {
     			int sum = 0;
@@ -217,10 +212,8 @@ public class GameInstance {
     			}
     			score = sum;
     		}
-			System.out.println("score: "+score);
 			game.selectScore(id,score);
 			current.alreadySetScores.add(id);
-			System.out.println(current.getUsername()+" has set "+current.alreadySetScores.size());
 			sendGameUpdate();
 			}
 			
@@ -423,12 +416,10 @@ public class GameInstance {
 		for(int i = 0; i< players.length;i++) {
 			if(players[i] != null) {
 				try {
-					System.out.println("SENDING NOTIFY TO: "+players[i].getUsername() +" data: "+data);
 					ServerRequestWorkerThread wThread = sm.getSession(players[i].getSessionID()).getWorkerThread();
 					if(wThread.getClient().isConnected()) {
 					wThread.getOut().writeUTF(data);
 					wThread.getOut().flush();
-					System.out.println("successfully sended to "+players[i].getUsername());
 					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

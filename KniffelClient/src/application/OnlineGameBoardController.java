@@ -174,21 +174,15 @@ public class OnlineGameBoardController{
 						ArrayList<Integer> oldBank = prevSession.getBank();
 						ArrayList<Integer> newBank = session.getBank();
 						
-						System.out.println("OldBank: "+oldBank.size());
-						System.out.println("NewBank: "+newBank.size());
 							//Now update the bank (TODO: Not working when only 1 dice left on bank)
 							if(!prevSession.getBank().equals(session.getBank())) {
 
 							
 							//If dice was removed from bank
 							if(oldBank.size()>newBank.size()) {
-								System.out.println("NEW BANK:");
 								for(Integer d : newBank) {
-									System.out.println(d);
 								}
-								System.out.println(session.serialize());
 								int digit = differenceOfPrimitivesArrayList(session.getDice(), prevSession.getDice()).get(0);
-								System.out.println("START COMPARISON");
 								for(Button b : diceButtons) {
 									if(!b.getText().equals("-")) {
 										Integer number = Integer.parseInt(b.getText());
@@ -340,11 +334,9 @@ public class OnlineGameBoardController{
 			if(d.getNumber() == number) {
 				root.getChildren().remove(d);
 				dices.remove(d);
-				System.out.println("44");
 				for(Button b : diceButtons) {
 					if(b.getText().equals("-")) {
 						b.setText(number+"");
-						System.out.println("adasd");
 						break;
 			}
 		}
@@ -360,11 +352,9 @@ public class OnlineGameBoardController{
 	public void addDiceToButtons(Dice d) {
 		root.getChildren().remove(d);
 		dices.remove(d);
-		System.out.println("44");
 		for(Button b : diceButtons) {
 			if(b.getText().equals("-")) {
 				b.setText(d.getNumber()+"");
-				System.out.println("adasd");
 				break;
 			}
 		}
@@ -449,17 +439,8 @@ public class OnlineGameBoardController{
 	
 	
 	public void onNewRoll(ActionEvent e) throws IOException {
-		//Check if active player before (so the buttons can be greyed out)
+		//Check if active player before (so the buttons can be grayed out)
 		Client.getInstance().requestRollDice();
-		
-		/*if(gameSession.getCurrentPlayer() == gameSession.getPlayer()) {
-		Button b = (Button)e.getSource();
-		canClickDice = true;
-		rollDice();
-		setInteractableButtons(false,false);
-    	setInteractableButtons(true,false);
-		
-		}*/
 	}
 	
 	public void onMouseClicked(MouseEvent e) throws IOException {
@@ -710,7 +691,6 @@ public class OnlineGameBoardController{
 			}
 	        
 	        public void setInteractable(boolean interact, boolean clicked) {
-	        	int id = cells.indexOf(this);
 	        	//lock in clicked number
 	        	if(wasPressed) {
 	        		interact = false;
@@ -768,7 +748,6 @@ public class OnlineGameBoardController{
 	    				}
 	    			}
 	    			button.setText(sum+"");
-	    			System.out.println("id "+id+" set to "+sum);
 	    		}
 	    		//three of a kind
 	    		else if(id == 10) {

@@ -32,7 +32,6 @@ public class OnlinePlayerWrapper {
 	public void setScore(int index, int value)
 	{
 		scores[index] = value;
-		System.out.println("Index: "+index+" was set to: "+value);
 	}
 	
 	

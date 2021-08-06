@@ -32,9 +32,8 @@ public class ServerListenerThread extends Thread{
 	public void run() {
 		while(!serverSocket.isClosed() && serverSocket.isBound()) {
 		try {
-			System.out.println("Waiting for client at "+serverSocket.getLocalPort());
+			System.out.println("Waiting for clients at "+serverSocket.getLocalPort());
 			Socket client = serverSocket.accept();
-			//Server.log("Connection accepted: "+client.getInetAddress());
 			
 			ServerRequestWorkerThread worker = new ServerRequestWorkerThread(client);
 			worker.start();

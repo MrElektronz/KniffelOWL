@@ -86,7 +86,6 @@ public class Bot extends OfflinePlayer{
 				if(scores.get(i) >maxValue && !ogbc.isScoreAlreadySet(i) && !alreadySet.contains(i) && ogbc.isChoosableScoreID(i)) {
 					maxValue = scores.get(i);
 					index = i;
-					System.out.println("here1");
 				}
 			}
 			//if no highest score field found, set next field
@@ -94,7 +93,6 @@ public class Bot extends OfflinePlayer{
 				for(int i = 0; i< scores.size();i++) {
 					if(ogbc.isChoosableScoreID(i)&&!alreadySet.contains(i)) {
 						index = i;
-						System.out.println("here2");
 						break;
 					}
 				}

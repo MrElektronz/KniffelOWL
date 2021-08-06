@@ -144,7 +144,6 @@ public class Dice extends MeshView{
 		this.number = number;
 		PhongMaterial mat = new PhongMaterial(Color.WHITE);
 		mat.setSpecularColor(Color.BLACK);
-		System.out.println(number);
 		mat.setDiffuseMap(sides[number-1]);
 		setMaterial(mat);
 

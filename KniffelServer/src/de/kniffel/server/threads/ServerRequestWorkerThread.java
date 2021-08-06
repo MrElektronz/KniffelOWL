@@ -49,15 +49,11 @@ public class ServerRequestWorkerThread extends Thread{
 				client.close();
 			}
 		String[] args = received.split(";");
-		System.out.println(received);
 		String command = args[0];
 		if(command.equals("$P")) {
 			sm.acceptPing(args[1]);
 		}else if(command.equals("$Login")) {
-			System.out.println("Server: Tries to login user with username "+args[1]+" and password "+args[2]);
 			String newSessionID = Server.getSQLManager().login(args[1], args[2],this);
-			System.out.println("Result: "+newSessionID);
-			System.out.println("now sends sessionID");
 			out.writeUTF(newSessionID);
 			sm.printSessions();
 		}else if(command.equals("$Reg")) {
@@ -81,20 +77,13 @@ public class ServerRequestWorkerThread extends Thread{
 			out.writeUTF(name);
 		}else if(command.equals("$GetProf")) {
 			String name = args[1];
-			System.out.println("GETPROFFFFFFFFFFFFF");
 			out.writeInt(Server.getSQLManager().getProfilePic(name));
 		}else if(command.equals("$SetProf")) {
 			//SetProf;sessionid;imageID
 			String user = sm.getSession(args[1]).getUsername();
 			Server.getSQLManager().setProfilePic(user, Integer.parseInt(args[2]));
-		}else if(command.equals("$LobbyUpdate")) {
-			//SetProf;sessionid;imageID
-			//This is depricated
-			String sessionID = args[1];
-			//writeInts(out,GameFinder.getInstance().updateLobby(sessionID));
 		}else if(command.equals("$LobbyLeave")) {
 			String sessionID = args[1];
-			System.out.println("LEAAAAAAAAAAAVE "+sessionID);
 			GameFinder.getInstance().removePlayerFromLobby(sessionID);
 		}else if(command.equals("$LobbyReady")) {
 			String sessionID = args[1];
@@ -118,7 +107,6 @@ public class ServerRequestWorkerThread extends Thread{
 			int scoreID = Integer.parseInt(args[2]);
 			GameFinder.getInstance().setScore(sessionID, scoreID);
 		}
-		//System.out.println("Server: "+input.readUTF()+" by "+client.getRemoteSocketAddress());
 		
 		sleep(10);
 		}catch(IOException ex) {
@@ -149,7 +137,7 @@ public class ServerRequestWorkerThread extends Thread{
 			client.close();
 			//logout if error
 			sm.logout(sm.getSession(this));
-			System.out.println("Close connection TO CLIENT");
+			System.out.println("Close connection to CLIENT");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

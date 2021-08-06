@@ -23,8 +23,6 @@ public class LobbyThread extends Thread{
 		client = Client.getInstance();
 		this.lobby = lobby;
 		running = true;
-		System.out.println("GO");
-		//lobby.updateLobby(client.addToLobby());
 	}
 	
 	public void setRunning(boolean running) {
@@ -38,8 +36,8 @@ public class LobbyThread extends Thread{
 	@Override
 	public void run() {
 		while(running&&!client.getSocket().isClosed()) {
+			
 			//update the lobby client-side
-		    //lobby.updateLobby(Client.getInstance().requestLobbyUpdate());
 			String received = "";
 			try {
 				received = client.getIn().readUTF();
@@ -51,7 +49,6 @@ public class LobbyThread extends Thread{
 			String command = args[0];
 			
 			if(!received.equals("")) {
-			System.out.println("received: "+received);
 			}
 			if(command.equals("!LobbyUpdate")) {
 				try {
@@ -67,7 +64,6 @@ public class LobbyThread extends Thread{
 			}else if(command.equals("!GameUpdate")) {
 					OnlineSessionWrapper os = OnlineSessionWrapper.deserialize(received.replace("!GameUpdate;", ""));
 					Main.updateSession(os);
-					System.out.println("SERVER: "+os.serialize());
 				//!GameEnd;winner
 			}else if(command.equals("!GameEnd")) {
 				String winner = args[1];

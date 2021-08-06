@@ -60,23 +60,6 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 		
-		/*
-		OnlineSessionWrapper os = new OnlineSessionWrapper(new OnlinePlayerWrapper("KEK", (byte) 3), null, null, null);
-		System.out.println(os.serialize());
-		int a = os.getDice().get(0);
-		System.out.println(a);
-		int b = os.getDice().get(1);
-		System.out.println(b);
-		os.addToBank(a);
-		os.addToBank(b);
-		System.out.println(os.serialize());
-		os.removeFromBank(a);
-		System.out.println(os.serialize());
-		os.removeFromBank(b);
-		System.out.println(os.serialize());
-		*/
-		
-		
 	}
 	
 	

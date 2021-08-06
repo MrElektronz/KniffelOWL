@@ -161,7 +161,6 @@ public class OfflineGameBoardController {
 		int playerTotal = Integer.parseInt(iCells.get(18).button.getText());
 		int botTotal = Integer.parseInt(tv3.getItems().get(18));
 		if(playerTotal > botTotal) {
-			System.out.println("DER MENSCH HAT GEWONNEN!");
 			try {
 				Main.changeToEndScreen("You have won", "#CC8000");
 			} catch (IOException e) {
@@ -169,7 +168,6 @@ public class OfflineGameBoardController {
 				e.printStackTrace();
 			}
 		}else if(playerTotal == botTotal) {
-			System.out.println("Mensch und Maschine sind gleich auf");
 			try {
 				Main.changeToEndScreen("It is a draw", "#DDDD");
 			} catch (IOException e) {
@@ -177,7 +175,6 @@ public class OfflineGameBoardController {
 				e.printStackTrace();
 			}
 		}else {
-			System.out.println("Maschine bester Mensch");
 			try {
 				Main.changeToEndScreen("You have lost", "#CC1F00");
 			} catch (IOException e) {
@@ -259,11 +256,9 @@ public class OfflineGameBoardController {
 	public void addDiceToButtons(Dice d) {
 		root.getChildren().remove(d);
 		dices.remove(d);
-		System.out.println("44");
 		for(Button b : diceButtons) {
 			if(b.getText().equals("-")) {
 				b.setText(d.getNumber()+"");
-				System.out.println("adasd");
 				break;
 			}
 		}
@@ -465,7 +460,6 @@ public class OfflineGameBoardController {
 	 * @throws Exception 
 	 */
 	public void chooseScore(int id, ArrayList<Integer> scores) {
-		System.out.println("bot chose "+id);
 		if(!isChoosableScoreID(id)) {
 			System.err.println(id+" is no choosable score id, use method 'isChoosableScoreID(id) to check'");
 		}
@@ -513,7 +507,6 @@ public class OfflineGameBoardController {
 	        
 	        
 	        public void setInteractable(boolean interact, boolean clicked) {
-	        	int id = iCells.indexOf(this);
 	        	//lock in clicked number
 	        	if(wasPressed) {
 	        		interact = false;
@@ -562,7 +555,6 @@ public class OfflineGameBoardController {
 	    				}
 	    			}
 	    			button.setText(sum+"");
-	    			System.out.println("id "+id+" set to "+sum);
 	    		}
 	    		//three of a kind
 	    		else if(id == 10) {

@@ -75,7 +75,6 @@ public class Client {
 			//out.writeUTF("$Login;"+username+";"+password);
 			out.writeUTF(buildServerCommand("Login",username,encrypt(password)));
 			String value = in.readUTF();
-			System.out.println("got value: "+value+" in return");
 			//client.close();
 			if(value.equals("")) {
 				return null;
@@ -133,7 +132,6 @@ public class Client {
 			initClient();
 			//out.writeUTF("$Login;"+username+";"+password);
 			out.writeUTF(buildServerCommand("GetProf",username));
-			System.out.println("SENDING GET PROF");
 			int value = in.readInt();
 			//client.close();
 			setProfilePicID(value);
@@ -149,7 +147,6 @@ public class Client {
 	public void logout() {
 		if(!sessionID.equals("0")) {
 			try {
-				System.out.println("mach logout jetzt");
 				initClient();
 				out.writeUTF(buildServerCommand("Logout", sessionID));
 				out.flush();
@@ -231,7 +228,6 @@ public class Client {
 	 * if not: The server deletes the current session after multiple pings did not come through
 	 */
 	public void pingServer() {
-		//System.out.println("ping");
 		if(!sessionID.equals("0")) {
 			try {
 				initClient();
@@ -416,7 +412,6 @@ public class Client {
 		}catch(IOException ex) {
 			ex.printStackTrace();
 		}
-		System.out.println("leave lobby 2");
 	}
 
 	/**
