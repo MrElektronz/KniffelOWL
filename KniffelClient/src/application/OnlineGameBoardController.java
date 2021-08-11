@@ -137,6 +137,8 @@ public class OnlineGameBoardController{
 		this.prevSession = this.session;
 		this.session = session;
 		
+		
+		
 		OnlinePlayerWrapper[] players = session.getPlayers();
 			Platform.runLater(new Runnable() {
 				
@@ -284,8 +286,10 @@ public class OnlineGameBoardController{
 							//Update roll button
 							btnRoll.setText(getButtonLabel());		
 							
+
 							//Update button color for current player
-							if(session.getPlayerCount() > 1 && !prevSession.getCurrentPlayer().getName().equals(session.getCurrentPlayer().getName())) {
+							if(session.getPlayerCount() > 1 && (prevSession.getCurrentPlayer() == null || !prevSession.getCurrentPlayer().getName().equals
+									(session.getCurrentPlayer().getName()))) {
 								updateCurrentPlayerButtons();
 							}
 					}
@@ -537,12 +541,15 @@ public class OnlineGameBoardController{
 		
 		OnlinePlayerWrapper p = session.getCurrentPlayer();
 	
+		if(p != null) {
+		
 		int id = 0;
 		for(int i = 1; i< session.getPlayerCount();i++) {
 			if(session.getPlayer(i).getName().equals(p.getName())) {
 				id=i;
 			}
 		}
+		
 		
 		if(p.getName().equals(Client.getInstance().getUsername())) {
 			btnRoll.setStyle("");
@@ -580,6 +587,7 @@ public class OnlineGameBoardController{
 			btnDice3.setStyle(style);
 			btnDice4.setStyle(style);
 			btnDice5.setStyle(style);
+		}
 		}
 	}
 	/**
@@ -647,6 +655,12 @@ public class OnlineGameBoardController{
 		}
 	}
 	
+	
+	public void endGame()
+	{
+		session = null;
+		prevSession = null;
+	}
 	class InteractableCell extends TableCell<String, Void>{
 		 private final Button button;
 		 private boolean interactable = false;

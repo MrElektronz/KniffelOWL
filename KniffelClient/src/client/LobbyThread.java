@@ -7,6 +7,7 @@ import application.Main;
 import application.OnlineGameBoardController;
 import de.client.serialize.OnlineSessionWrapper;
 import de.client.serialize.Serializer;
+import javafx.application.Platform;
 
 /**
  * This class asks every 2 seconds for a lobby update 
@@ -66,22 +67,33 @@ public class LobbyThread extends Thread{
 					Main.updateSession(os);
 				//!GameEnd;winner
 			}else if(command.equals("!GameEnd")) {
+				Main.endGame();
 				String winner = args[1];
-				if(winner.equals(client.getUsername())) {
-					try {
-						Main.changeToEndScreen("You have won", "#CC8000");
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+				
+					Platform.runLater(new Runnable() {
+
+						@Override
+						public void run() {
+							if(winner.equals(client.getUsername())) {
+							try {
+								Main.changeToEndScreen("You have won", "#CC8000");
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}else {
+							try {
+								Main.changeToEndScreen("You have lost", "#CC1F00");
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}						
+					
 					}
-				}else {
-					try {
-						Main.changeToEndScreen("You have lost", "#CC1F00");
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
+					});
+			
+				
 			}
 		try {
 			sleep(20);

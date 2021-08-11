@@ -31,6 +31,7 @@ public class Main extends Application {
 	public static LobbyThread lThread;
 	public static MainMenuController mainMenu;
 	public static OnlineGameBoardController onlineGame;
+	public static boolean gameEnded = false;
 	@Override
 	public void start(Stage primaryStage) {
 		// Client.register("Emre2", "passwort2", "xaxaxa@gmail.com");
@@ -204,6 +205,9 @@ public class Main extends Application {
 
 
 	public static void updateSession(OnlineSessionWrapper deserialize) {
+		if(gameEnded) {
+			return;
+		}
 		Platform.runLater(new Runnable() {
 			
 			@Override
@@ -225,6 +229,13 @@ public class Main extends Application {
 				}
 			}
 		});
-		
+	}
+	
+	public static void endGame() {
+		if(onlineGame != null) {
+			gameEnded = true;
+			onlineGame.endGame();
+			onlineGame = null;
+		}
 	}
 }

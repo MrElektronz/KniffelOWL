@@ -25,7 +25,6 @@ public class ServerTimeoutListenerThread extends Thread{
 		
 			SessionManager.getInstance().checkForTimeouts(120);
 			
-			
 			try {
 				sleep(10000);
 			} catch (InterruptedException e) {

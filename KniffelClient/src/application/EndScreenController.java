@@ -24,6 +24,7 @@ public class EndScreenController {
 	 * @throws IOException
 	 */
 	public void onReturn(ActionEvent event) throws IOException {
+		Main.gameEnded = false;
 		Main.changeScene("Scene_MainMenu.fxml",1280,720);
 	}
 }

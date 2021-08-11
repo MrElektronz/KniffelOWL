@@ -129,7 +129,7 @@ public class GameInstance {
 	 */
 	public void rollDice(String sessionID) {
 		Session s = sm.getSession(sessionID);
-		if(game.getCurrentPlayer().getName().equals(s.getUsername())&&game.getCurrentRoll()<4) {
+		if(game != null && s != null && game.getCurrentPlayer().getName().equals(s.getUsername())&&game.getCurrentRoll()<4) {
 			game.rollDice();
 			sendGameUpdate();
 		}
