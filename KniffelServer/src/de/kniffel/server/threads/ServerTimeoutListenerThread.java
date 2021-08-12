@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import de.kniffel.server.Server;
-import de.kniffel.server.SessionManager;
+import de.kniffel.server.main.ServerMain;
+import de.kniffel.server.utils.SessionManager;
 
 /**
  * 
@@ -21,7 +21,7 @@ public class ServerTimeoutListenerThread extends Thread{
 	
 	@Override
 	public void run() {
-		while(Server.isRunning()) {
+		while(ServerMain.isRunning()) {
 		
 			SessionManager.getInstance().checkForTimeouts(120);
 			

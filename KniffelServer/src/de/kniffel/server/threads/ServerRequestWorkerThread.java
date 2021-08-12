@@ -8,12 +8,12 @@ import java.net.Socket;
 
 import org.omg.CORBA.portable.OutputStream;
 
-import de.kniffel.serialize.Serializer;
-import de.kniffel.server.GameFinder;
-import de.kniffel.server.MailManager;
-import de.kniffel.server.SQLManager;
-import de.kniffel.server.Server;
-import de.kniffel.server.SessionManager;
+import de.kniffel.server.main.GameFinder;
+import de.kniffel.server.main.ServerMain;
+import de.kniffel.server.serialize.Serializer;
+import de.kniffel.server.utils.MailManager;
+import de.kniffel.server.utils.SQLManager;
+import de.kniffel.server.utils.SessionManager;
 
 public class ServerRequestWorkerThread extends Thread{
 	
@@ -53,11 +53,11 @@ public class ServerRequestWorkerThread extends Thread{
 		if(command.equals("$P")) {
 			sm.acceptPing(args[1]);
 		}else if(command.equals("$Login")) {
-			String newSessionID = Server.getSQLManager().login(args[1], args[2],this);
+			String newSessionID = ServerMain.getSQLManager().login(args[1], args[2],this);
 			out.writeUTF(newSessionID);
 			sm.printSessions();
 		}else if(command.equals("$Reg")) {
-			int register = Server.getSQLManager().createAccount(args[1], args[2], args[3]);
+			int register = ServerMain.getSQLManager().createAccount(args[1], args[2], args[3]);
 			System.out.println("User "+args[1]+" tried to register with password "+args[2]+" with result: "+register);
 			out.writeInt(register);
 		}else if(command.equals("$Logout")) {
@@ -70,18 +70,18 @@ public class ServerRequestWorkerThread extends Thread{
 			out.writeByte(result);
 		}else if(command.equals("$ResetPW")) {
 			//.log("AUSLOGGEN");
-			byte result = Server.getSQLManager().setNewPasswordWithPin(args[1], args[2], args[3]);
+			byte result = ServerMain.getSQLManager().setNewPasswordWithPin(args[1], args[2], args[3]);
 			out.writeByte(result);
 		}else if(command.equals("$ReqUsername")) {
 			String name = sm.getSession(args[1]).getUsername();
 			out.writeUTF(name);
 		}else if(command.equals("$GetProf")) {
 			String name = args[1];
-			out.writeInt(Server.getSQLManager().getProfilePic(name));
+			out.writeInt(ServerMain.getSQLManager().getProfilePic(name));
 		}else if(command.equals("$SetProf")) {
 			//SetProf;sessionid;imageID
 			String user = sm.getSession(args[1]).getUsername();
-			Server.getSQLManager().setProfilePic(user, Integer.parseInt(args[2]));
+			ServerMain.getSQLManager().setProfilePic(user, Integer.parseInt(args[2]));
 		}else if(command.equals("$LobbyLeave")) {
 			String sessionID = args[1];
 			GameFinder.getInstance().removePlayerFromLobby(sessionID);
