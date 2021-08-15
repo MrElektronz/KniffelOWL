@@ -1,11 +1,5 @@
 package de.kniffel.server.threads;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-
 import de.kniffel.server.main.ServerMain;
 import de.kniffel.server.utils.SessionManager;
 

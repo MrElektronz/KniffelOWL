@@ -1,10 +1,11 @@
 package de.kniffel.server.serialize;
 
-
 /**
  * 
- * @author KBeck This class holds all important data about an OnlinePlayer and
- *         gets serialized by an OnlineSessionWrapper to be send to a client.
+ * @author KBeck
+ * 
+ *         This class holds all important data about an OnlinePlayer and gets
+ *         serialized by an OnlineSessionWrapper to be send to a client.
  *
  */
 public class OnlinePlayerWrapper {
@@ -12,8 +13,7 @@ public class OnlinePlayerWrapper {
 	private String name;
 	private byte profilePic;
 	private int[] scores;
-	
-	
+
 	/**
 	 * 
 	 * @param name
@@ -105,4 +105,3 @@ public class OnlinePlayerWrapper {
 	}
 
 }
-

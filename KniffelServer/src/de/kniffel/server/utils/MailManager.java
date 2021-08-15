@@ -44,7 +44,7 @@ public class MailManager {
 	public byte sendResetPasswordPIN(String username)
 	{
 		String pin = new RandomString(6).nextString();
-		String email = ServerMain.getSQLManager().getMailAdresse(username);
+		String email = ServerMain.getSQLManager().getMailAddress(username);
 		if(email.length()>3) {
 			
 		//add the email with the pin to the database

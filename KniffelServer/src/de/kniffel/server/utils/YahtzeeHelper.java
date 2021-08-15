@@ -51,6 +51,7 @@ public class YahtzeeHelper {
 		return 0;
 	}
 	
+
 	public int isFourOfAKind(ArrayList<Integer> allDices) {
 		int i1=0,i2=0,i3=0,i4=0,i5=0,i6=0;
 		int sum=0;
@@ -143,6 +144,8 @@ public class YahtzeeHelper {
 		}
 		return 0;
 	}
+	
+	
 	public int isYahtzee(ArrayList<Integer> allDices) {
 		int i1=0,i2=0,i3=0,i4=0,i5=0,i6=0;
 		for(int num : allDices) {

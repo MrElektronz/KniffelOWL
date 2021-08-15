@@ -2,31 +2,31 @@ package de.kniffel.server.threads;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.EOFException;
 import java.io.IOException;
 import java.net.Socket;
 
-import org.omg.CORBA.portable.OutputStream;
-
 import de.kniffel.server.main.GameFinder;
 import de.kniffel.server.main.ServerMain;
-import de.kniffel.server.serialize.Serializer;
 import de.kniffel.server.utils.MailManager;
-import de.kniffel.server.utils.SQLManager;
 import de.kniffel.server.utils.SessionManager;
 
+/**
+ * 
+ * @author KBeck
+ * 
+ * This thread is the "core" of this project, it processes every new request a client sends to a server
+ *
+ */
 public class ServerRequestWorkerThread extends Thread{
 	
 	
 	private Socket client;
 	private DataInputStream in;
 	private DataOutputStream out;
-	private GameFinder gameFinder;
 	private SessionManager sm;
 	public ServerRequestWorkerThread(Socket client) {
 		this.client = client;
 		sm = SessionManager.getInstance();
-		gameFinder = GameFinder.getInstance();
 		try {
 			in = new DataInputStream(client.getInputStream());
 			out = new DataOutputStream(client.getOutputStream());

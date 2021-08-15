@@ -293,26 +293,32 @@ public class OnlineSessionWrapper {
 	 * @return new OnlinePlayerWrapper object from serialized string
 	 */
 	public static OnlineSessionWrapper deserialize(String data) {
+		
+		//split string into array which is easier to work with
 		String[] args = splitIntoArgs(data);
-		try {
-		} catch (ArrayIndexOutOfBoundsException ex) {
 
-		}
+		//creation of new OnlineSessionWrapper instance
 		OnlineSessionWrapper session = new OnlineSessionWrapper(OnlinePlayerWrapper.deserialize(args[2]),
 				OnlinePlayerWrapper.deserialize(args[3]), OnlinePlayerWrapper.deserialize(args[4]),
 				OnlinePlayerWrapper.deserialize(args[5]));
+		
+		//setting turn and current roll of the newly created instance
 		session.setTurn(Integer.parseInt(args[0]));
 		session.setCurrentRoll(Integer.parseInt(args[1]));
+		
 		String[] sDice = args[6].split(",");
 		ArrayList<Integer> newDice = new ArrayList<Integer>();
 
-		// Check if no dice? That's the case when sDice[0] = 0
+		// Check if no dice? That's the case if sDice[0] = 0
 		if (Integer.parseInt(sDice[0]) != 0) {
 			for (int i = 0; i < sDice.length; i++) {
 				newDice.add(Integer.parseInt(sDice[i]));
 			}
 		}
+		//setting the dice
 		session.setDice(newDice);
+		
+		//Check if there are dice in the bank and add them to the instance if so
 		if (args.length > 7) {
 			String[] sBank = args[7].split(",");
 			ArrayList<Integer> newBank = new ArrayList<Integer>();
