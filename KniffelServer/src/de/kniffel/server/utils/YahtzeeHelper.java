@@ -18,8 +18,6 @@ public class YahtzeeHelper {
 		return instance;
 	}
 	
-	
-	
 	/**
 	 * 
 	 * @param allDices
