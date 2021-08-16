@@ -17,7 +17,6 @@ import javafx.scene.paint.Paint;
  */
 public class EndScreenController {
 
-	
 	@FXML
 	private Label text;
 
