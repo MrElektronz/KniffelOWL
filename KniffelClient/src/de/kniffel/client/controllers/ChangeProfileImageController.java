@@ -18,7 +18,6 @@ import javafx.scene.layout.HBox;
 public class ChangeProfileImageController {
 	
 	
-	
 	@FXML
 	private HBox box;
 
