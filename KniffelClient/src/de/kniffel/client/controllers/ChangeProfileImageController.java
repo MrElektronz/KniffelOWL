@@ -16,7 +16,6 @@ import javafx.scene.layout.HBox;
  *         corresponding button was clicked.
  */
 public class ChangeProfileImageController {
-
 	
 	
 	@FXML
