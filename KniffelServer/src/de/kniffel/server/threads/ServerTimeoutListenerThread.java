@@ -5,27 +5,27 @@ import de.kniffel.server.utils.SessionManager;
 
 /**
  * 
+ * Checks every ~10 secs if every connected client can be reached or if the last
+ * time seen is >120 seconds.
+ * 
  * @author KBeck
- * This class serves as a thread which only listens for incoming clients and creates a new worker thread for every one of them
- * This type of architecture can work on requests way faster, because it does not have to wait for a request to be finished to start a new one
- * TODO: Add ServerCheckTimeoutListener <- checks every ~10 secs if every conencted client can be reached or if the last time seen is >30 seconds
+ * 
  */
-public class ServerTimeoutListenerThread extends Thread{
-	
-	
+public class ServerTimeoutListenerThread extends Thread {
+
 	@Override
 	public void run() {
-		while(ServerMain.isRunning()) {
-		
+		while (ServerMain.isRunning()) {
+
 			SessionManager.getInstance().checkForTimeouts(120);
-			
+
 			try {
 				sleep(10000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	}
+		}
 	}
 
 }

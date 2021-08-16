@@ -6,10 +6,10 @@ import java.util.Objects;
 import java.util.Random;
 
 /**
+ * Helps generating a random string.
  * Taken from https://stackoverflow.com/questions/41107/how-to-generate-a-random-alpha-numeric-string
  *
  */
-
 public class RandomString {
 
     /**
@@ -21,12 +21,24 @@ public class RandomString {
         return new String(buf);
     }
 
+    /**
+     * upper case alphabet
+     */
     public static final String upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+    /**
+     * lower case alphabet
+     */
     public static final String lower = upper.toLowerCase(Locale.ROOT);
 
+    /**
+     * digits
+     */
     public static final String digits = "0123456789";
 
+    /**
+     * all those characters combined to one string
+     */
     public static final String alphanum = upper + lower + digits;
 
     private final Random random;

@@ -14,6 +14,13 @@ import javax.mail.internet.MimeMessage;
 
 import de.kniffel.server.main.ServerMain;
 
+/**
+ * 
+ * This class handles sending emails to the user.
+ * 
+ * @author KBeck
+ *
+ */
 public class MailManager {
 
 	private static MailManager instance;
@@ -38,7 +45,7 @@ public class MailManager {
 	
 	/**
 	 * sends a email to the usernames mail adress to reset its password
-	 * @param username
+	 * @param username of the user
 	 * @return 1 if successful
 	 */
 	public byte sendResetPasswordPIN(String username)

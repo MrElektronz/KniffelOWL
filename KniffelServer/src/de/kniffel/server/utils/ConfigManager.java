@@ -4,12 +4,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-
+/**
+ * 
+ * This class only contains one method, it is used to read from the config file.
+ * 
+ * @author KBeck
+ * 
+ *
+ */
 public class ConfigManager {
-	
+
 	/**
 	 * 
-	 * @param key
+	 * @param key to read from
 	 * @return value stored in the config file under the key
 	 */
 	public static String readFromProperties(String key) {
@@ -24,6 +31,5 @@ public class ConfigManager {
 		}
 		return "";
 	}
-
 
 }

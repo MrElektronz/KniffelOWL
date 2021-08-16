@@ -13,9 +13,9 @@ import de.kniffel.server.threads.ServerRequestWorkerThread;
 
 /**
  * 
- * @author KBeck
+ * The class manages all requests from this project to the database.
  * 
- *         The class manages all requests from this project to the database
+ * @author KBeck
  *
  */
 
@@ -25,9 +25,9 @@ public class SQLManager {
 
 	/**
 	 * 
-	 * @param url
-	 * @param user
-	 * @param password
+	 * @param url      of the database
+	 * @param user     username for the login into the database
+	 * @param password for the login into the database
 	 */
 	public SQLManager(String url, String user, String password) {
 		this.url = url;
@@ -71,7 +71,7 @@ public class SQLManager {
 
 	/**
 	 * 
-	 * @param username
+	 * @param username of the user
 	 * @return all wins of the username
 	 */
 	public int getWins(String username) {
@@ -96,7 +96,7 @@ public class SQLManager {
 
 	/**
 	 * 
-	 * @param username
+	 * @param username of the user
 	 * @return all losses of the username
 	 */
 	public int getLosses(String username) {
@@ -121,7 +121,7 @@ public class SQLManager {
 
 	/**
 	 * 
-	 * @param username
+	 * @param username of the user
 	 * @return all played games of the username
 	 */
 	public int getPlayedGames(String username) {
@@ -146,7 +146,7 @@ public class SQLManager {
 
 	/**
 	 * 
-	 * @param username
+	 * @param username of the user
 	 * @return all points of the username
 	 */
 	public int getPoints(String username) {
@@ -171,7 +171,7 @@ public class SQLManager {
 
 	/**
 	 * 
-	 * @param username
+	 * @param username of the user
 	 * @return profile pic id of the username
 	 */
 	public byte getProfilePic(String username) {
@@ -199,8 +199,8 @@ public class SQLManager {
 
 	/**
 	 * 
-	 * @param username
-	 * @param id
+	 * @param username of the user
+	 * @param id       to set the profile picture id to
 	 * 
 	 *                 sets the profile pic id of the given username
 	 */
@@ -215,7 +215,7 @@ public class SQLManager {
 
 	/**
 	 * 
-	 * @param username
+	 * @param username of the user
 	 * 
 	 *                 adds a win to username's account
 	 */
@@ -231,7 +231,7 @@ public class SQLManager {
 
 	/**
 	 * 
-	 * @param username
+	 * @param username of the user
 	 * 
 	 *                 adds a loss to username's account
 	 */
@@ -247,7 +247,7 @@ public class SQLManager {
 
 	/**
 	 * 
-	 * @param username
+	 * @param username of the user
 	 * 
 	 *                 adds a played game to username's account
 	 */
@@ -263,7 +263,7 @@ public class SQLManager {
 
 	/**
 	 * 
-	 * @param username
+	 * @param username of the user
 	 * @param points   the amount of points to add
 	 * 
 	 *                 adds points to username's account
@@ -279,6 +279,9 @@ public class SQLManager {
 	}
 
 	/**
+	 * @param username of the new account
+	 * @param password of the new account
+	 * @param email of the new account
 	 * @return 0 if username already exists, 1 if account was successfully created,
 	 *         2 if the format doesnt match, 3 other error, 4 email already in use
 	 */
@@ -320,8 +323,9 @@ public class SQLManager {
 
 	/**
 	 * 
-	 * @param username
-	 * @param password
+	 * @param username of the user
+	 * @param password of the user
+	 * @param wt the ServerRequestWorkerThread of the established connection
 	 * @return session-ID login successful, '0' username/password wrong, '' other
 	 *         error, '-1' already logged in
 	 */
@@ -352,7 +356,7 @@ public class SQLManager {
 	 * @param statement to be executed
 	 * @throws SQLException
 	 * 
-	 * Is used as a helper method
+	 *                      Is used as a helper method
 	 */
 	public void executeSQLStatement(String statement) throws SQLException {
 		Connection con = DriverManager.getConnection("jdbc:mysql://" + this.url + "/KNIFFEL", this.user, this.password);
@@ -370,8 +374,14 @@ public class SQLManager {
 		return !(str.contains("$") || str.contains("#") || str.contains(";") || str.contains("=") || str.contains("*"));
 	}
 
-	// The server never knows the decrypted password and only receives the encrypted
-	// one
+	/**
+	 * 
+	 * @param in String to hash with help of the MD5-algorithm
+	 * @return hashed string
+	 * 
+	 *         Now the server gets send a hashed password and never know the
+	 *         correct, unhashed one.
+	 */
 	public String encrypt(String in) {
 		try {
 			MessageDigest m = MessageDigest.getInstance("MD5");
@@ -392,7 +402,7 @@ public class SQLManager {
 
 	/**
 	 * 
-	 * @param username
+	 * @param username of the user
 	 * @return e-mail address of the username's account
 	 */
 	public String getMailAddress(String username) {
@@ -416,9 +426,9 @@ public class SQLManager {
 
 	/**
 	 * 
-	 * @param username
-	 * @param password
-	 * @param pin
+	 * @param username of the user
+	 * @param password of the user
+	 * @param pin which has been send to the user by an e-mail
 	 * @return 1 if password was reset, 0 if username not found, 2 if other error, 3
 	 *         if pin wrong
 	 */

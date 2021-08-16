@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import de.kniffel.server.main.GameInstance.GameState;
 
 /**
+ * This class handles all game instances.
+ * 
  * Maybe TODO: create LobbyInstance as parent class of GameInstance
- * (gameinstance has more functionality) <- Decided against it, because it works
- * just fine the way it is now
+ * (gameinstance has more functionality). Decided against it, because it works
+ * just fine the way it is now.
  * 
  * @author KBeck
  *
@@ -24,13 +26,12 @@ public class GameFinder {
 	 */
 
 	private static GameFinder instance;
-	public ArrayList<GameInstance> games = new ArrayList<GameInstance>();
+	private ArrayList<GameInstance> games = new ArrayList<GameInstance>();
 
 	/**
 	 * private constructor, so no other class can instanciate GameFinder
 	 */
-	private GameFinder() {
-	}
+	private GameFinder() {}
 
 	/**
 	 * using the singleton design pattern
@@ -93,7 +94,7 @@ public class GameFinder {
 
 	/**
 	 * 
-	 * @param sessionID
+	 * @param sessionID of the user
 	 * @return The GameInstance the player is playing in. Returns null when not in a
 	 *         game
 	 */
@@ -105,6 +106,14 @@ public class GameFinder {
 			}
 		}
 		return g;
+	}
+	
+	/**
+	 * 
+	 * @param game newly created game to be added to the list of games
+	 */
+	public void addGameInstance(GameInstance game) {
+		games.add(game);
 	}
 
 	/**

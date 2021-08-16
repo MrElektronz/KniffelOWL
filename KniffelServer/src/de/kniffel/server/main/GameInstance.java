@@ -30,23 +30,39 @@ public class GameInstance {
 	private SessionManager sm;
 	private OnlineSessionWrapper game;
 
+	/**
+	 * Generates a new, empty game instance, which starts as a lobby
+	 */
 	public GameInstance() {
 		sm = SessionManager.getInstance();
 		players = new Player[4];
 		state = GameState.Lobby;
-		GameFinder.getInstance().games.add(this);
+		GameFinder.getInstance().addGameInstance(this);
 		ready = new HashSet<String>();
 		game = new OnlineSessionWrapper(null, null, null, null);
 	}
 
+	/**
+	 * 
+	 * @return state of the game instance (either GameState.Lobby or
+	 *         GameState.Ingame)
+	 */
 	public GameState getState() {
 		return state;
 	}
 
+	/**
+	 * 
+	 * @return Array of all players, can include "null"
+	 */
 	public Player[] getPlayers() {
 		return players;
 	}
 
+	/**
+	 * 
+	 * @return the player whose turn it is
+	 */
 	public Player getCurrentPlayer() {
 		for (int i = 0; i < players.length; i++) {
 			if (players[i] != null) {
@@ -58,12 +74,17 @@ public class GameInstance {
 		return null;
 	}
 
+	/**
+	 * 
+	 * @return the sessionWrapper, this object includes the current turn, scores and
+	 *         more
+	 */
 	public OnlineSessionWrapper getGame() {
 		return game;
 	}
 
 	/**
-	 * 
+	 * @param sessionID of the user
 	 * @return true if successful
 	 */
 	public boolean addPlayer(String sessionID) {
@@ -95,7 +116,7 @@ public class GameInstance {
 	 * please use GameFinder.getInstance().removePlayerFromLobby(sessionID) for
 	 * this. Removes the player from the game
 	 * 
-	 * @param sessionID
+	 * @param sessionID of the user
 	 */
 	public void removePlayer(String sessionID) {
 		for (int i = 0; i < players.length; i++) {
@@ -126,7 +147,11 @@ public class GameInstance {
 	}
 
 	/**
-	 * gets called by the current player (client) and sends a game update afterwards
+	 * 
+	 * @param sessionID
+	 * 
+	 *                  gets called by the current player (client) and sends a game
+	 *                  update afterwards
 	 */
 	public void rollDice(String sessionID) {
 		Session s = sm.getSession(sessionID);
@@ -138,7 +163,12 @@ public class GameInstance {
 	}
 
 	/**
-	 * gets called by the current player (client) and sends a game update afterwards
+	 * 
+	 * @param sessionID of the user
+	 * @param number the number the dice shows, which gets added to the bank
+	 * 
+	 *                  gets called by the current player (client) and sends a game
+	 *                  update afterwards
 	 */
 	public void addDiceToBank(String sessionID, int number) {
 		Session s = sm.getSession(sessionID);
@@ -151,7 +181,12 @@ public class GameInstance {
 	}
 
 	/**
-	 * gets called by the current player (client) and sends a game update afterwards
+	 * 
+	 * @param sessionID of the user
+	 * @param number the number the dice shows, which gets removed to the bank
+	 * 
+	 *                  gets called by the current player (client) and sends a game
+	 *                  update afterwards
 	 */
 	public void removeDiceFromBank(String sessionID, int number) {
 		Session s = sm.getSession(sessionID);
@@ -164,9 +199,11 @@ public class GameInstance {
 		}
 	}
 
+	
 	/**
 	 * 
-	 * @param fieldID gets selected after dice roll
+	 * @param id gets selected after dice roll
+	 * @param sessionID of the user
 	 */
 	public void selectScore(String sessionID, int id) {
 		Session s = sm.getSession(sessionID);
@@ -274,7 +311,7 @@ public class GameInstance {
 	/**
 	 * Ends the game
 	 * 
-	 * @param winner
+	 * @param winner the winner player
 	 */
 	private void sendGameEnd(OnlinePlayerWrapper winner) {
 		if (winner != null) {
@@ -303,7 +340,7 @@ public class GameInstance {
 
 	/**
 	 * 
-	 * @param sessionID
+	 * @param sessionID of the user
 	 * @return true if player is in lobby, false if not
 	 */
 	public boolean containsPlayer(String sessionID) {
@@ -318,8 +355,8 @@ public class GameInstance {
 	/**
 	 * Gets called whenever a client presses the "Ready"-button in the lobby
 	 * 
-	 * @param sessionID
-	 * @param bReady
+	 * @param sessionID of the user
+	 * @param bReady if user is ready or not
 	 */
 	public void updateReady(String sessionID, boolean bReady) {
 		if (state == GameState.Lobby) {
@@ -409,7 +446,7 @@ public class GameInstance {
 	/**
 	 * sends data to every client in the game instance
 	 * 
-	 * @param data
+	 * @param data to be send to all connected clients
 	 */
 	public void notifyAllClients(String data) {
 		for (int i = 0; i < players.length; i++) {
@@ -497,7 +534,6 @@ public class GameInstance {
 		}
 	}
 
-	
 	/**
 	 * 
 	 * @author KBeck

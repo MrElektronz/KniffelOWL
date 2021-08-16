@@ -6,13 +6,27 @@ import java.io.InputStreamReader;
 
 import de.kniffel.server.main.ServerMain;
 
+/**
+ * A thread which checks for console input of an admin.
+ * 
+ * @author KBeck
+ *
+ */
 public class AdminConsoleThread extends Thread{
 
 	private boolean running;
+	
+	/**
+	 * Default constructor, automatically sets "running" to true
+	 */
 	public AdminConsoleThread() {
 		running = true;
 	}
 	
+	/**
+	 * 
+	 * @param running set to false to stop the thread
+	 */
 	public void setRunning(boolean running) {
 		this.running = running;
 	}

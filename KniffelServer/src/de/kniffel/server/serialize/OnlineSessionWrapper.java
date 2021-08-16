@@ -156,7 +156,7 @@ public class OnlineSessionWrapper {
 
 	/**
 	 * 
-	 * @param index
+	 * @param index of the player within the array
 	 * @return player on position index+1 (e.g. use index=0 to return the first
 	 *         player)
 	 */
@@ -184,8 +184,14 @@ public class OnlineSessionWrapper {
 		return numbers;
 	}
 
-	/*
+
+	/**
+	 * 
 	 * sets the score for the current player and adds one turn
+	 * 
+	 * @param fieldID the id the of the field the score is set to
+	 * @param score the value of the set score
+	 *
 	 */
 	public void selectScore(int fieldID, int score) {
 		OnlinePlayerWrapper current = getCurrentPlayer();
@@ -194,7 +200,10 @@ public class OnlineSessionWrapper {
 	}
 
 	/**
+	 * 
 	 * add specific dice with number to bank
+	 * 
+	 * @param number the number the corresponding dice shows
 	 */
 	public void addToBank(int number) {
 		if (dice.contains(number)) {
@@ -206,7 +215,7 @@ public class OnlineSessionWrapper {
 	/**
 	 * removes dice from bank and adds to normal field
 	 * 
-	 * @param number
+	 * @param number the number the corresponding dice shows
 	 */
 	public void removeFromBank(int number) {
 		if (bank.contains(number)) {
@@ -225,7 +234,7 @@ public class OnlineSessionWrapper {
 
 	/**
 	 * 
-	 * @param dice set array of integers as bank
+	 * @param bank set array of integers as bank
 	 */
 	public void setBank(ArrayList<Integer> bank) {
 		this.bank = bank;

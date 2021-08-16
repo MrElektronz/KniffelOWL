@@ -11,10 +11,11 @@ import de.kniffel.server.threads.ServerRequestWorkerThread;
 
 /**
  * 
+ * This class has the important task to manage all sessions, which means
+ * managing all logins and logouts/disconnects.
+ * 
  * @author KBeck
  * 
- *         This class has the important task to manage all sessions, which means
- *         managing all logins and logouts/disconnects
  *
  */
 public class SessionManager {
@@ -25,6 +26,7 @@ public class SessionManager {
 	 * private constructor, so no other class can instanciate from SessionManager
 	 */
 	private SessionManager() {
+		sessions = new HashMap<String, Session>();
 	}
 
 	/**
@@ -50,14 +52,11 @@ public class SessionManager {
 	// Has format SessionID,Session(Username, lastTimeSeen)
 	private HashMap<String, Session> sessions;
 
-	public void setup() {
-		sessions = new HashMap<String, Session>();
-	}
 
 	/**
 	 * 
-	 * @param id
-	 * @param username
+	 * @param wt       the ServerRequestWorkerThread belonging to the user
+	 * @param username the user's name
 	 * @return sessionID if username does not already have session, if so: return
 	 *         "-1"
 	 */
@@ -75,7 +74,7 @@ public class SessionManager {
 
 	/**
 	 * 
-	 * @param sessionID
+	 * @param sessionID of the user
 	 * @return "Session"-object of the given sessionID
 	 */
 	public Session getSession(String sessionID) {
@@ -84,7 +83,7 @@ public class SessionManager {
 
 	/**
 	 * 
-	 * @param wThread
+	 * @param wThread to get the corresponding session from
 	 * @return "Session"-object of the given ServerRequestWorkerThread
 	 */
 	public Session getSession(ServerRequestWorkerThread wThread) {
@@ -135,16 +134,18 @@ public class SessionManager {
 
 	/**
 	 * 
-	 * @param id
+	 * @param sessionID of the session we want to check
 	 * @return true if session with given id exists, false if otherwise
 	 */
-	public boolean doesSessionExist(String id) {
-		return sessions.containsKey(id);
+	public boolean doesSessionExist(String sessionID) {
+		return sessions.containsKey(sessionID);
 	}
 
 	/**
 	 * accepts the ping of a client which is determined to see if a client is still
 	 * connected to the server
+	 * 
+	 * @param sessionID the ping was send from
 	 */
 	public void acceptPing(String sessionID) {
 		if (sessions.containsKey(sessionID)) {
@@ -181,8 +182,8 @@ public class SessionManager {
 
 	/**
 	 * 
-	 * @param sessionID
-	 * 
+	 * @param sessionID of the session which should be logged out
+	 * @return 1
 	 *                  logs out the session with the given sessionID
 	 */
 	public int logout(String sessionID) {
@@ -193,7 +194,7 @@ public class SessionManager {
 
 	/**
 	 * 
-	 * @param session
+	 * @param session we want to log out
 	 * @return 1 if session was deleted, 0 if session does not exist
 	 * 
 	 *         logs out the given session
@@ -245,6 +246,11 @@ public class SessionManager {
 		private GameInstance currentGame;
 		private ServerRequestWorkerThread wt;
 
+		/**
+		 * 
+		 * @param username of the user belonging to the session
+		 * @param wt the ServerRequestWorkerThread of the user
+		 */
 		public Session(String username, ServerRequestWorkerThread wt) {
 			this.username = username;
 			lastTimeSeen = Instant.now();
@@ -252,10 +258,18 @@ public class SessionManager {
 			this.wt = wt;
 		}
 
+		/**
+		 * 
+		 * @return user's username
+		 */
 		public String getUsername() {
 			return username;
 		}
 
+		/**
+		 * 
+		 * @return the client's socket
+		 */
 		public Socket getClient() {
 			return wt.getClient();
 		}
