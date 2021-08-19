@@ -112,7 +112,7 @@ public class ServerRequestWorkerThread extends Thread {
 					int scoreID = Integer.parseInt(args[2]);
 					GameFinder.getInstance().setScore(sessionID, scoreID);
 				}
-
+				
 				sleep(10);
 			} catch (IOException ex) {
 				ex.printStackTrace();

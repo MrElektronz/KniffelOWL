@@ -81,12 +81,16 @@ public class MailManager {
 	
 	
 	/**
-	 * send message to recepient to reset his/her password
-	 * @param recepient
-	 * @param pin
-	 * @param username
+	 * Send message to recipient to reset his/her password.
+	 * The e-mail's login credentials are "hardcoded" in here, which is not the best practice,
+	 * but taking a look at the use-case of this project it is sufficient
+	 * (Only the authors and Prof. Dr. Wolf have direct access to the source code
+	 * and they are permitted to see the login credentials).
+	 * @param recipient the recipient's e-mail adress
+	 * @param pin the pin which gets send to the recipient
+	 * @param username of the user
 	 */
-	private void sendMail(String recepient, String pin, String username) {
+	private void sendMail(String recipient, String pin, String username) {
 		Properties prop = new Properties();
 		prop.put("mail.smtp.auth", "true");
 		prop.put("mail.smtp.starttls.enable","true");
@@ -101,7 +105,7 @@ public class MailManager {
 				return new PasswordAuthentication(acc, password);
 			}
 		});
-		Message m = prepareMessage(session,acc,recepient,pin, username);
+		Message m = prepareMessage(session,acc,recipient,pin, username);
 		try {
 			Transport.send(m);
 		} catch (MessagingException e) {
@@ -112,18 +116,18 @@ public class MailManager {
 	
 	/**
 	 * 
-	 * @param session
-	 * @param acc
-	 * @param recepient
-	 * @param pin
-	 * @param username
+	 * @param session the server's logged in e-mail session
+	 * @param acc e-mail of the sender
+	 * @param recipient e-mail of the recipient
+	 * @param pin the pin which gets send to the recipient
+	 * @param username of the user
 	 * @return Message object, with all the new account's data to send to the users email
 	 */
-	private Message prepareMessage(Session session, String acc, String recepient, String pin,String username) {
+	private Message prepareMessage(Session session, String acc, String recipient, String pin,String username) {
 		try {
 		Message m = new MimeMessage(session);
 		m.setFrom(new InternetAddress(acc));
-		m.setRecipient(Message.RecipientType.TO, new InternetAddress(recepient));
+		m.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
 		m.setSubject("Code to reset your password at KniffelOWL");
 		m.setText("Hello "+username+",\nenter this code to successfully reset your password\n"+pin);
 		return m;
