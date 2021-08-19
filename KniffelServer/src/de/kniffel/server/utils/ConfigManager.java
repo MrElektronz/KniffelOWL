@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import de.kniffel.server.main.ServerMain;
+
 /**
  * 
  * This class only contains one method, it is used to read from the config file.
@@ -20,7 +22,7 @@ public class ConfigManager {
 	 * @return value stored in the config file under the key
 	 */
 	public static String readFromProperties(String key) {
-		try (InputStream in = ConfigManager.class.getResourceAsStream("config.properties")) {
+		try (InputStream in = ServerMain.class.getResourceAsStream("config.properties")) {
 			Properties prop = new Properties();
 
 			prop.load(in);

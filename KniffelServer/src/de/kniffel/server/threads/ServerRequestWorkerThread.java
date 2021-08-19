@@ -77,8 +77,9 @@ public class ServerRequestWorkerThread extends Thread {
 					// .log("AUSLOGGEN");
 					byte result = ServerMain.getSQLManager().setNewPasswordWithPin(args[1], args[2], args[3]);
 					out.writeByte(result);
-				} else if (command.equals("$ReqUsername")) {
+				} else if (command.equals("$RequestUsername")) {
 					String name = sm.getSession(args[1]).getUsername();
+					System.out.println("sending name");
 					out.writeUTF(name);
 				} else if (command.equals("$GetProf")) {
 					String name = args[1];
