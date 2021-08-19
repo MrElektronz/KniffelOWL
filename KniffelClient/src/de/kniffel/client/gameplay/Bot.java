@@ -7,8 +7,9 @@ import de.kniffel.client.controllers.OfflineGameBoardController;
 import javafx.application.Platform;
 
 /**
+ * This class includes all bot functionality
  * 
- * @author KBeck This class includes all bot functionality
+ * @author KBeck
  */
 public class Bot extends OfflinePlayer {
 
@@ -73,7 +74,7 @@ public class Bot extends OfflinePlayer {
 	/**
 	 * sets the bot's difficulty in hindsight
 	 * 
-	 * @param difficulty
+	 * @param difficulty the bot is going to have
 	 */
 	public void setDifficulty(BotDifficulty difficulty) {
 		this.difficulty = difficulty;
@@ -97,8 +98,6 @@ public class Bot extends OfflinePlayer {
 		// Both are used to simulate the behaviour of a real player (e.g random delay
 		// time)
 		private int delay, delayRatio;
-
-
 
 		/**
 		 * Default constructor to set "a realistic" delay amount, so that the bot kinda

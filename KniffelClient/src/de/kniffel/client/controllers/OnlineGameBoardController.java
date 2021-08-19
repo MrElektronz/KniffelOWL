@@ -28,6 +28,15 @@ import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
+/**
+ * 
+ * Controller class of the GameBoard-Scene. Handles all functionality to manage
+ * and display a game session between multiple players online. Also contains a
+ * reference to the "SoundGenerator" to play a soundeffect when rolling the
+ * dice.
+ * 
+ * @author KBeck
+ */
 public class OnlineGameBoardController {
 
 	@FXML
@@ -297,14 +306,14 @@ public class OnlineGameBoardController {
 
 	/**
 	 * 
-	 * @param <T>
-	 * @param a1
-	 * @param a2
+	 * @param <T> Datatype of the array and return value
+	 * @param a1  first array
+	 * @param a2  second array
 	 * @return If same length, return a1, if not the same length return new
 	 *         arraylist with all left over elements
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> ArrayList<T> differenceOfPrimitivesArrayList(ArrayList<T> a1, ArrayList<T> a2) {
+	private <T> ArrayList<T> differenceOfPrimitivesArrayList(ArrayList<T> a1, ArrayList<T> a2) {
 		ArrayList<T> longer = a1.size() > a2.size() ? (ArrayList<T>) a1.clone() : (ArrayList<T>) a2.clone();
 		ArrayList<T> smaller = a1.size() > a2.size() ? (ArrayList<T>) a2.clone() : (ArrayList<T>) a1.clone();
 
@@ -329,7 +338,7 @@ public class OnlineGameBoardController {
 	/**
 	 * removes the dice and adds it to the next free button
 	 * 
-	 * @param d
+	 * @param number of dice to add to bank
 	 */
 	public void addDiceToButtons(int number) {
 		for (Dice d : diceList) {
@@ -350,7 +359,7 @@ public class OnlineGameBoardController {
 	/**
 	 * removes the dice and adds it to the next free button
 	 * 
-	 * @param d
+	 * @param d dice to add to bank
 	 */
 	public void addDiceToButtons(Dice d) {
 		root.getChildren().remove(d);
@@ -504,6 +513,8 @@ public class OnlineGameBoardController {
 	 * 
 	 * @param interact if true all buttons which are possible to be interacted with
 	 *                 will get interactable
+	 * @param clicked  use true if the button for the score field was clicked, false
+	 *                 otherwise
 	 */
 	public void setInteractableButtons(boolean interact, boolean clicked) {
 

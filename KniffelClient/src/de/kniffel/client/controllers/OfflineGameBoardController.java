@@ -30,12 +30,12 @@ import javafx.scene.layout.GridPane;
 
 /**
  * 
- * @author KBeck
+ * Controller class of the GameBoard-Scene. Handles all functionality to manage
+ * and display a game session between a player and a bot. Also contains a
+ * reference to the "SoundGenerator" to play a soundeffect when rolling the
+ * dice.
  * 
- *         Controller class of the GameBoard-Scene. Handles all functionality to
- *         manage and display a game session between a player and a bot. Also
- *         contains a reference to the "SoundGenerator" to play a soundeffect
- *         when rolling the dice.
+ * @author KBeck
  */
 public class OfflineGameBoardController {
 
@@ -77,6 +77,9 @@ public class OfflineGameBoardController {
 	private OfflineSession session;
 	private YahtzeeHelper yh;
 
+	/**
+	 * gets called whenever a scene with this controller assigned to it, starts
+	 */
 	public void initialize() {
 		canClickDice = false;
 		pc = new PerspectiveCamera();
@@ -123,7 +126,7 @@ public class OfflineGameBoardController {
 	/**
 	 * Set difficulty of the game session.
 	 * 
-	 * @param difficulty
+	 * @param difficulty the bot has
 	 */
 	public void setDifficulty(BotDifficulty difficulty) {
 		session.getBot().setDifficulty(difficulty);
@@ -133,6 +136,8 @@ public class OfflineGameBoardController {
 	 * 
 	 * @param interact if true all buttons which are possible to be interacted with
 	 *                 will get interactable
+	 * @param clicked  use true if the button for the score field was clicked, false
+	 *                 otherwise
 	 */
 	public void setInteractableButtons(boolean interact, boolean clicked) {
 		for (InteractableCell ic : iCells) {
@@ -185,7 +190,7 @@ public class OfflineGameBoardController {
 	}
 
 	/**
-	 * Called when the game ends
+	 * Called when the game ends, shows the end screen
 	 */
 	public void endGame() {
 		int playerTotal = Integer.parseInt(iCells.get(18).button.getText());
@@ -215,7 +220,7 @@ public class OfflineGameBoardController {
 	}
 
 	/**
-	 * When dice button was clicked -> add dice to playing field as 3D-Object
+	 * When dice button was clicked, add dice to playing field as 3D-Object
 	 * 
 	 * @param e
 	 * @throws IOException
@@ -243,6 +248,12 @@ public class OfflineGameBoardController {
 		}
 	}
 
+	/**
+	 * Called when the Roll button was clicked
+	 * 
+	 * @param e
+	 * @throws IOException
+	 */
 	public void onNewRoll(ActionEvent e) throws IOException {
 		if (session.getCurrentPlayer() == session.getPlayer()) {
 			canClickDice = true;
@@ -253,6 +264,12 @@ public class OfflineGameBoardController {
 		}
 	}
 
+	/**
+	 * Called when the mouse clicked on a dice
+	 * 
+	 * @param e
+	 * @throws IOException
+	 */
 	public void onMouseClicked(MouseEvent e) throws IOException {
 		if (session.getCurrentPlayer() == session.getPlayer() && canClickDice) {
 			Dice d = getNearestDice(e.getX(), e.getY(), 200);
@@ -298,7 +315,7 @@ public class OfflineGameBoardController {
 	/**
 	 * removes the dice and adds it to the next free button
 	 * 
-	 * @param d
+	 * @param d dice to add to bank
 	 */
 	public void addDiceToButtons(Dice d) {
 		root.getChildren().remove(d);
@@ -313,8 +330,8 @@ public class OfflineGameBoardController {
 
 	/**
 	 * 
-	 * @param x
-	 * @param y
+	 * @param x           x-coordinate to search from
+	 * @param y           y-coordinate to search from
 	 * @param maxDistance if the nearest dice is further away than this, null gets
 	 *                    returned
 	 * @return the nearest dice object from the position of x,y
@@ -349,18 +366,32 @@ public class OfflineGameBoardController {
 		return numbers;
 	}
 
-	/*
-	 * The following methods only exist so that they can be used for the bot's logic
-	 */
+	// The following methods only exist so that they can be used for the bot's
+	// logic//
 
+	/**
+	 * Only for the bot usage
+	 * 
+	 * @return list of all dice
+	 */
 	public ArrayList<Dice> getDices() {
 		return diceList;
 	}
 
+	/**
+	 * Only for the bot usage
+	 * 
+	 * @return list of all dice buttons
+	 */
 	public ArrayList<Button> getDiceButtons() {
 		return diceButtons;
 	}
 
+	/**
+	 * Only for the bot usage
+	 * 
+	 * @return list all score fields
+	 */
 	public ArrayList<InteractableCell> getiCells() {
 		return iCells;
 	}
@@ -453,7 +484,7 @@ public class OfflineGameBoardController {
 
 	/**
 	 * 
-	 * @param id
+	 * @param id score field id (interactable cell id)
 	 * @return false if score is not set already and can be set, otherwise true
 	 */
 	public boolean isScoreAlreadySet(int id) {
@@ -527,8 +558,8 @@ public class OfflineGameBoardController {
 
 	/**
 	 * 
-	 * @param id if id=0 'aces' are chosen, if id=1 'twos' are chosen
-	 * @throws Exception
+	 * @param id     if id=0 'aces' are chosen, if id=1 'twos' are chosen
+	 * @param scores list of current scores
 	 */
 	public void chooseScore(int id, ArrayList<Integer> scores) {
 		if (!isChoosableScoreID(id)) {
@@ -545,7 +576,7 @@ public class OfflineGameBoardController {
 
 	/**
 	 * 
-	 * @param id
+	 * @param id of the interactable cell
 	 * @return if id can be chosen (not a total score or anything similar)
 	 */
 	public boolean isChoosableScoreID(int id) {
@@ -553,11 +584,10 @@ public class OfflineGameBoardController {
 	}
 
 	/**
+	 * Embodies all the buttons which can be clicked to select a score
 	 * 
 	 * @author KBeck
 	 * 
-	 *         Embodies all the buttons which can be clicked to select a score
-	 *
 	 */
 	class InteractableCell extends TableCell<String, Void> {
 		private final Button button;

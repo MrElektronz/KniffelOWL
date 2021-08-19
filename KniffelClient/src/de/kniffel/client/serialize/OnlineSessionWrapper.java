@@ -7,7 +7,7 @@ import java.util.Random;
 /**
  * This class has all important information about an online game and gets send
  * to the client (serialized). One thought was using Gson for serialization, but
- * we tried to create our own method.
+ * we tried to create our own method
  * 
  * @author KBeck
  *
@@ -90,7 +90,7 @@ public class OnlineSessionWrapper {
 
 	/**
 	 * 
-	 * @return ArrayList of all dice -> combining bank and 3d dice
+	 * @return ArrayList of all dice, combining bank and 3d dice
 	 */
 	@SuppressWarnings("unchecked")
 	public ArrayList<Integer> getCombinedDice() {
@@ -156,7 +156,7 @@ public class OnlineSessionWrapper {
 
 	/**
 	 * 
-	 * @param index
+	 * @param index of the player within the array
 	 * @return player on position index+1 (e.g. use index=0 to return the first
 	 *         player)
 	 */
@@ -184,8 +184,13 @@ public class OnlineSessionWrapper {
 		return numbers;
 	}
 
-	/*
+	/**
+	 * 
 	 * sets the score for the current player and adds one turn
+	 * 
+	 * @param fieldID the id the of the field the score is set to
+	 * @param score   the value of the set score
+	 *
 	 */
 	public void selectScore(int fieldID, int score) {
 		OnlinePlayerWrapper current = getCurrentPlayer();
@@ -194,7 +199,10 @@ public class OnlineSessionWrapper {
 	}
 
 	/**
+	 * 
 	 * add specific dice with number to bank
+	 * 
+	 * @param number the number the corresponding dice shows
 	 */
 	public void addToBank(int number) {
 		if (dice.contains(number)) {
@@ -206,7 +214,7 @@ public class OnlineSessionWrapper {
 	/**
 	 * removes dice from bank and adds to normal field
 	 * 
-	 * @param number
+	 * @param number the number the corresponding dice shows
 	 */
 	public void removeFromBank(int number) {
 		if (bank.contains(number)) {
@@ -225,7 +233,7 @@ public class OnlineSessionWrapper {
 
 	/**
 	 * 
-	 * @param dice set array of integers as bank
+	 * @param bank set array of integers as bank
 	 */
 	public void setBank(ArrayList<Integer> bank) {
 		this.bank = bank;
@@ -293,26 +301,32 @@ public class OnlineSessionWrapper {
 	 * @return new OnlinePlayerWrapper object from serialized string
 	 */
 	public static OnlineSessionWrapper deserialize(String data) {
-		String[] args = splitIntoArgs(data);
-		try {
-		} catch (ArrayIndexOutOfBoundsException ex) {
 
-		}
+		// split string into array which is easier to work with
+		String[] args = splitIntoArgs(data);
+
+		// creation of new OnlineSessionWrapper instance
 		OnlineSessionWrapper session = new OnlineSessionWrapper(OnlinePlayerWrapper.deserialize(args[2]),
 				OnlinePlayerWrapper.deserialize(args[3]), OnlinePlayerWrapper.deserialize(args[4]),
 				OnlinePlayerWrapper.deserialize(args[5]));
+
+		// setting turn and current roll of the newly created instance
 		session.setTurn(Integer.parseInt(args[0]));
 		session.setCurrentRoll(Integer.parseInt(args[1]));
+
 		String[] sDice = args[6].split(",");
 		ArrayList<Integer> newDice = new ArrayList<Integer>();
 
-		// Check if no dice? That's the case when sDice[0] = 0
+		// Check if no dice? That's the case if sDice[0] = 0
 		if (Integer.parseInt(sDice[0]) != 0) {
 			for (int i = 0; i < sDice.length; i++) {
 				newDice.add(Integer.parseInt(sDice[i]));
 			}
 		}
+		// setting the dice
 		session.setDice(newDice);
+
+		// Check if there are dice in the bank and add them to the instance if so
 		if (args.length > 7) {
 			String[] sBank = args[7].split(",");
 			ArrayList<Integer> newBank = new ArrayList<Integer>();

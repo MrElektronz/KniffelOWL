@@ -17,12 +17,10 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 /**
+ * Controller class of the MainMenu-Scene. Displays buttons to play offline and
+ * online, also gives the player the possibility to change the profile picture.
  * 
  * @author KBeck
- * 
- *         Controller class of the MainMenu-Scene. Displays buttons to play
- *         offline and online, also gives the player the possibility to change
- *         the profile picture.
  *
  */
 
@@ -34,15 +32,18 @@ public class MainMenuController {
 	@FXML
 	private ImageView imageProfile;
 
+	/**
+	 * gets called whenever a scene with this controller assigned to it, starts
+	 */
 	public void initialize() {
-		
-		//display username and profile picture
+
+		// display username and profile picture
 		username.setText(Client.getInstance().getUsername());
 		updateProfileImage();
 	}
 
 	/**
-	 * handles the process after the 'Play vs Bots'-Button has been clicked
+	 * handles the process after the 'Bot[Easy]'-Button has been clicked
 	 * 
 	 * @param event
 	 * @throws IOException
@@ -51,20 +52,40 @@ public class MainMenuController {
 		ClientMain.changeToOfflineScene(BotDifficulty.EASY);
 	}
 
+	/**
+	 * 
+	 * handles the process after the 'Bot[Medium]'-Button has been clicked
+	 * 
+	 * @param event
+	 * @throws IOException
+	 */
 	public void onPlayBotMedium(ActionEvent event) throws IOException {
 		ClientMain.changeToOfflineScene(BotDifficulty.MEDIUM);
 	}
 
+	/**
+	 * handles the process after the 'Bot[Hard]'-Button has been clicked
+	 * 
+	 * @param event
+	 * @throws IOException
+	 */
 	public void onPlayBotHard(ActionEvent event) throws IOException {
 		ClientMain.changeToOfflineScene(BotDifficulty.HARD);
 	}
 
+	/**
+	 * Starts joining a lobby to play online
+	 * 
+	 * @param event
+	 * @throws IOException
+	 */
 	public void onPlayOnline(ActionEvent event) throws IOException {
 		ClientMain.changeScene("Scene_Lobby.fxml", 640, 440);
 	}
 
 	/**
 	 * Opens the scene to change the profile picture
+	 * 
 	 * @param event
 	 * @throws IOException
 	 */

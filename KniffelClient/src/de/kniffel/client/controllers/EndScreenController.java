@@ -9,23 +9,22 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Paint;
 
 /**
+ * Controller class of the End-Scene Pretty much only functionality is:
+ * Displaying a win/loss text and adding a "Return to main menu"-button.
  * 
  * @author KBeck
  * 
- *         Controller class of the End-Scene Pretty much only functionality is:
- *         Displaying a win/loss text and adding a "Return to main menu"-button.
  */
 public class EndScreenController {
 
-	
 	@FXML
 	private Label text;
 
 	/**
 	 * Set text and color of it to the corresponding parameters.
 	 * 
-	 * @param txt
-	 * @param color
+	 * @param txt   to display
+	 * @param color of the text
 	 */
 	public void setText(String txt, String color) {
 		text.setTextFill(Paint.valueOf(color));

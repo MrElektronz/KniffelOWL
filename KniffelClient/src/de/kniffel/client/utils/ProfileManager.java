@@ -3,10 +3,9 @@ package de.kniffel.client.utils;
 import javafx.scene.image.Image;
 
 /**
+ * A helper class to access the profile pictures
  * 
  * @author KBeck
- * A helper class to access the profile pictures
- *
  */
 public class ProfileManager {
 
@@ -15,7 +14,8 @@ public class ProfileManager {
 	/**
 	 * private constructor, so no class can instanciate from ProfileManager
 	 */
-	private ProfileManager() {}
+	private ProfileManager() {
+	}
 
 	/**
 	 * uses Singleton design pattern

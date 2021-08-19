@@ -13,10 +13,9 @@ import javafx.scene.control.TextField;
 
 /**
  * 
- * @author KBeck
+ * Controller class of the Register-Scene. Lets the user create a new account.
  * 
- *         Controller class of the Register-Scene. Lets the user create a new
- *         account.
+ * @author KBeck
  *
  */
 

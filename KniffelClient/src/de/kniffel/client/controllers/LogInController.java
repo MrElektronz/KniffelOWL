@@ -13,12 +13,11 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 /**
+ * Controller class of the LogIn-Scene. Sets username and password and displays
+ * the possibilities to change to "Register" and "ResetPW"-Scene
  * 
  * @author KBeck
  * 
- *         Controller class of the LogIn-Scene. Sets username and password and
- *         displays the possibilities to change to "Register" and
- *         "ResetPW"-Scene
  */
 public class LogInController {
 
@@ -77,11 +76,11 @@ public class LogInController {
 		if (username.getText() != null && password.getText() != null) {
 
 			if (keepSignedIn.isSelected()) {
-
+				// Store username and password in config file
 				ClientMain.updateUserPassword(username.getText(), password.getText());
-				System.out.println("saved");
 			}
 
+			// tries to log in and stores the answer of this request in "sessionID"
 			String sessionID = client.login(username.getText(), password.getText());
 
 			if (sessionID == null) {
@@ -92,7 +91,6 @@ public class LogInController {
 				errorLabel.setText("Dieser Nutzer ist bereits eingeloggt");
 			} else {
 				errorLabel.setText("Du wurdest erfolgreich eingeloggt");
-				client.setUsername(username.getText());
 				client.updateProfilePic();
 				ClientMain.changeScene("Scene_MainMenu.fxml", 1280, 720);
 			}

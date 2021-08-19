@@ -13,9 +13,10 @@ import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
 
 /**
+ * This class embodies a 3D-Dice object and all of it's functionality and
+ * attributes
  * 
- * @author KBeck This class embodies a 3D-Dice object and all of it's
- *         functionality and attributes
+ * @author KBeck
  */
 
 public class Dice extends MeshView {
@@ -197,9 +198,9 @@ public class Dice extends MeshView {
 	/**
 	 * Translates the cube to the given parameters
 	 * 
-	 * @param x
-	 * @param y
-	 * @param z
+	 * @param x x-coordinate
+	 * @param y y-coordinate
+	 * @param z z-coordinate
 	 */
 	public void translate(double x, double y, double z) {
 		setTranslateX(x);

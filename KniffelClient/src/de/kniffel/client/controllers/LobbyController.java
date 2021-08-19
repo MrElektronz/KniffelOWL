@@ -15,11 +15,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 /**
+ * Controller class of the Lobby-Scene. Updates the player display and start the
+ * GameUpdateThread.
  * 
  * @author KBeck
  * 
- *         Controller class of the Lobby-Scene. Updates the player display and
- *         start the GameUpdateThread
  *
  */
 
@@ -35,6 +35,9 @@ public class LobbyController {
 	private boolean isReady;
 	private Client client;
 
+	/**
+	 * gets called whenever a scene with this controller assigned to it, starts
+	 */
 	public void initialize() {
 		isReady = false;
 		client = Client.getInstance();
@@ -69,6 +72,9 @@ public class LobbyController {
 		}
 	}
 
+	/**
+	 * Called whenever the client leaves the lobby
+	 */
 	public static void shutdown() {
 		Client.getInstance().sendLeaveLobby();
 	}
@@ -86,7 +92,7 @@ public class LobbyController {
 	 * Gets called by the GameUpdateThread and updates the pictures shown in the
 	 * lobby
 	 * 
-	 * @param lobbyData
+	 * @param lobbyData which was send by the server
 	 */
 	public void updateLobby(byte[] lobbyData) {
 		// start the game if lobby is ready
@@ -101,6 +107,7 @@ public class LobbyController {
 
 				@Override
 				public void run() {
+					// set player pictures
 					horbox.getChildren().clear();
 					horbox.getChildren().addAll(profiles);
 				}

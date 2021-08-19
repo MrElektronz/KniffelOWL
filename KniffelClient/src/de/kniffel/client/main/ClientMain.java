@@ -27,10 +27,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 /**
+ * This is the main class of this project. This class contains the starting
+ * point of the program and brings most of the classes together to let them
+ * operate the way they should.
  * 
- * @author KBeck This is the mail class of this project. This class contains the
- *         starting point of the program and brings most of the classes together
- *         to let them operate the way they should.
+ * @author KBeck
  *
  */
 public class ClientMain extends Application {
@@ -44,11 +45,12 @@ public class ClientMain extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		// Client.register("Emre2", "passwort2", "xaxaxa@gmail.com");
 
+		//Starts the TimeoutThread (which pings the server)
 		tThread = new TimeoutThread();
 		tThread.start();
 		try {
+			//Opens the window
 			stg = primaryStage;
 			primaryStage.setResizable(false);
 			primaryStage.setTitle("Kniffel OWL");
@@ -61,6 +63,7 @@ public class ClientMain extends Application {
 
 				tThread.setRunning(false);
 			});
+			//Shows the login scene
 			BorderPane root = (BorderPane) FXMLLoader.load(ClientMain.class.getResource("Scene_Login.fxml"));
 			Scene scene = new Scene(root, 600, 400);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -75,7 +78,9 @@ public class ClientMain extends Application {
 	/**
 	 * Changes the scene
 	 * 
-	 * @param fxml
+	 * @param fxml   Scene-file to load
+	 * @param width  of the window
+	 * @param height of the window
 	 * @throws IOException
 	 */
 	public static void changeScene(String fxml, int width, int height) throws IOException {
@@ -89,7 +94,7 @@ public class ClientMain extends Application {
 	/**
 	 * Changes the scene
 	 * 
-	 * @param fxml
+	 * @param difficulty The bots difficulty
 	 * @throws IOException
 	 */
 	public static void changeToOfflineScene(BotDifficulty difficulty) throws IOException {
@@ -105,6 +110,7 @@ public class ClientMain extends Application {
 
 	/**
 	 * Load another scene
+	 * 
 	 * @param fxml load the scene from this file
 	 * @throws IOException
 	 */
@@ -115,7 +121,8 @@ public class ClientMain extends Application {
 
 	/**
 	 * Changes to game end screen
-	 * @param text to display
+	 * 
+	 * @param text  to display
 	 * @param color of the text
 	 * @throws IOException
 	 */
@@ -136,10 +143,11 @@ public class ClientMain extends Application {
 		});
 	}
 
+	
 	/**
 	 * main method
 	 * 
-	 * @param args
+	 * @param args handed over to the 'launch'-method
 	 */
 	public static void main(String[] args) {
 		launch(args);
@@ -147,7 +155,7 @@ public class ClientMain extends Application {
 
 	/**
 	 * 
-	 * @param key
+	 * @param key to read value from
 	 * @return returns the value of the key 'key' stored in client.properties (next
 	 *         to the .jar file) or returns "" if key was not found
 	 */
@@ -168,8 +176,8 @@ public class ClientMain extends Application {
 	/**
 	 * updates the user and password value stored in client.properties
 	 * 
-	 * @param user
-	 * @param password
+	 * @param user     username
+	 * @param password password
 	 */
 	public static void updateUserPassword(String user, String password) {
 		try (InputStream in = new FileInputStream(new File("client.properties"))) {
@@ -225,11 +233,11 @@ public class ClientMain extends Application {
 		}
 	}
 
-	
 	/**
-	 * Gets called every time the client receives a game update.
-	 * Update the current game session
-	 * @param deserialize
+	 * Gets called every time the client receives a game update. Update the current
+	 * game session
+	 * 
+	 * @param deserialize deserialized session send over by the server
 	 */
 	public static void updateSession(OnlineSessionWrapper deserialize) {
 		if (gameEnded) {
