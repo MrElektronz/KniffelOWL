@@ -42,16 +42,23 @@ public class ResetPasswordController {
 
 	public void onSendCode(ActionEvent event) throws IOException {
 		if (username.getText().length() < 3) {
+			lCheckMail.setVisible(false);
+			errorLabel.setVisible(true);
 			errorLabel.setText("username not found");
 		}
 		byte result = Client.getInstance().requestResetPassword(username.getText());
 		if (result == 0) {
+			lCheckMail.setVisible(false);
+			errorLabel.setVisible(true);
 			errorLabel.setText("username not found");
 		} else if (result == 2) {
+			lCheckMail.setVisible(false);
+			errorLabel.setVisible(true);
 			errorLabel.setText("An error has occurred");
 		} else if (result == 1) {
 			lCheckMail.setText("An email with the reset code has been send to your e-mail address");
 			lCheckMail.setVisible(true);
+			errorLabel.setVisible(false);
 		}
 
 	}
@@ -70,14 +77,22 @@ public class ResetPasswordController {
 				if (answer == 1) {
 					lCheckMail.setText("Password was changed successfully");
 					lCheckMail.setVisible(true);
+					errorLabel.setVisible(false);
 				} else if (answer == 0) {
+					lCheckMail.setVisible(false);
+					errorLabel.setVisible(true);
 					errorLabel.setText("User does not exist");
 				} else if (answer == 3) {
+					lCheckMail.setVisible(false);
+					errorLabel.setVisible(true);
 					errorLabel.setText("Your pin is wrong");
 				} else {
+					lCheckMail.setVisible(false);
+					errorLabel.setVisible(true);
 					errorLabel.setText("An error has occurred[" + answer + "]");
 				}
 			} else {
+				lCheckMail.setVisible(false);
 				errorLabel.setText("Both passwords do not match");
 			}
 

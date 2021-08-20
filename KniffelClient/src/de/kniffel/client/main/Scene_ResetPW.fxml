@@ -25,29 +25,28 @@
    <right>
       <AnchorPane prefHeight="400.0" prefWidth="327.0" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="150.0" fitWidth="217.0" pickOnBounds="true" preserveRatio="true" />
             <Label layoutX="14.0" layoutY="42.0" text="Username:" textFill="#cc8000" AnchorPane.leftAnchor="14.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Label layoutX="14.0" layoutY="120.0" text="Password:" textFill="#cc8000" AnchorPane.leftAnchor="14.0">
+            <Label layoutX="14.0" layoutY="161.0" text="Password:" textFill="#cc8000" AnchorPane.leftAnchor="14.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
             <TextField fx:id="username" layoutX="126.0" layoutY="46.0" promptText="Username" />
-            <PasswordField fx:id="password" layoutX="126.0" layoutY="121.0" promptText="New password" />
-            <PasswordField fx:id="password2" layoutX="126.0" layoutY="175.0" promptText="Repeat new password" />
-            <Label layoutX="16.0" layoutY="174.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="99.0" text="Password:" textFill="#cc8000" wrapText="true" AnchorPane.bottomAnchor="200.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="187.0" AnchorPane.topAnchor="174.0">
+            <PasswordField fx:id="password" layoutX="126.0" layoutY="162.0" promptText="New password" />
+            <PasswordField fx:id="password2" layoutX="126.0" layoutY="216.0" promptText="Repeat new password" />
+            <Label layoutX="14.0" layoutY="215.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="30.0" prefWidth="99.0" text="Password:" textFill="#cc8000" wrapText="true" AnchorPane.bottomAnchor="159.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="187.0" AnchorPane.topAnchor="215.0">
                <font>
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <Button fx:id="bSendCode" layoutX="154.0" layoutY="243.0" mnemonicParsing="false" onAction="#onSendCode" prefHeight="33.0" prefWidth="94.0" style="-fx-background-color: #cc8000;" text="Send Code" />
-            <Label fx:id="lCheckMail" disable="true" ellipsisString="10" text="Please check your stored e-mail adress" textFill="#48f005" visible="false" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="284.0">
+            <Button fx:id="bSendCode" layoutX="156.0" layoutY="79.0" mnemonicParsing="false" onAction="#onSendCode" prefHeight="33.0" prefWidth="94.0" style="-fx-background-color: #cc8000;" text="Send Code" />
+            <Label fx:id="lCheckMail" disable="true" ellipsisString="10" prefHeight="20.0" prefWidth="325.0" text="Please check your stored e-mail adress" textFill="#48f005" translateY="-160.0" visible="false" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="284.0">
                <font>
-                  <Font name="American Typewriter" size="14.0" />
+                  <Font size="11.0" />
                </font>
             </Label>
             <Hyperlink fx:id="hForgotPasswort" layoutX="14.0" layoutY="361.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onBackToLogin" prefHeight="35.0" prefWidth="75.0" text="back to login" textFill="#cc7e005e" underline="true" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="238.0" AnchorPane.topAnchor="350.0">
@@ -55,7 +54,7 @@
                   <Font size="11.0" />
                </font>
             </Hyperlink>
-            <Label fx:id="errorLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="83.0" layoutY="223.0" prefHeight="20.0" prefWidth="162.0" textAlignment="CENTER" textFill="#1ae500" textOverrun="CENTER_ELLIPSIS" wrapText="true">
+            <Label fx:id="errorLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="114.0" layoutY="264.0" prefHeight="20.0" prefWidth="162.0" textAlignment="CENTER" textFill="#e31e00" textOverrun="CENTER_ELLIPSIS" wrapText="true">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font></Label>
