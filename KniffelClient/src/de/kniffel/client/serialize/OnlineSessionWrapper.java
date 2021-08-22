@@ -90,7 +90,7 @@ public class OnlineSessionWrapper {
 
 	/**
 	 * 
-	 * @return ArrayList of all dice, combining bank and 3d dice
+	 * @return ArrayList of all dice -> combining bank and 3d dice
 	 */
 	@SuppressWarnings("unchecked")
 	public ArrayList<Integer> getCombinedDice() {
@@ -178,24 +178,23 @@ public class OnlineSessionWrapper {
 			dice.add(number);
 		}
 		currentRoll++;
-		if (currentRoll > 3) {
-			currentRoll = 1;
-		}
 		return numbers;
 	}
+
 
 	/**
 	 * 
 	 * sets the score for the current player and adds one turn
 	 * 
 	 * @param fieldID the id the of the field the score is set to
-	 * @param score   the value of the set score
+	 * @param score the value of the set score
 	 *
 	 */
 	public void selectScore(int fieldID, int score) {
 		OnlinePlayerWrapper current = getCurrentPlayer();
 		current.setScore(fieldID, score);
 		turn++;
+		currentRoll = 1;
 	}
 
 	/**
@@ -301,19 +300,19 @@ public class OnlineSessionWrapper {
 	 * @return new OnlinePlayerWrapper object from serialized string
 	 */
 	public static OnlineSessionWrapper deserialize(String data) {
-
-		// split string into array which is easier to work with
+		
+		//split string into array which is easier to work with
 		String[] args = splitIntoArgs(data);
 
-		// creation of new OnlineSessionWrapper instance
+		//creation of new OnlineSessionWrapper instance
 		OnlineSessionWrapper session = new OnlineSessionWrapper(OnlinePlayerWrapper.deserialize(args[2]),
 				OnlinePlayerWrapper.deserialize(args[3]), OnlinePlayerWrapper.deserialize(args[4]),
 				OnlinePlayerWrapper.deserialize(args[5]));
-
-		// setting turn and current roll of the newly created instance
+		
+		//setting turn and current roll of the newly created instance
 		session.setTurn(Integer.parseInt(args[0]));
 		session.setCurrentRoll(Integer.parseInt(args[1]));
-
+		
 		String[] sDice = args[6].split(",");
 		ArrayList<Integer> newDice = new ArrayList<Integer>();
 
@@ -323,10 +322,10 @@ public class OnlineSessionWrapper {
 				newDice.add(Integer.parseInt(sDice[i]));
 			}
 		}
-		// setting the dice
+		//setting the dice
 		session.setDice(newDice);
-
-		// Check if there are dice in the bank and add them to the instance if so
+		
+		//Check if there are dice in the bank and add them to the instance if so
 		if (args.length > 7) {
 			String[] sBank = args[7].split(",");
 			ArrayList<Integer> newBank = new ArrayList<Integer>();
