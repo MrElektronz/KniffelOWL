@@ -178,9 +178,6 @@ public class OnlineSessionWrapper {
 			dice.add(number);
 		}
 		currentRoll++;
-		if (currentRoll > 3) {
-			currentRoll = 1;
-		}
 		return numbers;
 	}
 
@@ -197,6 +194,7 @@ public class OnlineSessionWrapper {
 		OnlinePlayerWrapper current = getCurrentPlayer();
 		current.setScore(fieldID, score);
 		turn++;
+		currentRoll = 1;
 	}
 
 	/**

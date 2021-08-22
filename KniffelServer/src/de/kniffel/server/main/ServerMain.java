@@ -91,7 +91,6 @@ public class ServerMain {
 			s.getWorkerThread().shutdown();
 		}
 		listenerThread.shutdown();
-		timeoutThread.interrupt();
 		System.out.println("SERVER CLOSED");
 		System.exit(0);
 	}
