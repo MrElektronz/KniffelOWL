@@ -3,6 +3,7 @@ package de.kniffel.client.controllers;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import de.kniffel.client.gameplay.Bot;
 import de.kniffel.client.gameplay.Dice;
@@ -13,6 +14,7 @@ import de.kniffel.client.main.ClientMain;
 import de.kniffel.client.sound.SoundGenerator;
 import de.kniffel.client.utils.Client;
 import de.kniffel.client.utils.YahtzeeHelper;
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -240,11 +242,17 @@ public class OfflineGameBoardController {
 	 */
 	private void releaseStoredDice(Button b) {
 		if (!b.getText().equals("-")) {
-			int number = Integer.parseInt(b.getText());
-			Dice newDice = new Dice(number);
-			diceList.add(newDice);
-			root.getChildren().add(newDice);
-			b.setText("-");
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					int number = Integer.parseInt(b.getText());
+					Dice newDice = new Dice(number);
+					diceList.add(newDice);
+
+					root.getChildren().add(newDice);
+					b.setText("-");
+				}
+			});
 		}
 	}
 
@@ -324,6 +332,49 @@ public class OfflineGameBoardController {
 			if (b.getText().equals("-")) {
 				b.setText(d.getNumber() + "");
 				break;
+			}
+		}
+	}
+
+	/**
+	 * removes the dice and adds it to the next free button
+	 * 
+	 * @param number of dice to add to bank
+	 */
+	public void addDiceToButtons(int number) {
+		for (Dice d : diceList) {
+			if (d.getNumber() == number) {
+				root.getChildren().remove(d);
+				diceList.remove(d);
+				for (Button b : diceButtons) {
+					if (b.getText().equals("-")) {
+						b.setText(number + "");
+						break;
+					}
+				}
+				break;
+			}
+		}
+	}
+
+	/**
+	 * removes the dice and adds it to the next free button
+	 * 
+	 * @param number of dice to add to bank
+	 */
+	public void addAllDiceToButtons(int number) {
+		Iterator<Dice> it = diceList.iterator();
+		while (it.hasNext()) {
+			Dice d = it.next();
+			if (d.getNumber() == number) {
+				root.getChildren().remove(d);
+				it.remove();
+				for (Button b : diceButtons) {
+					if (b.getText().equals("-")) {
+						b.setText(number + "");
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -562,16 +613,27 @@ public class OfflineGameBoardController {
 	 * @param scores list of current scores
 	 */
 	public void chooseScore(int id, ArrayList<Integer> scores) {
-		if (!isChoosableScoreID(id)) {
-			System.err.println(id + " is no choosable score id, use method 'isChoosableScoreID(id) to check'");
-		}
-		ObservableList<String> entries = tv3.getItems();
-		entries.set(id, scores.get(id) + "");
 
-		tv3.setItems(entries);
-		releaseAllStoredDice();
-		canClickDice = false;
-		session.nextTurn();
+		Platform.runLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				if (!isChoosableScoreID(id)) {
+					System.err.println(id + " is no choosable score id, use method 'isChoosableScoreID(id) to check'");
+				}
+				ObservableList<String> entries = tv3.getItems();
+
+
+
+				entries.set(id, scores.get(id) + "");
+
+				tv3.setItems(entries);
+				releaseAllStoredDice();
+				canClickDice = false;
+				session.nextTurn();				
+			}
+		});
+		
 	}
 
 	/**

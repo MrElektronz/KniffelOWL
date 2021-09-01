@@ -333,6 +333,7 @@ public class Client {
 		}
 	}
 
+
 	public void addToLobby() {
 		try {
 			initClient();
