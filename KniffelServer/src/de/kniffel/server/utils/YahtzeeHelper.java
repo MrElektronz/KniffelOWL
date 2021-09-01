@@ -64,6 +64,24 @@ public class YahtzeeHelper {
 	/**
 	 * 
 	 * @param allDice list of dice numbers to be calculated from
+	 * @param toCount number to be counted
+	 * @return how often toCount is found inside our allDice array
+	 */
+	public int countEquals(ArrayList<Integer> allDice, int toCount) {
+		
+		int count = 0;
+		for(int i = 0; i<allDice.size();i++) {
+			if(allDice.get(i) == toCount) {
+				count++;
+			}
+		}
+		
+		return count;
+	}
+	
+	/**
+	 * 
+	 * @param allDice list of dice numbers to be calculated from
 	 * @return if 0, then no four of a kind
 	 */
 	public int isFourOfAKind(ArrayList<Integer> allDice) {

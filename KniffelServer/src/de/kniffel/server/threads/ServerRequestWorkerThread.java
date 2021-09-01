@@ -52,6 +52,7 @@ public class ServerRequestWorkerThread extends Thread {
 				} catch (Exception ex) {
 					client.close();
 				}
+				
 				String[] args = received.split(";");
 				String command = args[0];
 				if (command.equals("$P")) {

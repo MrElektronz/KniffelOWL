@@ -237,6 +237,8 @@ public class OnlineSessionWrapper {
 	public void setBank(ArrayList<Integer> bank) {
 		this.bank = bank;
 	}
+	
+	
 
 	/**
 	 * 
