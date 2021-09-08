@@ -6,7 +6,7 @@ import de.kniffel.server.utils.SessionManager;
 /**
  * 
  * Checks every ~10 secs if every connected client can be reached or if the last
- * time seen is >120 seconds.
+ * time seen is more than 120 seconds.
  * 
  * @author KBeck
  * 

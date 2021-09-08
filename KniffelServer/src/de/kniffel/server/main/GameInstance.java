@@ -165,7 +165,7 @@ public class GameInstance {
 	/**
 	 * 
 	 * @param sessionID of the user
-	 * @param number the number the dice shows, which gets added to the bank
+	 * @param number    the number the dice shows, which gets added to the bank
 	 * 
 	 *                  gets called by the current player (client) and sends a game
 	 *                  update afterwards
@@ -183,7 +183,7 @@ public class GameInstance {
 	/**
 	 * 
 	 * @param sessionID of the user
-	 * @param number the number the dice shows, which gets removed to the bank
+	 * @param number    the number the dice shows, which gets removed to the bank
 	 * 
 	 *                  gets called by the current player (client) and sends a game
 	 *                  update afterwards
@@ -199,10 +199,9 @@ public class GameInstance {
 		}
 	}
 
-	
 	/**
 	 * 
-	 * @param id gets selected after dice roll
+	 * @param id        gets selected after dice roll
 	 * @param sessionID of the user
 	 */
 	public void selectScore(String sessionID, int id) {
@@ -356,7 +355,7 @@ public class GameInstance {
 	 * Gets called whenever a client presses the "Ready"-button in the lobby
 	 * 
 	 * @param sessionID of the user
-	 * @param bReady if user is ready or not
+	 * @param bReady    if user is ready or not
 	 */
 	public void updateReady(String sessionID, boolean bReady) {
 		if (state == GameState.Lobby) {

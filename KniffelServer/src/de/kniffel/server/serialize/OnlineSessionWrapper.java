@@ -90,7 +90,7 @@ public class OnlineSessionWrapper {
 
 	/**
 	 * 
-	 * @return ArrayList of all dice -> combining bank and 3d dice
+	 * @return ArrayList of all dice, combining bank and 3d dice
 	 */
 	@SuppressWarnings("unchecked")
 	public ArrayList<Integer> getCombinedDice() {

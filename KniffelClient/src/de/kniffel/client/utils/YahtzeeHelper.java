@@ -30,6 +30,55 @@ public class YahtzeeHelper {
 	/**
 	 * 
 	 * @param allDice list of dice numbers to be calculated from
+	 * @return the numbers which are displayed at least 3 times (0 if no three of a kind)
+	 */
+	public int getThreeOfAKindNumbers(ArrayList<Integer> allDice) {
+		int i1 = 0, i2 = 0, i3 = 0, i4 = 0, i5 = 0, i6 = 0;
+		for (int num : allDice) {
+			switch (num) {
+			case 1:
+				i1++;
+				break;
+			case 2:
+				i2++;
+				break;
+			case 3:
+				i3++;
+				break;
+			case 4:
+				i4++;
+				break;
+			case 5:
+				i5++;
+				break;
+			case 6:
+				i6++;
+				break;
+			default:
+				break;
+			}
+		}
+		if(i1 > 2) {
+			return 1;
+		}else if(i2 > 2){
+			return 2;
+		}else if(i3 > 2){
+			return 3;
+		}else if(i4 > 2){
+			return 4;
+		}else if(i5 > 2){
+			return 5;
+		}else if(i6 > 2){
+			return 6;
+		}
+		
+		return 0;
+	}
+
+	
+	/**
+	 * 
+	 * @param allDice list of dice numbers to be calculated from
 	 * @return if 0, then no three of a kind
 	 */
 	public int isThreeOfAKind(ArrayList<Integer> allDice) {
@@ -104,7 +153,10 @@ public class YahtzeeHelper {
 		}
 		return 0;
 	}
+	
 
+	
+	
 	/**
 	 * 
 	 * @param allDice list of dice numbers to be calculated from

@@ -18,7 +18,7 @@ public class OnlinePlayerWrapper {
 
 	/**
 	 * 
-	 * @param name of the player
+	 * @param name       of the player
 	 * @param profilePic the profile pic id of the player
 	 */
 	public OnlinePlayerWrapper(String name, byte profilePic) {
@@ -89,7 +89,7 @@ public class OnlinePlayerWrapper {
 	/**
 	 * 
 	 * @param data serialized OnlinePlayerWrapper object
-	 * @return new OnlinePlayerWrapper object from serialized string
+	 * @return new OnlinePlayerWrapper object from serialized string, if string is 0, return 'null'
 	 */
 	public static OnlinePlayerWrapper deserialize(String data) {
 		String[] args = data.replace("{", "").replace("}", "").split(";");

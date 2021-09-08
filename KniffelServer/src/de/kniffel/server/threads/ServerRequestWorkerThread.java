@@ -80,7 +80,6 @@ public class ServerRequestWorkerThread extends Thread {
 					out.writeByte(result);
 				} else if (command.equals("$RequestUsername")) {
 					String name = sm.getSession(args[1]).getUsername();
-					System.out.println("sending name");
 					out.writeUTF(name);
 				} else if (command.equals("$GetProf")) {
 					String name = args[1];

@@ -175,7 +175,6 @@ public class SQLManager {
 	 * @return profile pic id of the username
 	 */
 	public byte getProfilePic(String username) {
-		System.out.println("Start " + username);
 		try {
 			Connection con = DriverManager.getConnection("jdbc:mysql://" + this.url + "/KNIFFEL", this.user,
 					this.password);
@@ -188,7 +187,6 @@ public class SQLManager {
 			}
 			int i = rs.getInt("prof");
 			con.close();
-			System.out.println("return " + i);
 			return (byte) i;
 
 		} catch (SQLException ex) {
@@ -208,7 +206,6 @@ public class SQLManager {
 		try {
 			executeSQLStatement("UPDATE accounts SET profilepicture=" + id + " WHERE username='" + username + "'");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -224,7 +221,6 @@ public class SQLManager {
 			executeSQLStatement(
 					"UPDATE players SET wins=" + (getWins(username) + 1) + " WHERE username='" + username + "'");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -240,7 +236,6 @@ public class SQLManager {
 			executeSQLStatement(
 					"UPDATE players SET losses=" + (getLosses(username) + 1) + " WHERE username='" + username + "'");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -256,7 +251,6 @@ public class SQLManager {
 			executeSQLStatement("UPDATE players SET played=" + (getPlayedGames(username) + 1) + " WHERE username='"
 					+ username + "'");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -273,7 +267,6 @@ public class SQLManager {
 			executeSQLStatement("UPDATE players SET points=" + (getPoints(username) + points) + " WHERE username='"
 					+ username + "'");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -342,7 +335,7 @@ public class SQLManager {
 				con.close();
 				return "0";
 			}
-			System.out.println("User " + username + " has logged in with password " + password);
+			System.out.println("User " + username + " has logged in");
 			con.close();
 			return SessionManager.getInstance().addNewSession(username, wt);
 		} catch (SQLException ex) {

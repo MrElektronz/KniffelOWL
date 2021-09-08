@@ -55,8 +55,10 @@ public class ClientMain extends Application {
 			primaryStage.setResizable(false);
 			primaryStage.setTitle("Kniffel OWL");
 			primaryStage.setOnCloseRequest(event -> {
+				if(Client.getInstance().getSocket() != null &&Client.getInstance().getSocket().isConnected()) {
 				LobbyController.shutdown();
 				Client.getInstance().logout();
+				}
 				if (lThread != null) {
 					lThread.setRunning(false);
 				}

@@ -31,7 +31,8 @@ public class GameFinder {
 	/**
 	 * private constructor, so no other class can instanciate GameFinder
 	 */
-	private GameFinder() {}
+	private GameFinder() {
+	}
 
 	/**
 	 * using the singleton design pattern
@@ -107,7 +108,7 @@ public class GameFinder {
 		}
 		return g;
 	}
-	
+
 	/**
 	 * 
 	 * @param game newly created game to be added to the list of games

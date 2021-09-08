@@ -56,10 +56,8 @@ public class Client {
 				out = new DataOutputStream(client.getOutputStream());
 				in = new DataInputStream(client.getInputStream());
 			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -79,10 +77,8 @@ public class Client {
 		}
 		try {
 			initClient();
-			// out.writeUTF("$Login;"+username+";"+password);
 			out.writeUTF(buildServerCommand("Login", username, encrypt(password)));
 			String value = in.readUTF();
-			// client.close();
 			if (value.equals("")) {
 				return null;
 			}
@@ -138,10 +134,8 @@ public class Client {
 	public void updateProfilePic() {
 		try {
 			initClient();
-			// out.writeUTF("$Login;"+username+";"+password);
 			out.writeUTF(buildServerCommand("GetProf", getUsername()));
 			int value = in.readInt();
-			// client.close();
 			setProfilePicID(value);
 			out.flush();
 		} catch (IOException ex) {
@@ -171,13 +165,14 @@ public class Client {
 	}
 
 	/**
-	 * This method is not in use right now, but can become handy in the future (The
-	 * player can change his username through memory editing and this provides a
-	 * safe way to get his real username)
+	 * This method is not really in use right now, but can become handy in the
+	 * future (The player can change his username through memory editing and this
+	 * provides a safe way to get his real username). It is only used once when
+	 * getUsername() has been called for the first time.
 	 * 
 	 * @return the client's username, as stored on the server
 	 */
-	public String requestUsername() {
+	private String requestUsername() {
 		String user = "?";
 		if (!sessionID.equals("0")) {
 			try {
@@ -185,13 +180,9 @@ public class Client {
 				out.writeUTF(buildServerCommand("RequestUsername", sessionID));
 				out.flush();
 				user = in.readUTF();
-				// client.close();
-				// Could receive answer from server after logout
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
-		} else {
-			System.out.println("no user request");
 		}
 		return user;
 	}
@@ -210,7 +201,6 @@ public class Client {
 			out.writeUTF(buildServerCommand("RequestResetPW", username));
 			out.flush();
 			byte value = in.readByte();
-			// client.close();
 			return value;
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -233,7 +223,6 @@ public class Client {
 			out.writeUTF(buildServerCommand("ResetPW", username, password, pin));
 			out.flush();
 			byte value = in.readByte();
-			// client.close();
 			return value;
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -254,7 +243,6 @@ public class Client {
 				// Ping command: $P;ID
 				out.writeUTF(buildServerCommand("P", sessionID));
 				out.flush();
-				// client.close();
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
@@ -333,17 +321,10 @@ public class Client {
 		}
 	}
 
-
 	public void addToLobby() {
 		try {
 			initClient();
 			out.writeUTF(buildServerCommand("LobbyAdd", sessionID));
-			/*
-			 * This answer doesnt come anymore, now the server will always send data try {
-			 * lobbyData = Serializer.fromStringToByteArr(in.readUTF().split(";")[1]); }
-			 * catch (ClassNotFoundException e) { // TODO Auto-generated catch block
-			 * e.printStackTrace(); }
-			 */
 			out.flush();
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -358,7 +339,6 @@ public class Client {
 		try {
 			initClient();
 			out.writeUTF(buildServerCommand("LobbyReady", sessionID));
-			// client.close();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -431,7 +411,6 @@ public class Client {
 			initClient();
 			out.writeUTF(buildServerCommand("LobbyLeave", sessionID));
 			out.flush();
-			// client.close();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
